@@ -16,6 +16,7 @@ const STATE_DIR = join(
   "orchestrator",
 )
 const BACKLOG_FILE = join(STATE_DIR, "backlog.json")
+const METRICS_FILE = join(STATE_DIR, "metrics.json")
 const POLL_INTERVAL_MS = 60 * 1000 // check every 60s
 const BOOT_DELAY_MS = 12000
 const MAX_CONCURRENT = 2 // max sessions working simultaneously
@@ -44,6 +45,21 @@ interface Backlog {
   version: number
 }
 
+interface MetricEvent {
+  type: "dispatched" | "completed" | "blocked" | "plan_created" | "auto_promoted"
+  taskID: string
+  taskTitle: string
+  directory: string
+  priority: string
+  timestamp: number
+  durationMs?: number // for completed tasks: time from dispatch to done
+}
+
+interface Metrics {
+  events: MetricEvent[]
+  startedAt: number
+}
+
 // ── Helpers ─────────────────────────────────────────────────────────
 function loadBacklog(): Backlog {
   if (!existsSync(BACKLOG_FILE)) {
@@ -59,6 +75,28 @@ function loadBacklog(): Backlog {
 function saveBacklog(backlog: Backlog): void {
   mkdirSync(STATE_DIR, { recursive: true })
   writeFileSync(BACKLOG_FILE, JSON.stringify(backlog, null, 2))
+}
+
+function loadMetrics(): Metrics {
+  if (!existsSync(METRICS_FILE)) {
+    return { events: [], startedAt: Date.now() }
+  }
+  try {
+    return JSON.parse(readFileSync(METRICS_FILE, "utf-8"))
+  } catch {
+    return { events: [], startedAt: Date.now() }
+  }
+}
+
+function saveMetrics(metrics: Metrics): void {
+  mkdirSync(STATE_DIR, { recursive: true })
+  writeFileSync(METRICS_FILE, JSON.stringify(metrics, null, 2))
+}
+
+function recordMetric(event: Omit<MetricEvent, "timestamp">): void {
+  const metrics = loadMetrics()
+  metrics.events.push({ ...event, timestamp: Date.now() })
+  saveMetrics(metrics)
 }
 
 function genID(): string {
@@ -100,6 +138,14 @@ async function dispatchTask(client: any, task: Task): Promise<void> {
   t.sessionID = sessionID
   t.updatedAt = Date.now()
   saveBacklog(backlog)
+
+  recordMetric({
+    type: "dispatched",
+    taskID: t.id,
+    taskTitle: t.title,
+    directory: t.directory,
+    priority: t.priority,
+  })
 
   // Build the prompt
   const subtaskContext =
@@ -174,6 +220,30 @@ async function checkCompletions(client: any): Promise<void> {
           task.completedAt = Date.now()
           task.updatedAt = Date.now()
           saveBacklog(backlog)
+
+          const dispatchTime = task.updatedAt - task.createdAt
+          recordMetric({
+            type: "completed",
+            taskID: task.id,
+            taskTitle: task.title,
+            directory: task.directory,
+            priority: task.priority,
+            durationMs: task.completedAt - (task.updatedAt - dispatchTime),
+          })
+
+          // Auto-promote next subtask if this was part of a plan
+          if (task.parentID) {
+            const promoted = promoteNext(task.parentID)
+            if (promoted) {
+              recordMetric({
+                type: "auto_promoted",
+                taskID: task.parentID,
+                taskTitle: "next subtask promoted",
+                directory: task.directory,
+                priority: task.priority,
+              })
+            }
+          }
         }
       }
     } catch {
@@ -181,6 +251,14 @@ async function checkCompletions(client: any): Promise<void> {
       task.status = "blocked"
       task.updatedAt = Date.now()
       saveBacklog(backlog)
+
+      recordMetric({
+        type: "blocked",
+        taskID: task.id,
+        taskTitle: task.title,
+        directory: task.directory,
+        priority: task.priority,
+      })
     }
   }
 }
@@ -357,4 +435,99 @@ export function getBacklogSummary(): string {
     `Backlog: ${counts.backlog} | Ready: ${counts.ready} | In Progress: ${counts.in_progress} | Done: ${counts.done} | Blocked: ${counts.blocked}`,
     `Total: ${backlog.tasks.length}`,
   ].join("\n")
+}
+
+export function getStats(): string {
+  const metrics = loadMetrics()
+  const events = metrics.events
+
+  if (events.length === 0) {
+    return "No telemetry data yet. Run /plan to create tasks and let the orchestrator dispatch them."
+  }
+
+  const dispatched = events.filter((e) => e.type === "dispatched")
+  const completed = events.filter((e) => e.type === "completed")
+  const blocked = events.filter((e) => e.type === "blocked")
+  const promoted = events.filter((e) => e.type === "auto_promoted")
+
+  // Duration stats for completed tasks
+  const durations = completed
+    .map((e) => e.durationMs)
+    .filter((d): d is number => d !== undefined && d > 0)
+
+  const avgDuration = durations.length > 0
+    ? durations.reduce((a, b) => a + b, 0) / durations.length
+    : 0
+
+  const medianDuration = durations.length > 0
+    ? durations.sort((a, b) => a - b)[Math.floor(durations.length / 2)]
+    : 0
+
+  // Tasks per day
+  const trackingDays = Math.max(
+    1,
+    (Date.now() - metrics.startedAt) / (24 * 60 * 60 * 1000),
+  )
+  const tasksPerDay = completed.length / trackingDays
+
+  // By priority
+  const byPriority: Record<string, number> = {}
+  for (const e of completed) {
+    byPriority[e.priority] = (byPriority[e.priority] || 0) + 1
+  }
+
+  // By project
+  const byProject: Record<string, number> = {}
+  for (const e of completed) {
+    const proj = e.directory.split("/").pop() || e.directory
+    byProject[proj] = (byProject[proj] || 0) + 1
+  }
+
+  // Completion rate
+  const completionRate =
+    dispatched.length > 0
+      ? Math.round((completed.length / dispatched.length) * 100)
+      : 0
+
+  const fmt = (ms: number) => {
+    const mins = Math.round(ms / 60000)
+    if (mins < 60) return `${mins}m`
+    return `${Math.round(mins / 60 * 10) / 10}h`
+  }
+
+  const lines = [
+    "## Orchestrator Stats",
+    "",
+    `Tracking since: ${new Date(metrics.startedAt).toISOString().slice(0, 10)} (${Math.round(trackingDays)}d)`,
+    "",
+    "### Overview",
+    `| Metric | Value |`,
+    `|--------|-------|`,
+    `| Tasks dispatched | ${dispatched.length} |`,
+    `| Tasks completed | ${completed.length} |`,
+    `| Tasks blocked | ${blocked.length} |`,
+    `| Auto-promotions | ${promoted.length} |`,
+    `| Completion rate | ${completionRate}% |`,
+    `| Tasks/day | ${Math.round(tasksPerDay * 10) / 10} |`,
+    `| Avg duration | ${fmt(avgDuration)} |`,
+    `| Median duration | ${fmt(medianDuration)} |`,
+  ]
+
+  if (Object.keys(byPriority).length > 0) {
+    lines.push("", "### By Priority")
+    for (const [p, count] of Object.entries(byPriority).sort()) {
+      lines.push(`- ${p}: ${count} completed`)
+    }
+  }
+
+  if (Object.keys(byProject).length > 0) {
+    lines.push("", "### By Project")
+    for (const [proj, count] of Object.entries(byProject).sort(
+      (a, b) => b[1] - a[1],
+    )) {
+      lines.push(`- ${proj}: ${count} completed`)
+    }
+  }
+
+  return lines.join("\n")
 }
