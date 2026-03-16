@@ -1,7 +1,7 @@
 #Requires -RunAsAdministrator
 <#
 .SYNOPSIS
-    AI Dev Toolkit — Windows Setup
+    AI Dev Toolkit - Windows Setup
 .DESCRIPTION
     Installs productivity CLI tools via winget and scoop.
     Run as Administrator in PowerShell.
@@ -9,7 +9,7 @@
 
 $ErrorActionPreference = "Stop"
 
-Write-Output "=== AI Dev Toolkit — Windows Setup ==="
+Write-Output "=== AI Dev Toolkit - Windows Setup ==="
 
 $Installed = @()
 $Skipped = @()
