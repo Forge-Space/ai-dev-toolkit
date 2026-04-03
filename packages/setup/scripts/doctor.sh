@@ -31,6 +31,8 @@ check_cmd rg "ripgrep"
 check_cmd fd "fd"
 check_cmd fzf "fzf"
 check_cmd tmux "tmux"
+check_cmd opencode "OpenCode CLI"
+check_cmd claude "Claude CLI"
 
 echo
 
@@ -44,6 +46,24 @@ if [[ -f "$HOME/.config/ai-dev-toolkit/shell.sh" ]]; then
 	ok "portable shell config installed"
 else
 	warn "portable shell config missing"
+fi
+
+if [[ -f "$HOME/.config/opencode/opencode.jsonc" ]]; then
+	ok "OpenCode config installed"
+else
+	warn "OpenCode config missing"
+fi
+
+if [[ -f "$HOME/.config/opencode/AGENTS.md" ]]; then
+	ok "OpenCode rules/guidance installed"
+else
+	warn "OpenCode rules/guidance missing"
+fi
+
+if [[ -d "$HOME/.opencode/skills/agents" && -d "$HOME/.opencode/skills/codex" ]]; then
+	ok "OpenCode skills directories prepared"
+else
+	warn "OpenCode skills directories missing"
 fi
 
 if [[ -f "$HOME/.config/tmux/sessionizer.sh" ]]; then
@@ -62,4 +82,5 @@ echo
 echo "Next recommended commands:"
 echo "  source ~/.bashrc   # or source ~/.zshrc"
 echo "  gh auth login"
+echo "  opencode --help    # verify CLI if installed"
 echo "  repo-terminal-ready"

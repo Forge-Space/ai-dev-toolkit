@@ -9,6 +9,7 @@ Setup portátil do ai-dev-toolkit para máquinas novas, sem depender de dotfiles
 - instala o workflow compartilhado de tmux
 - prepara onboarding por repositório com `.tmux-session.json`
 - oferece suporte opcional ao iTerm2 no macOS
+- prepara um ambiente base de OpenCode/AI tools com regras, config e diretórios de skills
 
 ## Quick start
 
@@ -64,6 +65,29 @@ Em macOS, o bootstrap também instala extras úteis via Homebrew:
 - starship
 - direnv
 
+## O que será configurado para AI tools
+
+O bootstrap agora também prepara:
+
+- `~/.config/opencode/opencode.jsonc`
+- `~/.config/opencode/AGENTS.md`
+- `~/.config/opencode/dcp.jsonc`
+- `~/.opencode/skills/agents`
+- `~/.opencode/skills/codex`
+
+Isso cobre a base de:
+
+- regras/guidance do OpenCode
+- configuração inicial de MCPs portáteis
+- estrutura local para skills
+- ambiente inicial para agentes
+
+Ainda ficam manuais:
+
+- autenticação de provedores de IA
+- instalação de skills específicas de terceiros
+- secrets e tokens locais
+
 ## Fluxo diário
 
 Depois do bootstrap:
@@ -111,3 +135,17 @@ Use um arquivo local fora do repo, por exemplo:
 ```
 
 Exemplo em `templates/local.env.example`.
+
+## Observação importante sobre AI Agents, MCP e Skills
+
+Este setup prepara a base compartilhada e portátil.
+
+Ele **não depende de dotfiles pessoais**, mas também **não instala automaticamente segredos, tokens privados ou skills proprietárias**.
+
+Ou seja:
+
+- **configura a estrutura**
+- **gera os arquivos base**
+- **deixa o ambiente pronto**
+
+Mas ainda exige autenticação/segredos para uso completo de alguns provedores e ferramentas.
