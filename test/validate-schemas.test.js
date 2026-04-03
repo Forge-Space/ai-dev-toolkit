@@ -147,7 +147,9 @@ describe('validateKit', () => {
     for (const r of audit.results) {
       expect(r.features.rules).toBe(true)
       expect(r.features.skills).toBe(true)
+      expect(r.features.ohmy).toBe(true)
     }
+    expect(audit.gaps).toEqual([])
   })
 
   test('every skill has name, description, and triggers', () => {
