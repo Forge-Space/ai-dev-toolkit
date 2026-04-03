@@ -84,12 +84,43 @@ PYEOF
 		install_skills "$FORGE_KIT_DIR/core/skills" "$opencode_dir/skills"
 	fi
 
+	if [ "${FORGE_HOOKS:-false}" = "true" ]; then
+		hooks_src="$FORGE_KIT_DIR/core/hooks.json"
+		hooks_dst="$opencode_dir/hooks.json"
+		hooks_marker="$opencode_dir/.forge-kit-hooks"
+
+		if [ -f "$hooks_src" ]; then
+			log_step "Installing hooks manifest to $hooks_dst"
+			if [ -f "$hooks_dst" ]; then
+				old_sha="$(file_sha256 "$hooks_dst")"
+				new_sha="$(file_sha256 "$hooks_src")"
+				if [ "$old_sha" = "$new_sha" ]; then
+					log_dim "  (no changes)"
+				elif [ "${FORGE_DRY_RUN:-false}" = "true" ]; then
+					log_info "  [DRY RUN] Would overwrite $hooks_dst"
+				else
+					cp "$hooks_src" "$hooks_dst"
+					: >"$hooks_marker"
+					log_success "hooks manifest updated"
+				fi
+			else
+				if [ "${FORGE_DRY_RUN:-false}" = "true" ]; then
+					log_info "  [DRY RUN] Would create $hooks_dst"
+				else
+					cp "$hooks_src" "$hooks_dst"
+					: >"$hooks_marker"
+					log_success "hooks manifest created"
+				fi
+			fi
+		fi
+	fi
+
 	if [ "${FORGE_PROVIDERS:-false}" = "true" ]; then
 		log_step "Installing providers to $opencode_dir/providers.json"
 		install_providers "$FORGE_KIT_DIR/core/providers.json" "$opencode_dir/providers.json"
 	fi
 
-	if [ "${FORGE_DURABLE:-false}" = "true" ] && [ -f "$opencode_dir/system.md" ]; then
+	if [ "${FORGE_DURABLE:-false}" = "true" ]; then
 		log_step "Adding durable execution config"
 		install_durable "$FORGE_KIT_DIR/core/rules.md" "$opencode_dir/system.md"
 	fi
@@ -125,7 +156,9 @@ adapter_status() {
 	opencode_dir="$(get_config_dir opencode)"
 	system_md=""
 	[ -f "$opencode_dir/system.md" ] && system_md="system.md ✓" || system_md="system.md ✗"
-	printf 'opencode | %s | config → %s/\n' "$system_md" "$opencode_dir"
+	hooks_status="hooks.json ✗"
+	[ -f "$opencode_dir/hooks.json" ] && hooks_status="hooks.json ✓"
+	printf 'opencode | %s | %s | config → %s/\n' "$system_md" "$hooks_status" "$opencode_dir"
 }
 
 adapter_uninstall() {
@@ -143,6 +176,17 @@ adapter_uninstall() {
 	fi
 
 	uninstall_skills "$opencode_dir/skills"
+
+	if [ -f "$opencode_dir/.forge-kit-hooks" ] && [ -f "$opencode_dir/hooks.json" ]; then
+		if [ "${FORGE_DRY_RUN:-false}" = "true" ]; then
+			log_info "[DRY RUN] Would remove $opencode_dir/hooks.json"
+			log_info "[DRY RUN] Would remove $opencode_dir/.forge-kit-hooks"
+		else
+			rm "$opencode_dir/hooks.json"
+			rm "$opencode_dir/.forge-kit-hooks"
+			log_success "Removed hooks manifest"
+		fi
+	fi
 
 	if [ -f "$opencode_dir/.forge-kit-oh-my-openagent" ] && [ -f "$opencode_dir/oh-my-opencode.jsonc" ]; then
 		if [ "${FORGE_DRY_RUN:-false}" = "true" ]; then

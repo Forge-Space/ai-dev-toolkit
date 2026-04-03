@@ -1,5 +1,4 @@
 {
-  "$schema": "../schema/hooks.schema.json",
   "version": "1.0.0",
   "hooks": {
     "PreToolUse": {
@@ -139,7 +138,7 @@
     "profiles": {
       "minimal": {
         "description": "Only hard-block rules — secrets, destructive commands",
-        "enabledHooks": ["PreToolUse", "PreCommit"],
+        "enabledHooks": ["PreToolUse"],
         "enabledRules": [
           "block-secrets-in-write",
           "block-rm-rf",
@@ -171,11 +170,11 @@
     ]
   },
   "toolMapping": {
-    "claude-code": "settings.json hooks array (PreToolUse/PostToolUse)",
-    "opencode": "oh-my-opencode.json hooks section",
+    "claude-code": "settings.json hooks array (planned)",
+    "opencode": "~/.config/opencode/hooks.json (installed by forge-kit)",
     "codex": "AGENTS.md hook instructions (declarative)",
     "cursor": ".cursor/rules/ hook rules (declarative)",
     "windsurf": ".windsurfrules hook section (declarative)",
-    "antigravity": "~/.antigravity/hooks.json"
+    "antigravity": "~/.antigravity/hooks.json (installed by forge-kit)"
   }
 }
