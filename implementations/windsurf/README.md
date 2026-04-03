@@ -8,7 +8,8 @@ Windsurf reads `.windsurfrules` from the project root and can also consume
 supporting files from a `.windsurf/` directory.
 
 ```bash
-cp ../../rules/.windsurfrules your-project/.windsurfrules
+# from the repository root
+cp rules/.windsurfrules your-project/.windsurfrules
 ```
 
 ## Multi-Model Routing
