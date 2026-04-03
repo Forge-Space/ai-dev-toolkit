@@ -13,10 +13,5 @@ cp "$ROOT/config/opencode/README.md" "$OPENCODE_DIR/README.md"
 python3 "$ROOT/scripts/render-opencode-config.py" "$ROOT/config/opencode/opencode.template.jsonc" "$OPENCODE_DIR/opencode.jsonc"
 
 if [[ ! -f "$OPENCODE_DIR/dcp.jsonc" ]]; then
-	cat >"$OPENCODE_DIR/dcp.jsonc" <<'EOF'
-{
-  "threshold": 0.65,
-  "strategy": "aggressive"
-}
-EOF
+	cp "$ROOT/config/opencode/dcp.template.jsonc" "$OPENCODE_DIR/dcp.jsonc"
 fi

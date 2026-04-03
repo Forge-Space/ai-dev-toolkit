@@ -82,6 +82,9 @@ Isso cobre a base de:
 - configuração inicial de MCPs portáteis
 - estrutura local para skills
 - ambiente inicial para agentes
+- compressão de contexto e token optimization via DCP
+- plugins base para worktrees e memória local
+- comandos compartilhados para contexto, verificação e worktrees
 
 Ainda ficam manuais:
 

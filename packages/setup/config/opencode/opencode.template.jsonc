@@ -19,6 +19,46 @@
     "fast": {
       "description": "Fast edits and quick lookup agent",
       "model": "anthropic/claude-sonnet-4-5"
+    },
+    "reviewer": {
+      "description": "Code review and quality agent",
+      "model": "anthropic/claude-sonnet-4-5"
+    },
+    "planner": {
+      "description": "Planning and task breakdown agent",
+      "model": "anthropic/claude-sonnet-4-5"
+    }
+  },
+  "command": {
+    "resume": {
+      "description": "Resume work by reading repo state and local instructions",
+      "template": "Check git status and recent log. Read README.md, AGENTS.md, and CLAUDE.md if present. Summarize current state and suggest the highest-value next action.",
+      "subtask": false
+    },
+    "verify": {
+      "description": "Run lint, type-check, test, and build",
+      "template": "Run the project's lint, type-check, test, and build commands in sequence. Report failures with exact command and error. Do not fix automatically.",
+      "subtask": false
+    },
+    "context": {
+      "description": "Show context usage and recommended compaction actions",
+      "template": "Report current context window usage and summarize what can be pruned or compacted if the window is getting full.",
+      "subtask": false
+    },
+    "optimize": {
+      "description": "Prune stale context and compact history",
+      "template": "Optimize context usage by pruning stale tool results and compacting obsolete history while preserving recent work.",
+      "subtask": false
+    },
+    "worktree": {
+      "description": "Create an isolated git worktree for a feature branch",
+      "template": "Create a git worktree for a new feature/fix/chore branch, then report the path and branch name.",
+      "subtask": false
+    },
+    "validate": {
+      "description": "Run a full repo health scorecard",
+      "template": "Run lint, type-check, tests, and security checks if available. Return a pass/fail scorecard.",
+      "subtask": false
     }
   },
   "mcp": {
@@ -59,5 +99,23 @@
       "enabled": true,
       "timeout": 10000
     }
+  },
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest",
+    "opencode-worktree",
+    "opencode-mem",
+    "oh-my-opencode-slim"
+  ],
+  "watcher": {
+    "ignore": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.next/**",
+      "**/.turbo/**",
+      "**/coverage/**",
+      "**/__pycache__/**",
+      "**/.mypy_cache/**",
+      ".worktrees/**"
+    ]
   }
 }

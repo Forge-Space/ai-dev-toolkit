@@ -60,6 +60,12 @@ else
 	warn "OpenCode config missing"
 fi
 
+if [[ -f "$HOME/.config/opencode/dcp.jsonc" ]]; then
+	ok "context compression / DCP config installed"
+else
+	warn "context compression / DCP config missing"
+fi
+
 if [[ -f "$HOME/.config/opencode/AGENTS.md" ]]; then
 	ok "OpenCode rules/guidance installed"
 else
@@ -70,6 +76,12 @@ if [[ -d "$HOME/.opencode/skills/agents" && -d "$HOME/.opencode/skills/codex" ]]
 	ok "OpenCode skills directories prepared"
 else
 	warn "OpenCode skills directories missing"
+fi
+
+if [[ -f "$HOME/.config/opencode/opencode.jsonc" ]] && grep -q 'opencode-worktree' "$HOME/.config/opencode/opencode.jsonc"; then
+	ok "worktree workflow plugin configured"
+else
+	warn "worktree workflow plugin not configured"
 fi
 
 if [[ -n "${OPENAI_API_KEY:-}" || -n "${ANTHROPIC_API_KEY:-}" || -n "${GITHUB_TOKEN:-}" ]]; then
