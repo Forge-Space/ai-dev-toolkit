@@ -100,6 +100,7 @@ describe('validateKit', () => {
     const agents = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/agents.json'), 'utf8'))
     const names = Object.keys(agents.agents)
     expect(names.length).toBeGreaterThanOrEqual(10)
+    expect(names).toContain('worker')
     expect(names).toContain('frontend')
     expect(names).toContain('backend')
     expect(names).toContain('devops')
@@ -109,6 +110,9 @@ describe('validateKit', () => {
     expect(agents.orgChart).toBeDefined()
     expect(agents.orgChart.orchestrator.directReports.length).toBeGreaterThan(0)
     expect(agents.orgChart.architect.directReports.length).toBeGreaterThan(0)
+    expect(agents.orgChart.reviewer.directReports).toEqual(
+      expect.arrayContaining(['ts-reviewer', 'python-reviewer', 'go-reviewer', 'rust-reviewer']),
+    )
   })
 
   test('every agent has title, tools, and valid reportsTo', () => {
