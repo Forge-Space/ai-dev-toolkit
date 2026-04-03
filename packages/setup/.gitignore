@@ -1,0 +1,5 @@
+.DS_Store
+*.bak
+*.bak.*
+*.tmp
+config/tmux/repo-preferences.json
