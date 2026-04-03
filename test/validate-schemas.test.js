@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals'
-import { validateCompany, validateAll } from '../scripts/validate-schemas.js'
+import { validateCompany, validateAll, validateKit } from '../scripts/validate-schemas.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -60,5 +60,57 @@ describe('validateCompany', () => {
 describe('validateAll', () => {
   test('companies/ directory passes full validation', () => {
     expect(() => validateAll(companiesDir)).not.toThrow()
+  })
+})
+
+const rootDir = path.join(__dirname, '..')
+
+describe('validateKit', () => {
+  test('kit/core configs and skills pass all validations', () => {
+    const errors = validateKit(rootDir)
+    expect(errors).toEqual([])
+  })
+
+  test('all core JSON configs parse successfully', () => {
+    const configs = [
+      'kit/core/agents.json',
+      'kit/core/routing.json',
+      'kit/core/providers.json',
+      'kit/core/autopilot.json',
+      'kit/core/token-optimization.json',
+      'kit/core/loop.json',
+      'kit/core/mcp.json',
+    ]
+    for (const cfg of configs) {
+      const full = path.join(rootDir, cfg)
+      expect(() => JSON.parse(fs.readFileSync(full, 'utf8'))).not.toThrow()
+    }
+  })
+
+  test('every agent references a valid tier', () => {
+    const agents = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/agents.json'), 'utf8'))
+    for (const [, agent] of Object.entries(agents.agents)) {
+      expect(['haiku', 'sonnet', 'opus']).toContain(agent.tier)
+    }
+  })
+
+  test('every skill has name, description, and triggers', () => {
+    const skillsDir = path.join(rootDir, 'kit/core/skills')
+    const skills = fs.readdirSync(skillsDir).filter(f => f.endsWith('.md'))
+    expect(skills.length).toBeGreaterThanOrEqual(12)
+    for (const skill of skills) {
+      const content = fs.readFileSync(path.join(skillsDir, skill), 'utf8')
+      expect(content).toMatch(/^---\n/)
+      expect(content).toMatch(/name:/)
+      expect(content).toMatch(/description:/)
+      expect(content).toMatch(/triggers:/)
+    }
+  })
+
+  test('loop.json has governance section', () => {
+    const loop = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/loop.json'), 'utf8'))
+    expect(loop.loop.governance).toBeDefined()
+    expect(loop.loop.governance.requiredBeforeCommit).toBeDefined()
+    expect(loop.loop.governance.blockOn).toBeDefined()
   })
 })
