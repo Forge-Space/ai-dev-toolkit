@@ -1,5 +1,6 @@
 import { describe, test, expect } from '@jest/globals'
 import { validateCompany, validateAll, validateKit } from '../scripts/validate-schemas.js'
+import { runParityAudit } from '../scripts/parity-audit.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -122,10 +123,21 @@ describe('validateKit', () => {
     expect(cfg.cost.budgets).toBeDefined()
   })
 
+  test('parity audit runs and reports all adapters', () => {
+    const audit = runParityAudit()
+    expect(audit.results.length).toBe(6)
+    expect(audit.skills.length).toBeGreaterThanOrEqual(16)
+    expect(audit.configs.length).toBeGreaterThanOrEqual(7)
+    for (const r of audit.results) {
+      expect(r.features.rules).toBe(true)
+      expect(r.features.skills).toBe(true)
+    }
+  })
+
   test('every skill has name, description, and triggers', () => {
     const skillsDir = path.join(rootDir, 'kit/core/skills')
     const skills = fs.readdirSync(skillsDir).filter(f => f.endsWith('.md'))
-    expect(skills.length).toBeGreaterThanOrEqual(14)
+    expect(skills.length).toBeGreaterThanOrEqual(16)
     for (const skill of skills) {
       const content = fs.readFileSync(path.join(skillsDir, skill), 'utf8')
       expect(content).toMatch(/^---\n/)
