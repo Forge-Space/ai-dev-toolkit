@@ -79,6 +79,7 @@ describe('validateKit', () => {
       'kit/core/autopilot.json',
       'kit/core/token-optimization.json',
       'kit/core/loop.json',
+      'kit/core/hooks.json',
       'kit/core/mcp.json',
     ]
     for (const cfg of configs) {
@@ -94,10 +95,37 @@ describe('validateKit', () => {
     }
   })
 
+  test('every agent has a tools access list', () => {
+    const agents = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/agents.json'), 'utf8'))
+    for (const [, agent] of Object.entries(agents.agents)) {
+      expect(agent.tools).toBeDefined()
+      expect(Array.isArray(agent.tools)).toBe(true)
+      expect(agent.tools.length).toBeGreaterThan(0)
+    }
+  })
+
+  test('hooks.json has rules and tool mapping', () => {
+    const hooks = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/hooks.json'), 'utf8'))
+    expect(hooks.hooks).toBeDefined()
+    expect(Object.keys(hooks.hooks).length).toBeGreaterThanOrEqual(4)
+    expect(hooks.toolMapping).toBeDefined()
+    for (const [, hook] of Object.entries(hooks.hooks)) {
+      expect(hook.description).toBeDefined()
+      expect(hook.rules.length).toBeGreaterThan(0)
+    }
+  })
+
+  test('token-optimization has cost tracking config', () => {
+    const cfg = JSON.parse(fs.readFileSync(path.join(rootDir, 'kit/core/token-optimization.json'), 'utf8'))
+    expect(cfg.cost).toBeDefined()
+    expect(cfg.cost.tracking).toBeDefined()
+    expect(cfg.cost.budgets).toBeDefined()
+  })
+
   test('every skill has name, description, and triggers', () => {
     const skillsDir = path.join(rootDir, 'kit/core/skills')
     const skills = fs.readdirSync(skillsDir).filter(f => f.endsWith('.md'))
-    expect(skills.length).toBeGreaterThanOrEqual(12)
+    expect(skills.length).toBeGreaterThanOrEqual(14)
     for (const skill of skills) {
       const content = fs.readFileSync(path.join(skillsDir, skill), 'utf8')
       expect(content).toMatch(/^---\n/)

@@ -31,6 +31,27 @@
       "rtk": { "enabled": false }
     }
   },
+  "cost": {
+    "tracking": {
+      "perSession": true,
+      "perAgent": true,
+      "perPhase": true,
+      "reportFormat": "inline"
+    },
+    "budgets": {
+      "sessionMax": { "value": null, "unit": "USD", "note": "null = unlimited, set a number to cap" },
+      "agentMax": {
+        "orchestrator": null,
+        "architect": null,
+        "worker": null,
+        "reviewer": null,
+        "researcher": null,
+        "explorer": null
+      },
+      "onBudgetExceeded": "warn-and-continue"
+    },
+    "reportTemplate": "Cost: ${{total}} ({{input_tokens}} in / {{output_tokens}} out) | Session: ${{session_total}}"
+  },
   "rules": {
     "alwaysPreserve": [
       "current branch and git state",

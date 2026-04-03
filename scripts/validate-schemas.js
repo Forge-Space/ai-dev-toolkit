@@ -125,6 +125,7 @@ const REQUIRED_KIT_CONFIGS = [
   'kit/core/autopilot.json',
   'kit/core/token-optimization.json',
   'kit/core/loop.json',
+  'kit/core/hooks.json',
   'kit/core/mcp.json',
 ]
 
@@ -157,7 +158,23 @@ export function validateKit(rootDir = '.') {
       if (agent.fallback && !agent.fallback.chain) {
         errors.push(`Agent ${name} has fallback without chain`)
       }
+      if (!agent.tools || !Array.isArray(agent.tools) || agent.tools.length === 0) {
+        errors.push(`Agent ${name} missing tools access list`)
+      }
     }
+  }
+
+  const hooksPath = path.join(rootDir, 'kit/core/hooks.json')
+  if (fs.existsSync(hooksPath)) {
+    const hooks = JSON.parse(fs.readFileSync(hooksPath, 'utf8'))
+    const hookTypes = Object.keys(hooks.hooks || {})
+    if (hookTypes.length === 0) errors.push('Hooks has no hook types defined')
+    for (const hookType of hookTypes) {
+      const hook = hooks.hooks[hookType]
+      if (!hook.description) errors.push(`Hook ${hookType} missing description`)
+      if (!hook.rules || hook.rules.length === 0) errors.push(`Hook ${hookType} has no rules`)
+    }
+    if (!hooks.toolMapping) errors.push('Hooks missing toolMapping section')
   }
 
   const routingPath = path.join(rootDir, 'kit/core/routing.json')

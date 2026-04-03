@@ -12,6 +12,7 @@
         "chain": ["opus", "sonnet"],
         "onFailure": "escalate-or-switch"
       },
+      "tools": ["Bash", "FileRead", "FileWrite", "Glob", "Grep", "WebFetch", "WebSearch", "TodoWrite", "Skill", "Agent", "MCP"],
       "aliases": ["sisyphus", "main", "primary", "autopilot"]
     },
     "architect": {
@@ -23,6 +24,7 @@
         "chain": ["opus", "sonnet"],
         "onFailure": "degrade-gracefully"
       },
+      "tools": ["FileRead", "Glob", "Grep", "WebFetch", "WebSearch"],
       "aliases": ["hephaestus", "oracle", "deep"]
     },
     "worker": {
@@ -34,6 +36,7 @@
         "chain": ["sonnet", "haiku", "opus"],
         "onFailure": "retry-then-escalate"
       },
+      "tools": ["Bash", "FileRead", "FileWrite", "Glob", "Grep", "LSP", "TodoWrite"],
       "aliases": ["executor", "junior", "implementer"]
     },
     "reviewer": {
@@ -45,6 +48,7 @@
         "chain": ["sonnet", "haiku"],
         "onFailure": "skip-review-log-warning"
       },
+      "tools": ["FileRead", "Glob", "Grep", "LSP"],
       "aliases": ["critic", "validator", "momus"]
     },
     "researcher": {
@@ -57,6 +61,7 @@
         "chain": ["sonnet", "haiku"],
         "onFailure": "proceed-without"
       },
+      "tools": ["FileRead", "Glob", "Grep", "WebFetch", "WebSearch", "MCP"],
       "aliases": ["librarian", "prometheus"]
     },
     "explorer": {
@@ -69,6 +74,7 @@
         "chain": ["haiku"],
         "onFailure": "use-direct-tools"
       },
+      "tools": ["FileRead", "Glob", "Grep"],
       "aliases": ["grep", "find", "search"]
     }
   },
