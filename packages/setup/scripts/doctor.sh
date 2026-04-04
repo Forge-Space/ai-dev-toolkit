@@ -84,6 +84,12 @@ else
 	warn "starter shared skills missing"
 fi
 
+if [[ -f "$HOME/.opencode/skills/codex/ai-toolkit-plan-change/SKILL.md" ]]; then
+	ok "starter codex skills installed"
+else
+	warn "starter codex skills missing"
+fi
+
 if [[ -f "$HOME/.config/opencode/opencode.jsonc" ]] && grep -q 'opencode-worktree' "$HOME/.config/opencode/opencode.jsonc"; then
 	ok "worktree workflow plugin configured"
 else

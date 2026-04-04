@@ -99,6 +99,12 @@ E instala um starter pack de skills compartilhadas, incluindo:
 - `ai-toolkit-worktree-flow`
 - `ai-toolkit-mcp-readiness`
 
+E um starter pack de skills `codex`, incluindo:
+
+- `ai-toolkit-plan-change`
+- `ai-toolkit-root-cause-debug`
+- `ai-toolkit-context-hygiene`
+
 Isso cobre a base de:
 
 - regras/guidance do OpenCode
