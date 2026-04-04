@@ -135,6 +135,8 @@ release-tag --repo /path/to/repo --tag v1.2.3
 release-tag-github --repo /path/to/repo --tag v1.2.3
 ```
 
+Quando usar `--changelog`, o repositório alvo precisa ter `CHANGELOG.md` com uma seção `## [Unreleased]`.
+
 ## O que será configurado para AI tools
 
 O bootstrap agora também prepara:
