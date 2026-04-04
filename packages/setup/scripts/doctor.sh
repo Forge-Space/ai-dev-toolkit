@@ -102,6 +102,12 @@ else
 	warn "optional hosted MCP entries missing"
 fi
 
+if [[ -f "$HOME/.config/opencode/scripts/toggle-mcp.py" ]]; then
+	ok "MCP toggle helper installed"
+else
+	warn "MCP toggle helper missing"
+fi
+
 if [[ -n "${OPENAI_API_KEY:-}" || -n "${ANTHROPIC_API_KEY:-}" || -n "${GITHUB_TOKEN:-}" ]]; then
 	ok "at least one AI/provider token is loaded in environment"
 else
@@ -124,6 +130,8 @@ echo
 echo "Next recommended commands:"
 echo "  source ~/.bashrc   # or source ~/.zshrc"
 echo "  gh auth login"
+echo "  mcp-status        # list seeded MCP providers"
+echo "  mcp-enable linear # example: enable one hosted MCP"
 echo "  bash ./scripts/auth-ai-tools.sh   # guided auth helper"
 echo "  bash ./scripts/auth-mcp-tools.sh  # guided MCP auth helper"
 echo "  edit ~/.config/ai-dev-toolkit/local.env"

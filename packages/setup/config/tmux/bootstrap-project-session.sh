@@ -149,23 +149,23 @@ apply_default_layout() {
 
 	if $has_node; then
 		tmux new-window -t "$session_name" -n dev -c "$project_path"
-		tmux send-keys -t "$session_name":$next_index "$node_dev_cmd" C-m
+		tmux send-keys -t "$session_name":"$next_index" "$node_dev_cmd" C-m
 		next_index=$((next_index + 1))
 
 		tmux new-window -t "$session_name" -n test -c "$project_path"
-		tmux send-keys -t "$session_name":$next_index "$node_test_cmd" C-m
+		tmux send-keys -t "$session_name":"$next_index" "$node_test_cmd" C-m
 		next_index=$((next_index + 1))
 	fi
 
 	if $has_python; then
 		tmux new-window -t "$session_name" -n py -c "$project_path"
-		tmux send-keys -t "$session_name":$next_index "$python_test_cmd" C-m
+		tmux send-keys -t "$session_name":"$next_index" "$python_test_cmd" C-m
 		next_index=$((next_index + 1))
 	fi
 
 	if $has_docker; then
 		tmux new-window -t "$session_name" -n ops -c "$project_path"
-		tmux send-keys -t "$session_name":$next_index "$docker_cmd" C-m
+		tmux send-keys -t "$session_name":"$next_index" "$docker_cmd" C-m
 		next_index=$((next_index + 1))
 	fi
 

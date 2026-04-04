@@ -33,6 +33,22 @@ Com iTerm2 no macOS:
 ./bootstrap.sh --with-iterm2
 ```
 
+## CI / verificação local
+
+O repo agora possui checks compartilhados para:
+
+- shell scripts
+- linting de shell
+- validação Python
+- smoke tests de funcionalidade
+- checks de versões/ferramentas
+
+Para rodar localmente:
+
+```bash
+bash ./scripts/ci-check.sh
+```
+
 ### Windows
 
 Abra PowerShell como administrador:
@@ -85,6 +101,14 @@ Para MCPs com OAuth/autenticação, use:
 
 ```bash
 bash ./scripts/auth-mcp-tools.sh
+```
+
+Antes de autenticar, você também pode habilitar/desabilitar MCPs opcionais sem editar JSON manualmente:
+
+```bash
+mcp-status
+mcp-enable linear
+mcp-disable linear
 ```
 
 Ou diretamente para um provedor configurado, por exemplo:

@@ -5,8 +5,9 @@ ROOT="${1:?repo root required}"
 OPENCODE_DIR="$HOME/.config/opencode"
 OPENCODE_SKILLS_DIR="$HOME/.opencode/skills"
 SOURCE_SKILLS_DIR="$ROOT/config/opencode/skills"
+SOURCE_SCRIPTS_DIR="$ROOT/config/opencode/scripts"
 
-mkdir -p "$OPENCODE_DIR" "$OPENCODE_SKILLS_DIR/agents" "$OPENCODE_SKILLS_DIR/codex"
+mkdir -p "$OPENCODE_DIR" "$OPENCODE_DIR/scripts" "$OPENCODE_SKILLS_DIR/agents" "$OPENCODE_SKILLS_DIR/codex"
 
 cp "$ROOT/config/opencode/AGENTS.md" "$OPENCODE_DIR/AGENTS.md"
 cp "$ROOT/config/opencode/README.md" "$OPENCODE_DIR/README.md"
@@ -23,4 +24,9 @@ fi
 
 if [[ -d "$SOURCE_SKILLS_DIR/codex" ]]; then
 	cp -R "$SOURCE_SKILLS_DIR/codex/." "$OPENCODE_SKILLS_DIR/codex/"
+fi
+
+if [[ -d "$SOURCE_SCRIPTS_DIR" ]]; then
+	cp -R "$SOURCE_SCRIPTS_DIR/." "$OPENCODE_DIR/scripts/"
+	chmod +x "$OPENCODE_DIR/scripts/"* || true
 fi

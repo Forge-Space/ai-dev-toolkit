@@ -4,7 +4,8 @@ set -euo pipefail
 ROOT="${1:?repo root required}"
 TARGET="${2:-auto}"
 INSTALL_DIR="$HOME/.config/ai-dev-toolkit"
-SOURCE_LINE='[ -f "$HOME/.config/ai-dev-toolkit/shell.sh" ] && source "$HOME/.config/ai-dev-toolkit/shell.sh"'
+# shellcheck disable=SC2016
+SOURCE_LINE='[ -f "$HOME/.config/ai-dev-toolkit/shell.sh" ] && . "$HOME/.config/ai-dev-toolkit/shell.sh"'
 
 mkdir -p "$INSTALL_DIR"
 cp "$ROOT/config/shell/shell.sh" "$INSTALL_DIR/shell.sh"

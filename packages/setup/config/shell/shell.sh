@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# shellcheck source=/dev/null
+
 command_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
@@ -49,6 +53,15 @@ alias ttemplate-detect='python3 ~/.config/tmux/generate-session-template.py dete
 alias ttemplate-preview='python3 ~/.config/tmux/generate-session-template.py preview'
 alias ttemplate-apply='python3 ~/.config/tmux/generate-session-template.py apply'
 alias ttemplate-update='python3 ~/.config/tmux/generate-session-template.py update'
+alias mcp-status='python3 ~/.config/opencode/scripts/toggle-mcp.py list'
+
+mcp-enable() {
+	python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" enable "$1"
+}
+
+mcp-disable() {
+	python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" disable "$1"
+}
 
 work() {
 	~/.config/tmux/sessionizer.sh "$@"
