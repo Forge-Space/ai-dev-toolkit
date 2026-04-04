@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 
 
@@ -60,6 +61,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--notes-file",
         help="Write generated release notes to this path (repo-relative paths are supported)",
+    )
+    parser.add_argument(
+        "--changelog",
+        action="store_true",
+        help="Update an existing CHANGELOG.md with the generated release notes",
     )
     return parser.parse_args()
 
@@ -229,6 +235,75 @@ def write_notes(notes_path: Path | None, notes: str) -> None:
     notes_path.write_text(notes)
 
 
+def detect_changelog(repo: Path) -> Path | None:
+    changelog_path = repo / "CHANGELOG.md"
+    if changelog_path.exists():
+        return changelog_path
+    return None
+
+
+def version_label(next_version: str | None, tag: str) -> str:
+    if next_version is not None:
+        return next_version
+    return tag[1:] if tag.startswith("v") else tag
+
+
+def render_changelog_section(version: str, notes: str) -> str:
+    lines = [f"## [{version}] - {date.today().isoformat()}", ""]
+
+    for line in notes.splitlines():
+        if not line or line == "# Release Notes" or line.startswith("Changes since "):
+            continue
+        if line.startswith("## "):
+            lines.append(f"### {line[3:]}")
+            continue
+        lines.append(line)
+
+    lines.append("")
+    return "\n".join(lines)
+
+
+def update_changelog(changelog_path: Path, version: str, notes: str) -> None:
+    text = changelog_path.read_text()
+    entry = render_changelog_section(version, notes)
+    lines = text.splitlines()
+
+    unreleased_index = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if re.match(r"^##\s+\[?Unreleased\]?\s*$", line)
+        ),
+        None,
+    )
+
+    if unreleased_index is not None:
+        insert_at = next(
+            (
+                index
+                for index in range(unreleased_index + 1, len(lines))
+                if lines[index].startswith("## ")
+            ),
+            len(lines),
+        )
+    else:
+        insert_at = next(
+            (index for index, line in enumerate(lines) if line.startswith("## ")),
+            len(lines),
+        )
+
+    entry_lines = entry.rstrip().splitlines()
+    new_lines = lines[:insert_at]
+    if new_lines and new_lines[-1] != "":
+        new_lines.append("")
+    new_lines.extend(entry_lines)
+    if insert_at < len(lines) and lines[insert_at] != "":
+        new_lines.append("")
+    new_lines.extend(lines[insert_at:])
+
+    changelog_path.write_text("\n".join(new_lines).rstrip() + "\n")
+
+
 def create_release_commit_and_tag(
     repo: Path, tag: str, changed_paths: list[Path]
 ) -> None:
@@ -286,6 +361,7 @@ def print_plan(
     dry_run: bool,
     github_release: bool,
     notes_path: Path | None,
+    changelog_path: Path | None,
     notes_count: int,
     since_tag: str | None,
 ) -> None:
@@ -306,6 +382,8 @@ def print_plan(
         print(f"notes base tag: {since_tag}")
     if notes_path is not None:
         print(f"notes file: {notes_path}")
+    if changelog_path is not None:
+        print(f"changelog: {changelog_path}")
     if github_release:
         availability = "gh cli available" if shutil_which("gh") else "gh cli missing"
         print(f"github release: requested ({availability})")
@@ -337,6 +415,9 @@ def main() -> int:
         ensure_gh_cli_available()
 
     notes_path = resolve_notes_path(repo, args.notes_file)
+    changelog_path = detect_changelog(repo) if args.changelog else None
+    if args.changelog and changelog_path is None:
+        raise SystemExit("CHANGELOG.md not found for --changelog")
     subjects = commit_subjects(repo, since_tag)
     notes = render_release_notes(subjects, since_tag)
     if args.dry_run:
@@ -351,6 +432,7 @@ def main() -> int:
         args.dry_run,
         args.github_release,
         notes_path,
+        changelog_path,
         len(subjects),
         since_tag,
     )
@@ -364,6 +446,10 @@ def main() -> int:
     if next_version is not None and surface is not None:
         update_version_surface(surface, next_version)
         changed_paths.append(surface.path)
+
+    if changelog_path is not None:
+        update_changelog(changelog_path, version_label(next_version, tag), notes)
+        changed_paths.append(changelog_path)
 
     temp_notes_file: Path | None = None
     if notes_path is not None:
