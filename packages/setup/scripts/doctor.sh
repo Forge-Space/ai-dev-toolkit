@@ -91,16 +91,18 @@ else
 	warn "OpenCode skills directories missing"
 fi
 
-if [[ -f "$HOME/.opencode/skills/agents/ai-toolkit-repo-intake/SKILL.md" ]]; then
-	ok "starter shared skills installed"
+if [[ -f "$HOME/.opencode/skills/agents/repo-intake/SKILL.md" ]] ||
+	[[ -f "$HOME/.opencode/skills/agents/ai-toolkit-repo-intake/SKILL.md" ]]; then
+	ok "portable skills installed"
 else
-	warn "starter shared skills missing"
+	warn "portable skills missing (run setup-ai-tools.sh)"
 fi
 
-if [[ -f "$HOME/.opencode/skills/codex/ai-toolkit-plan-change/SKILL.md" ]]; then
-	ok "starter codex skills installed"
+if [[ -f "$HOME/.opencode/skills/agents/plan-change/SKILL.md" ]] ||
+	[[ -f "$HOME/.opencode/skills/codex/ai-toolkit-plan-change/SKILL.md" ]]; then
+	ok "planning/debug skills installed"
 else
-	warn "starter codex skills missing"
+	warn "planning/debug skills missing (run setup-ai-tools.sh)"
 fi
 
 if [[ -f "$HOME/.config/opencode/opencode.jsonc" ]] && grep -q 'opencode-worktree' "$HOME/.config/opencode/opencode.jsonc"; then
@@ -115,23 +117,14 @@ else
 	warn "optional hosted MCP entries missing"
 fi
 
-if [[ -f "$HOME/.config/opencode/scripts/toggle-mcp.py" ]]; then
-	ok "MCP toggle helper installed"
-else
-	warn "MCP toggle helper missing"
-fi
-
-if [[ -f "$HOME/.config/opencode/scripts/mcp-health.py" ]]; then
-	ok "MCP health helper installed"
-else
-	warn "MCP health helper missing"
-fi
-
-if [[ -f "$HOME/.config/opencode/scripts/release.py" ]]; then
-	ok "release helper installed"
-else
-	warn "release helper missing"
-fi
+for helper in toggle-mcp.py mcp-health.py release.py; do
+	label="${helper%.py}"
+	if [[ -f "$HOME/.config/opencode/scripts/$helper" ]]; then
+		ok "$label helper installed"
+	else
+		warn "$label helper missing"
+	fi
+done
 
 if [[ -n "${OPENAI_API_KEY:-}" || -n "${ANTHROPIC_API_KEY:-}" || -n "${GITHUB_TOKEN:-}" ]]; then
 	ok "at least one AI/provider token is loaded in environment"
