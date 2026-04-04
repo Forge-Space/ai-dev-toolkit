@@ -1,6 +1,32 @@
 # ai-dev-toolkit-setup
 
+**Idioma:** Português | [English](README.en.md)
+
 Setup portátil do ai-dev-toolkit para máquinas novas, sem depender de dotfiles pessoais.
+
+Quer a versão compartilhável com padrões, regras e implementações por ferramenta? Veja o
+repositório companheiro
+[ai-dev-toolkit](https://github.com/LucasSantana-Dev/ai-dev-toolkit).
+
+## Qual repositório usar?
+
+- Use **ai-dev-toolkit-setup** quando você quiser preparar uma máquina nova com shell, tmux, OpenCode, helpers de release/MCP e ambiente base para agentes.
+- Use **ai-dev-toolkit** quando você quiser padrões reutilizáveis, templates de regras e implementações de referência para aplicar dentro dos seus projetos.
+
+## Índice
+
+- [Qual repositório usar?](#qual-repositório-usar)
+- [O que este repo faz](#o-que-este-repo-faz)
+- [Quick start](#quick-start)
+- [CI / verificação local](#ci--verificação-local)
+- [O que será instalado](#o-que-será-instalado)
+- [Autenticação guiada](#autenticação-guiada)
+- [O que será configurado para AI tools](#o-que-será-configurado-para-ai-tools)
+- [Fluxo diário](#fluxo-diário)
+- [Templates tmux por projeto](#templates-tmux-por-projeto)
+- [Shells suportados](#shells-suportados)
+- [Segredos locais](#segredos-locais)
+- [Observação importante sobre AI Agents, MCP e Skills](#observação-importante-sobre-ai-agents-mcp-e-skills)
 
 ## O que este repo faz
 
