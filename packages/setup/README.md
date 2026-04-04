@@ -124,6 +124,14 @@ mcp-health
 mcp-health linear
 ```
 
+Para planejar ou executar releases em outros repositórios preparados pelo toolkit:
+
+```bash
+release-plan --repo /path/to/repo --level patch
+release-patch --repo /path/to/repo
+release-tag --repo /path/to/repo --tag v1.2.3
+```
+
 ## O que será configurado para AI tools
 
 O bootstrap agora também prepara:
