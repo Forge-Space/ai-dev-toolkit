@@ -143,8 +143,8 @@ def create_release_commit_and_tag(
 
 
 def maybe_create_github_release(repo: Path, tag: str) -> None:
-    if not shutil_which("gh"):
-        raise SystemExit("gh CLI not found for --github-release")
+    ensure_gh_cli_available()
+    ensure_gh_authenticated(repo)
     run(["gh", "release", "create", tag, "--generate-notes", "--title", tag], cwd=repo)
 
 
@@ -154,6 +154,17 @@ def shutil_which(cmd: str) -> str | None:
     return which(cmd)
 
 
+def ensure_gh_cli_available() -> None:
+    if not shutil_which("gh"):
+        raise SystemExit("gh CLI not found for --github-release")
+
+
+def ensure_gh_authenticated(repo: Path) -> None:
+    status = run(["gh", "auth", "status"], cwd=repo, check=False)
+    if status.returncode != 0:
+        raise SystemExit("gh CLI is not authenticated for --github-release")
+
+
 def print_plan(
     repo: Path,
     level: str,
@@ -161,6 +172,7 @@ def print_plan(
     next_version: str | None,
     tag: str,
     dry_run: bool,
+    github_release: bool,
 ) -> None:
     print("Release helper")
     print(f"repo: {repo}")
@@ -174,6 +186,9 @@ def print_plan(
     if next_version is not None:
         print(f"next version: {next_version}")
     print(f"tag: {tag}")
+    if github_release:
+        availability = "gh cli available" if shutil_which("gh") else "gh cli missing"
+        print(f"github release: requested ({availability})")
 
 
 def main() -> int:
@@ -197,7 +212,12 @@ def main() -> int:
         next_version = bump(surface.version, args.level)
         tag = args.tag or f"v{next_version}"
 
-    print_plan(repo, args.level, surface, next_version, tag, args.dry_run)
+    if args.github_release:
+        ensure_gh_cli_available()
+
+    print_plan(
+        repo, args.level, surface, next_version, tag, args.dry_run, args.github_release
+    )
     if args.dry_run:
         return 0
 

@@ -25,9 +25,10 @@ metadata:
 
 1. Run `release-plan --repo /path/to/repo --level patch|minor|major` to inspect the detected version source and next tag before changing anything.
 2. Refuse to continue if verification has not already passed or the release target is ambiguous.
-3. Execute `release-patch`, `release-minor`, `release-major`, or `release-tag --tag vX.Y.Z` in the target repo.
-4. Let the helper update only supported version sources (`VERSION`, `package.json`, or `pyproject.toml`) and create the annotated tag.
-5. Report the final release state: version source, tag, and any skipped GitHub release or publish steps with reasons.
+3. If a GitHub Release is required, use `release-plan-github` first so the helper validates `gh` CLI availability before any mutation.
+4. Execute `release-patch`, `release-minor`, `release-major`, `release-tag --tag vX.Y.Z`, or the matching `*-github` wrapper in the target repo.
+5. Let the helper update only supported version sources (`VERSION`, `package.json`, or `pyproject.toml`), create the annotated tag, and create the GitHub release only after `gh auth status` succeeds.
+6. Report the final release state: version source, tag, and any skipped GitHub release or publish steps with reasons.
 
 ## Outputs / Evidence
 

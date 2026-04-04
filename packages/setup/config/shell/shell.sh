@@ -63,20 +63,40 @@ release-plan() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --dry-run "$@"
 }
 
+release-plan-github() {
+	python3 "$HOME/.config/opencode/scripts/release.py" --dry-run --github-release "$@"
+}
+
 release-patch() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --level patch "$@"
+}
+
+release-patch-github() {
+	python3 "$HOME/.config/opencode/scripts/release.py" --level patch --github-release "$@"
 }
 
 release-minor() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --level minor "$@"
 }
 
+release-minor-github() {
+	python3 "$HOME/.config/opencode/scripts/release.py" --level minor --github-release "$@"
+}
+
 release-major() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --level major "$@"
 }
 
+release-major-github() {
+	python3 "$HOME/.config/opencode/scripts/release.py" --level major --github-release "$@"
+}
+
 release-tag() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --level tag-only "$@"
+}
+
+release-tag-github() {
+	python3 "$HOME/.config/opencode/scripts/release.py" --level tag-only --github-release "$@"
 }
 
 mcp-enable() {
