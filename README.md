@@ -4,11 +4,21 @@
 [![Latest Release](https://img.shields.io/github/v/release/LucasSantana-Dev/ai-dev-toolkit)](https://github.com/LucasSantana-Dev/ai-dev-toolkit/releases)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
+**Language:** English | [Português](README.pt-BR.md)
+
 Most AI coding sessions fail for one reason: the agent has no project context.
 
 `ai-dev-toolkit` gives you reusable building blocks to fix that — rule templates, context
 and orchestration patterns, reference implementations, and terminal setup scripts for
 AI-heavy workflows. The result is predictable output, less rework, and faster delivery.
+
+Need a portable machine bootstrap companion? See
+[ai-dev-toolkit-setup](https://github.com/LucasSantana-Dev/ai-dev-toolkit-setup).
+
+## Choose the Right Repository
+
+- Use **ai-dev-toolkit** when you want reusable patterns, rule templates, reference implementations, and AI workflow guidance you can copy into many projects.
+- Use **ai-dev-toolkit-setup** when you want to bootstrap a new machine with the shared CLI, shell, tmux, MCP, and OpenCode environment already wired in.
 
 ## Why This Toolkit
 
@@ -25,6 +35,7 @@ AI-heavy workflows. The result is predictable output, less rework, and faster de
 ## Table of Contents
 
 - [Quick Start](#quick-start)
+- [Choose the Right Repository](#choose-the-right-repository)
 - [How to Adopt in One Week](#how-to-adopt-in-one-week)
 - [Repository Map](#repository-map)
 - [Philosophy](#philosophy)
