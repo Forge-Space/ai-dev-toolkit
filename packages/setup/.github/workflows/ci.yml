@@ -52,7 +52,7 @@ jobs:
             if ($errors.Count -gt 0) {
               $failed = $true
               foreach ($error in $errors) {
-                Write-Error "$file: $($error.Message)"
+                Write-Error "${file}: $($error.Message)"
               }
             }
           }
