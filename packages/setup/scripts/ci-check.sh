@@ -119,7 +119,13 @@ printf '0.1.0\n' >"$plain_repo/VERSION"
 git -C "$plain_repo" add VERSION
 git -C "$plain_repo" commit -qm 'chore: seed version'
 printf 'demo\n' >"$plain_repo/demo.txt"
+cat >"$plain_repo/CHANGELOG.md" <<'EOF'
+# Changelog
+
+## [Unreleased]
+EOF
 git -C "$plain_repo" add demo.txt
+git -C "$plain_repo" add CHANGELOG.md
 git -C "$plain_repo" commit -qm 'feat: add demo file'
 python3 "$HOME/.config/opencode/scripts/release.py" --repo "$plain_repo" --level patch --dry-run --notes-file "$tmpdir/release-notes.md" >"$tmpdir/release-plan.txt"
 resolved_release_notes="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$tmpdir/release-notes.md")"
@@ -128,6 +134,11 @@ grep -q 'tag: v0.1.1' "$tmpdir/release-plan.txt"
 grep -q "notes file: $resolved_release_notes" "$tmpdir/release-plan.txt"
 grep -q '^## Features' "$tmpdir/release-notes.md"
 grep -q 'add demo file' "$tmpdir/release-notes.md"
+python3 "$HOME/.config/opencode/scripts/release.py" --repo "$plain_repo" --level patch --changelog --notes-file "$plain_repo/RELEASE_NOTES.md" >/dev/null
+grep -q '^## \[0.1.1\]' "$plain_repo/CHANGELOG.md"
+grep -q '^### Features' "$plain_repo/CHANGELOG.md"
+grep -q 'add demo file' "$plain_repo/CHANGELOG.md"
+test -f "$plain_repo/RELEASE_NOTES.md"
 python3 "$HOME/.config/opencode/scripts/release.py" --repo "$plain_repo" --level patch --dry-run --github-release --notes-file "$tmpdir/release-notes-github.md" >"$tmpdir/release-plan-github.txt"
 resolved_release_notes_github="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$tmpdir/release-notes-github.md")"
 grep -q 'github release: requested (gh cli available)' "$tmpdir/release-plan-github.txt"
