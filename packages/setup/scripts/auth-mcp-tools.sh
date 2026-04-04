@@ -33,6 +33,9 @@ if [[ $# -eq 0 ]]; then
 	echo
 	echo "To authenticate one, run for example:"
 	echo "  bash ./scripts/auth-mcp-tools.sh linear"
+	echo
+	echo "To inspect live MCP health after auth, run for example:"
+	echo "  mcp-health linear"
 	exit 0
 fi
 
@@ -40,4 +43,9 @@ for name in "$@"; do
 	echo
 	echo "Authenticating MCP server: $name"
 	opencode mcp auth "$name"
+	if [[ -f "$HOME/.config/opencode/scripts/mcp-health.py" ]]; then
+		echo
+		echo "Live MCP health snapshot for: $name"
+		python3 "$HOME/.config/opencode/scripts/mcp-health.py" "$name" || true
+	fi
 done

@@ -5,50 +5,50 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 require_cmd() {
-  if ! command -v "$1" >/dev/null 2>&1; then
-    printf 'Missing required command: %s\n' "$1" >&2
-    exit 1
-  fi
+	if ! command -v "$1" >/dev/null 2>&1; then
+		printf 'Missing required command: %s\n' "$1" >&2
+		exit 1
+	fi
 }
 
 echo "== Tool versions =="
 for cmd in bash python3 node npm git jq rg tmux zsh shellcheck; do
-  require_cmd "$cmd"
-  case "$cmd" in
-    bash) bash --version | head -n 1 ;;
-    python3) python3 --version ;;
-    node) node --version ;;
-    npm) npm --version ;;
-    git) git --version ;;
-    jq) jq --version ;;
-    rg) rg --version | head -n 1 ;;
-    tmux) tmux -V ;;
-    zsh) zsh --version ;;
-    shellcheck) shellcheck --version | head -n 2 ;;
-  esac
+	require_cmd "$cmd"
+	case "$cmd" in
+	bash) bash --version | head -n 1 ;;
+	python3) python3 --version ;;
+	node) node --version ;;
+	npm) npm --version ;;
+	git) git --version ;;
+	jq) jq --version ;;
+	rg) rg --version | head -n 1 ;;
+	tmux) tmux -V ;;
+	zsh) zsh --version ;;
+	shellcheck) shellcheck --version | head -n 2 ;;
+	esac
 done
 
 if command -v gh >/dev/null 2>&1; then
-  gh --version | head -n 1
+	gh --version | head -n 1
 fi
 
 if command -v fd >/dev/null 2>&1; then
-  fd --version
+	fd --version
 elif command -v fdfind >/dev/null 2>&1; then
-  fdfind --version
+	fdfind --version
 else
-  printf 'Missing required command: fd (or fdfind)\n' >&2
-  exit 1
+	printf 'Missing required command: fd (or fdfind)\n' >&2
+	exit 1
 fi
 
 echo
 echo "== Shell syntax and lint =="
 SHELL_FILES=(
-  bootstrap.sh
-  scripts/*.sh
-  config/shell/shell.sh
-  config/tmux/*.sh
-  config/iterm2/*.sh
+	bootstrap.sh
+	scripts/*.sh
+	config/shell/shell.sh
+	config/tmux/*.sh
+	config/iterm2/*.sh
 )
 
 bash -n "${SHELL_FILES[@]}"
@@ -58,10 +58,10 @@ zsh -n config/shell/shell.sh
 echo
 echo "== Python validation =="
 python3 -m py_compile \
-  scripts/*.py \
-  config/tmux/*.py \
-  config/iterm2/*.py \
-  config/opencode/scripts/*.py
+	scripts/*.py \
+	config/tmux/*.py \
+	config/iterm2/*.py \
+	config/opencode/scripts/*.py
 
 echo
 echo "== Functionality smoke tests =="
@@ -79,11 +79,14 @@ test -f "$HOME/.config/ai-dev-toolkit/shell.sh"
 test -f "$HOME/.config/ai-dev-toolkit/local.env"
 test -f "$HOME/.config/opencode/opencode.jsonc"
 test -f "$HOME/.config/opencode/dcp.jsonc"
+test -f "$HOME/.config/opencode/scripts/mcp-health.py"
 test -f "$HOME/.config/opencode/scripts/toggle-mcp.py"
 test -f "$HOME/.opencode/skills/agents/ai-toolkit-mcp-health/SKILL.md"
 test -f "$HOME/.opencode/skills/agents/ai-toolkit-repo-intake/SKILL.md"
 test -f "$HOME/.opencode/skills/agents/ai-toolkit-release/SKILL.md"
 test -f "$HOME/.opencode/skills/codex/ai-toolkit-plan-change/SKILL.md"
+bash -lc 'source "$HOME/.config/ai-dev-toolkit/shell.sh" && type mcp-health >/dev/null'
+python3 "$HOME/.config/opencode/scripts/mcp-health.py" --help >/dev/null 2>&1
 
 python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" enable linear >/dev/null
 python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" disable linear >/dev/null
@@ -91,14 +94,14 @@ python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" disable linear >/dev/null
 node_repo="$tmpdir/node-repo"
 mkdir -p "$node_repo"
 git -C "$node_repo" init -q
-printf '{"name":"demo","scripts":{"dev":"echo dev","test":"echo test"}}\n' > "$node_repo/package.json"
+printf '{"name":"demo","scripts":{"dev":"echo dev","test":"echo test"}}\n' >"$node_repo/package.json"
 python3 "$HOME/.config/tmux/generate-session-template.py" detect "$node_repo" >/dev/null
 test -f "$node_repo/.tmux-session.json"
 
 tmux kill-session -t ci_verify 2>/dev/null || true
 tmux new-session -d -s ci_verify -c "$node_repo"
 "$HOME/.config/tmux/bootstrap-project-session.sh" ci_verify "$node_repo"
-tmux list-windows -t ci_verify -F '#{window_name}' > "$tmpdir/windows.txt"
+tmux list-windows -t ci_verify -F '#{window_name}' >"$tmpdir/windows.txt"
 grep -qx 'editor' <(sed -n '1p' "$tmpdir/windows.txt")
 grep -q '^dev$' "$tmpdir/windows.txt"
 grep -q '^test$' "$tmpdir/windows.txt"
@@ -110,7 +113,7 @@ git -C "$plain_repo" init -q
 tmux kill-session -t ci_verify_plain 2>/dev/null || true
 tmux new-session -d -s ci_verify_plain -c "$plain_repo"
 "$HOME/.config/tmux/bootstrap-project-session.sh" ci_verify_plain "$plain_repo"
-tmux list-windows -t ci_verify_plain -F '#{window_name}' > "$tmpdir/plain-windows.txt"
+tmux list-windows -t ci_verify_plain -F '#{window_name}' >"$tmpdir/plain-windows.txt"
 grep -qx 'editor' <(sed -n '1p' "$tmpdir/plain-windows.txt")
 grep -q '^git$' "$tmpdir/plain-windows.txt"
 grep -q '^files$' "$tmpdir/plain-windows.txt"
