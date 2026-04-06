@@ -167,6 +167,8 @@ release-tag-github --repo /path/to/repo --tag v1.2.3
 
 When using `--changelog`, the target repository must already have a `CHANGELOG.md` file with a `## [Unreleased]` section.
 
+Note: this repo is still pinned to `TOOLKIT_VERSION=0.12.0`. Newly merged canonical helper capabilities — including release preflight / verify — only become available here after the next `ai-dev-toolkit` release tag and an explicit pin bump in this repo.
+
 ## What is configured for AI tools
 
 Bootstrap prepares:
