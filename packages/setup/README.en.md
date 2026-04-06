@@ -176,10 +176,13 @@ To check whether a newer toolkit release already exists before bumping the pin:
 ```bash
 toolkit-version-check
 toolkit-version-prepare
+toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md
 toolkit-version-sync
 ```
 
 Use `toolkit-version-prepare` to generate a ready PR summary without changing `TOOLKIT_VERSION`. Only use `toolkit-version-sync` when you want to apply the bump to the local file.
+
+If you want to save the PR body as reusable Markdown for GitHub, use `toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md`.
 
 ## What is configured for AI tools
 

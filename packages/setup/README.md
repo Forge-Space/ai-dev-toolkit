@@ -178,10 +178,13 @@ Para verificar se já existe um release novo do toolkit antes de fazer bump do p
 ```bash
 toolkit-version-check
 toolkit-version-prepare
+toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md
 toolkit-version-sync
 ```
 
 Use `toolkit-version-prepare` para gerar um resumo pronto de PR sem alterar o `TOOLKIT_VERSION`. Só use `toolkit-version-sync` quando quiser aplicar o bump no arquivo local.
+
+Se quiser salvar o corpo do PR em Markdown para reaproveitar no GitHub, use `toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md`.
 
 ## O que será configurado para AI tools
 
