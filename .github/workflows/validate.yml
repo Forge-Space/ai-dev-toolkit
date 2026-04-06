@@ -58,7 +58,7 @@ jobs:
           tmpdir="$(mktemp -d)"
           trap 'rm -rf "$tmpdir"' EXIT
           repo="$tmpdir/repo"
-          mkdir -p "$repo"
+          mkdir -p "$repo" "$tmpdir/home"
           git -C "$repo" init -q
           git -C "$repo" config user.name "CI"
           git -C "$repo" config user.email "ci@example.com"
@@ -73,7 +73,9 @@ jobs:
           git -C "$repo" tag -a v0.1.1 -m 'chore: seed release tag'
           git -C "$repo" config --unset user.name
           git -C "$repo" config --unset user.email
-          python3 tools/release.py --repo "$repo" --verify --level patch --notes-file "$tmpdir/RELEASE_NOTES.md" --changelog > "$tmpdir/preflight.txt"
+          HOME="$tmpdir/home" GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null \
+            python3 tools/release.py --repo "$repo" --verify --level patch --notes-file "$tmpdir/RELEASE_NOTES.md" --changelog > "$tmpdir/preflight.txt"
+          cat "$tmpdir/preflight.txt"
           grep -q '^overall: blocked$' "$tmpdir/preflight.txt"
           grep -q '^git working tree: ready clean$' "$tmpdir/preflight.txt"
           grep -q '^git identity: blocked missing user.name, user.email$' "$tmpdir/preflight.txt"
