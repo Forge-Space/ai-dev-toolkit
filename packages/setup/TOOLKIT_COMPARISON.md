@@ -160,21 +160,16 @@ The **ai-dev-toolkit-setup** repository provides **machine-level bootstrap and o
 | `scripts/install-ai-clis.sh` | OpenCode, Claude Code CLI | AI tools |
 | `scripts/setup-shell.sh` | Shell helper installation | Shell config |
 | `scripts/setup-tmux.sh` | Tmux workflow installation | Tmux config |
-| `scripts/setup-ai-tools.sh` | OpenCode bootstrap | OpenCode setup |
+| `scripts/setup-ai-tools.sh` | Toolkit-driven AI tools bootstrap | AI tools setup |
 | `scripts/setup-local-env.sh` | Local env file creation | Secrets template |
 | `scripts/auth-ai-tools.sh` | Interactive auth guidance | Auth scaffolding |
 | `scripts/auth-mcp-tools.sh` | MCP-specific auth guidance | MCP auth |
 | `scripts/doctor.sh` | Environment validation | Verification |
 | `scripts/ci-check.sh` | CI checks (lint, test, etc.) | Quality gates |
 | `config/shell/shell.sh` | Shell functions & aliases | Shell helpers |
-| `config/opencode/AGENTS.md` | Shared guidance | Conventions |
-| `config/opencode/opencode.template.jsonc` | OpenCode config template | Agent/MCP config |
-| `config/opencode/dcp.template.jsonc` | Context compression defaults | Token optimization |
-| `config/opencode/skills/agents/*` | Starter agent skills | Reusable workflows |
-| `config/opencode/skills/codex/*` | Starter codex skills | Reusable workflows |
-| `config/opencode/scripts/mcp-health.py` | MCP status checker | MCP management |
-| `config/opencode/scripts/toggle-mcp.py` | MCP enable/disable | MCP management |
-| `config/opencode/scripts/release.py` | Release automation | Release workflow |
+| `config/ai-tools/AGENTS.md` | Offline fallback guidance | Conventions |
+| `config/ai-tools/opencode.template.jsonc` | Offline OpenCode config fallback | Agent/MCP config |
+| `config/ai-tools/dcp.template.jsonc` | Offline context compression fallback | Token optimization |
 | `config/tmux/*` | Tmux session templates | Tmux workflow |
 | `templates/local.env.example` | Secrets template | Secrets scaffolding |
 | `Brewfile` | Homebrew dependencies | macOS packages |
@@ -183,11 +178,12 @@ The **ai-dev-toolkit-setup** repository provides **machine-level bootstrap and o
 
 | File | Purpose | Scope |
 |------|---------|-------|
-| `AGENTS.md` | Shared guidance (copied by setup) | Conventions |
-| `config/opencode/skills/agents/*` | Reusable agent skills | Skill library |
-| `config/opencode/skills/codex/*` | Reusable codex skills | Skill library |
-| `opencode.template.jsonc` | Config template (copied by setup) | Agent/MCP config |
-| `dcp.template.jsonc` | Context compression template | Token optimization |
+| `kit/install.sh` + `kit/adapters/opencode.sh` | Canonical AI tool installer flow | Distribution logic |
+| `kit/core/skills/*` | Reusable agent and codex skill library | Skill library |
+| `implementations/opencode/*.jsonc` | Canonical OpenCode config templates | Agent/MCP config |
+| `tools/mcp-health.py` | MCP status checker | MCP management |
+| `tools/toggle-mcp.py` | MCP enable/disable | MCP management |
+| `tools/release.py` | Release automation | Release workflow |
 | Project-level patterns | Rules, implementations, examples | Per-project guidance |
 
 ---
@@ -205,8 +201,8 @@ source ~/.bashrc  # or ~/.zshrc
 **Result**: 
 - System packages installed
 - Shell helpers available
-- OpenCode environment created at `~/.config/opencode/`
-- Starter skills installed
+- Toolkit-managed AI tool environment created from the pinned release
+- Starter skills installed from toolkit-owned assets
 - Local env template created
 
 ### Step 2: Authenticate (Manual + Setup Guidance)
@@ -222,6 +218,10 @@ bash ./scripts/auth-mcp-tools.sh
 - OpenCode authenticated
 - AI provider keys configured
 - MCP providers enabled (optional)
+
+### Version pin note
+
+This repo currently consumes `ai-dev-toolkit` via `TOOLKIT_VERSION=0.12.0`. Features merged upstream after that release — for example release preflight / verify support in the canonical `tools/release.py` helper — do not become available here until a new toolkit tag is published and this pin is bumped.
 
 ### Step 3: Enter a Project (ai-dev-toolkit)
 ```bash

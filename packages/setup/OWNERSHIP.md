@@ -102,5 +102,5 @@ These local files are only used when the toolkit tarball is unreachable.
 ## How to Update Toolkit Content
 
 1. Submit a PR to [Forge-Space/ai-dev-toolkit](https://github.com/Forge-Space/ai-dev-toolkit)
-2. After toolkit releases, bump `TOOLKIT_VERSION` in this repo
+2. After toolkit releases, bump `TOOLKIT_VERSION` in this repo so newly tagged helper capabilities become available here
 3. Run `./scripts/doctor.sh` to verify the pin is valid
