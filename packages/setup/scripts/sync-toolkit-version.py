@@ -32,7 +32,25 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Update TOOLKIT_VERSION when a newer stable release exists",
     )
+    parser.add_argument(
+        "--prepare-pr",
+        action="store_true",
+        help="Print a ready-to-use PR summary for a toolkit version bump without modifying files",
+    )
     return parser.parse_args()
+
+
+def render_pr_prep(current: tuple[int, int, int], latest: tuple[int, int, int]) -> str:
+    current_text = format_version(current)
+    latest_text = format_version(latest)
+    return "\n".join(
+        [
+            "## Summary",
+            f"- Bump TOOLKIT_VERSION from {current_text} to {latest_text}.",
+            f"- Pull the latest tagged ai-dev-toolkit release {latest_text} into setup bootstrap flows.",
+            "- Re-run bash ./scripts/ci-check.sh after updating the pin.",
+        ]
+    )
 
 
 def parse_version(text: str) -> tuple[int, int, int]:
@@ -79,6 +97,9 @@ def latest_stable_release(releases: list[dict]) -> tuple[int, int, int]:
 
 def main() -> int:
     args = parse_args()
+    if args.apply and args.prepare_pr:
+        raise SystemExit("Choose only one of --apply or --prepare-pr")
+
     version_path = Path(args.version_file).resolve()
     current_raw = version_path.read_text().strip()
     current = parse_version(current_raw)
@@ -92,6 +113,10 @@ def main() -> int:
         if args.apply:
             version_path.write_text(format_version(latest)[1:] + "\n")
             print(f"action: updated to {format_version(latest)}")
+        elif args.prepare_pr:
+            print("action: prepare toolkit bump")
+            print(f"pr-title: chore: bump toolkit version to {format_version(latest)}")
+            print(render_pr_prep(current, latest))
         else:
             print("action: update available")
     else:
