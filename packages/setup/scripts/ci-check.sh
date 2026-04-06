@@ -74,10 +74,19 @@ bash scripts/setup-shell.sh "$ROOT" both
 bash scripts/setup-ai-tools.sh "$ROOT"
 bash scripts/setup-local-env.sh "$ROOT"
 
+repo_toolkit_version="$(tr -d '\n' <TOOLKIT_VERSION)"
 test -f "$HOME/.config/ai-dev-toolkit/shell.sh"
 test -f "$HOME/.config/ai-dev-toolkit/local.env"
 test -f "$HOME/.config/ai-dev-toolkit/.toolkit-version"
+grep -qx "$repo_toolkit_version" "$HOME/.config/ai-dev-toolkit/.toolkit-version"
 bash -lc 'source "$HOME/.config/ai-dev-toolkit/shell.sh"'
+bash ./scripts/doctor.sh >"$tmpdir/doctor.txt"
+grep -q "toolkit pin sync: v${repo_toolkit_version}" "$tmpdir/doctor.txt"
+printf '9.9.9\n' >"$HOME/.config/ai-dev-toolkit/.toolkit-version"
+bash ./scripts/doctor.sh >"$tmpdir/doctor-mismatch.txt"
+grep -q "toolkit pin drift" "$tmpdir/doctor-mismatch.txt"
+grep -q "expected v${repo_toolkit_version}, found v9.9.9" "$tmpdir/doctor-mismatch.txt"
+printf '%s\n' "$repo_toolkit_version" >"$HOME/.config/ai-dev-toolkit/.toolkit-version"
 
 override_toolkit="$tmpdir/toolkit-override"
 mkdir -p "$override_toolkit/kit" "$override_toolkit/tools"
@@ -105,6 +114,7 @@ TOOLKIT_DIR_OVERRIDE="$override_toolkit" bash scripts/setup-ai-tools.sh "$ROOT"
 test -f "$HOME/.config/opencode/scripts/mcp-health.py"
 test -f "$HOME/.config/opencode/scripts/toggle-mcp.py"
 test -f "$HOME/.config/opencode/scripts/release.py"
+grep -qx 'override-local' "$HOME/.config/ai-dev-toolkit/.toolkit-version"
 python3 "$HOME/.config/opencode/scripts/mcp-health.py" >/dev/null
 python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" >/dev/null
 python3 "$HOME/.config/opencode/scripts/release.py" >/dev/null

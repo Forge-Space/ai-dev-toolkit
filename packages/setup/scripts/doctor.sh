@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 ok() { printf '✅ %s\n' "$1"; }
 warn() { printf '⚠️  %s\n' "$1"; }
 
@@ -138,6 +140,12 @@ echo
 echo "== Toolkit sync =="
 
 TOOLKIT_STAMP="$HOME/.config/ai-dev-toolkit/.toolkit-version"
+REPO_TOOLKIT_VERSION_FILE="$ROOT/TOOLKIT_VERSION"
+REPO_TOOLKIT_VERSION=""
+if [[ -f "$REPO_TOOLKIT_VERSION_FILE" ]]; then
+	REPO_TOOLKIT_VERSION="$(tr -d '\n' <"$REPO_TOOLKIT_VERSION_FILE")"
+fi
+
 if [[ -f "$TOOLKIT_STAMP" ]]; then
 	STAMP_VAL="$(cat "$TOOLKIT_STAMP")"
 	if [[ "$STAMP_VAL" == "local-fallback" || "$STAMP_VAL" == "no-pin" ]]; then
@@ -147,8 +155,23 @@ if [[ -f "$TOOLKIT_STAMP" ]]; then
 	else
 		ok "toolkit content from ai-dev-toolkit v${STAMP_VAL}"
 	fi
+
+	if [[ -z "$REPO_TOOLKIT_VERSION" ]]; then
+		warn "toolkit pin file missing in repo"
+	elif [[ "$STAMP_VAL" == "override-local" ]]; then
+		warn "toolkit pin sync skipped: local override source active"
+	elif [[ "$STAMP_VAL" == "local-fallback" || "$STAMP_VAL" == "no-pin" ]]; then
+		warn "toolkit pin drift: expected v${REPO_TOOLKIT_VERSION}, found ${STAMP_VAL} (run: bash scripts/setup-ai-tools.sh .)"
+	elif [[ "$STAMP_VAL" == "$REPO_TOOLKIT_VERSION" ]]; then
+		ok "toolkit pin sync: v${REPO_TOOLKIT_VERSION}"
+	else
+		warn "toolkit pin drift: expected v${REPO_TOOLKIT_VERSION}, found v${STAMP_VAL} (run: bash scripts/setup-ai-tools.sh .)"
+	fi
 else
 	warn "toolkit version stamp missing (run setup-ai-tools.sh)"
+	if [[ -n "$REPO_TOOLKIT_VERSION" ]]; then
+		warn "toolkit pin drift: expected v${REPO_TOOLKIT_VERSION}, found missing stamp (run: bash scripts/setup-ai-tools.sh .)"
+	fi
 fi
 
 for helper in mcp-health.py toggle-mcp.py release.py; do
