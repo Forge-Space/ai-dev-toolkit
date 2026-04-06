@@ -99,6 +99,14 @@ release-tag-github() {
 	python3 "$HOME/.config/opencode/scripts/release.py" --level tag-only --github-release "$@"
 }
 
+toolkit-version-check() {
+	python3 "$HOME/.config/ai-dev-toolkit/scripts/sync-toolkit-version.py" "$@"
+}
+
+toolkit-version-sync() {
+	python3 "$HOME/.config/ai-dev-toolkit/scripts/sync-toolkit-version.py" --apply "$@"
+}
+
 mcp-enable() {
 	python3 "$HOME/.config/opencode/scripts/toggle-mcp.py" enable "$1"
 }

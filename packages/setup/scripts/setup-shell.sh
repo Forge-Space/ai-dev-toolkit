@@ -4,11 +4,15 @@ set -euo pipefail
 ROOT="${1:?repo root required}"
 TARGET="${2:-auto}"
 INSTALL_DIR="$HOME/.config/ai-dev-toolkit"
+SCRIPTS_DIR="$INSTALL_DIR/scripts"
 # shellcheck disable=SC2016
 SOURCE_LINE='[ -f "$HOME/.config/ai-dev-toolkit/shell.sh" ] && . "$HOME/.config/ai-dev-toolkit/shell.sh"'
 
 mkdir -p "$INSTALL_DIR"
 cp "$ROOT/config/shell/shell.sh" "$INSTALL_DIR/shell.sh"
+mkdir -p "$SCRIPTS_DIR"
+cp "$ROOT/scripts/sync-toolkit-version.py" "$SCRIPTS_DIR/sync-toolkit-version.py"
+chmod +x "$SCRIPTS_DIR/sync-toolkit-version.py"
 
 append_once() {
 	local file="$1"
