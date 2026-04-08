@@ -1,7 +1,7 @@
 ---
 name: the-fool
 description: >
-  Challenges ideas, plans, decisions, and proposals using structured critical reasoning as devil's advocate, pre-mortem, red team, or evidence audit.
+  Questiona ideias, planos, decisões e propostas usando raciocínio crítico estruturado como advogado do diabo, pre-mortem, red team ou auditoria de evidências.
 metadata:
   sources:
     - kind: github-file

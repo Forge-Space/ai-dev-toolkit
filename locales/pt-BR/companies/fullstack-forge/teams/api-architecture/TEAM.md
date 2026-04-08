@@ -1,6 +1,6 @@
 ---
 name: API & Architecture
-description: API design, distributed systems, and MCP integration specialists
+description: Especialistas em design de APIs, sistemas distribuídos e integração com MCP
 slug: api-architecture
 manager: ../../agents/architecture-lead/AGENTS.md
 includes:
@@ -13,4 +13,4 @@ tags:
   - engineering
 ---
 
-The API and architecture team designs system architectures, APIs, and distributed systems. Covers REST, GraphQL, microservices, WebSockets, and MCP protocol development. Led by the Architecture Lead.
+A equipe de API e arquitetura projeta arquiteturas de sistemas, APIs e sistemas distribuídos. Cobre REST, GraphQL, microsserviços, WebSockets e desenvolvimento com o protocolo MCP. Liderada pelo Architecture Lead.

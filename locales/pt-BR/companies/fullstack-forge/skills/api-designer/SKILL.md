@@ -1,7 +1,7 @@
 ---
 name: api-designer
 description: >
-  Designs REST or GraphQL APIs, creates OpenAPI specifications, and plans API architecture including resource modeling, versioning strategies, pagination patterns, and error handling standards.
+  Projeta APIs REST ou GraphQL, cria especificações OpenAPI e planeja a arquitetura da API, incluindo modelagem de recursos, estratégias de versionamento, padrões de paginação e padrões de tratamento de erros.
 metadata:
   sources:
     - kind: github-file

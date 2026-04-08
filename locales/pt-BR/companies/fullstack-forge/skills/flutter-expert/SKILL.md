@@ -1,7 +1,7 @@
 ---
 name: flutter-expert
 description: >
-  Builds cross-platform applications with Flutter 3+ and Dart including widget development, Riverpod/Bloc state management, GoRouter navigation, and platform-specific implementations.
+  Constrói aplicações multiplataforma com Flutter 3+ e Dart, incluindo desenvolvimento de widgets, gerenciamento de estado com Riverpod/Bloc, navegação com GoRouter e implementações específicas de plataforma.
 metadata:
   sources:
     - kind: github-file

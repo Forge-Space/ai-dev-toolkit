@@ -1,6 +1,6 @@
 ---
 name: Platform Specialists
-description: Third-party platform specialists for Salesforce, Shopify, WordPress, and Atlassian
+description: Especialistas em plataformas terceiras para Salesforce, Shopify, WordPress e Atlassian
 slug: platform-specialists
 manager: ../../agents/platform-lead/AGENTS.md
 includes:
@@ -12,4 +12,4 @@ tags:
   - integrations
 ---
 
-The platform specialists team handles development on specific third-party platforms. Covers Salesforce (Apex, LWC), e-commerce (Shopify, WordPress/WooCommerce), and Atlassian (Jira, Confluence via MCP). Led by the Platform Lead.
+A equipe de especialistas em plataformas cuida do desenvolvimento em plataformas terceiras específicas. Cobre Salesforce (Apex, LWC), e-commerce (Shopify, WordPress/WooCommerce) e Atlassian (Jira, Confluence via MCP). Liderada pelo Platform Lead.

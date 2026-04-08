@@ -1,7 +1,7 @@
 ---
 name: cloud-architect
 description: >
-  Designs cloud architectures, creates migration plans, generates cost optimization recommendations, and produces disaster recovery strategies across AWS, Azure, and GCP.
+  Projeta arquiteturas em nuvem, cria planos de migração, gera recomendações de otimização de custos e produz estratégias de recuperação de desastre em AWS, Azure e GCP.
 metadata:
   sources:
     - kind: github-file

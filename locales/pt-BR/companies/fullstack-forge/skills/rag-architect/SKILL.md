@@ -1,7 +1,7 @@
 ---
 name: rag-architect
 description: >
-  Designs production-grade RAG systems with document chunking, embedding generation, vector store configuration, hybrid search pipelines, reranking, and retrieval quality evaluation.
+  Projeta sistemas de RAG em nível de produção com chunking de documentos, geração de embeddings, configuração de vector stores, pipelines de busca híbrida, reranking e avaliação da qualidade da recuperação.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: golang-pro
 description: >
-  Implements concurrent Go patterns using goroutines and channels, designs microservices with gRPC or REST, optimizes performance with pprof, and enforces idiomatic Go.
+  Implementa padrões concorrentes em Go usando goroutines e channels, projeta microsserviços com gRPC ou REST, otimiza performance com pprof e aplica Go idiomático.
 metadata:
   sources:
     - kind: github-file

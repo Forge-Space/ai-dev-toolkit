@@ -1,6 +1,6 @@
 ---
 name: Security
-description: Security engineering covering OWASP Top 10 prevention, secure coding, vulnerability auditing, and full-stack security
+description: Engenharia de segurança cobrindo prevenção ao OWASP Top 10, desenvolvimento seguro, auditoria de vulnerabilidades e segurança full-stack
 slug: security
 manager: ../../agents/security-lead/AGENTS.md
 includes:
@@ -10,4 +10,4 @@ tags:
   - engineering
 ---
 
-The security team handles all security implementation and review across the organization. Covers authentication, authorization, vulnerability auditing, OWASP Top 10 prevention, and secure full-stack development. Led by the Security Lead.
+A equipe de segurança cuida de toda implementação e revisão de segurança em toda a organização. Cobre autenticação, autorização, auditoria de vulnerabilidades, prevenção ao OWASP Top 10 e desenvolvimento full-stack seguro. Liderada pelo Security Lead.

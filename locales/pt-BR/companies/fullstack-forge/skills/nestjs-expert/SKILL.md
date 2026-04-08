@@ -1,7 +1,7 @@
 ---
 name: nestjs-expert
 description: >
-  Creates NestJS modules, controllers, services, DTOs, guards, and interceptors for enterprise-grade TypeScript backend applications with dependency injection.
+  Cria módulos, controllers, services, DTOs, guards e interceptors em NestJS para aplicações backend TypeScript de nível corporativo com injeção de dependências.
 metadata:
   sources:
     - kind: github-file

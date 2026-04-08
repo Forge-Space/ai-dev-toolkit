@@ -1,7 +1,7 @@
 ---
 name: mcp-developer
 description: >
-  Builds, debugs, and extends MCP servers and clients that connect AI systems with external tools and data sources via stdio/HTTP/SSE transport layers.
+  Constrói, depura e estende servidores e clientes MCP que conectam sistemas de IA a ferramentas externas e fontes de dados por camadas de transporte stdio/HTTP/SSE.
 metadata:
   sources:
     - kind: github-file

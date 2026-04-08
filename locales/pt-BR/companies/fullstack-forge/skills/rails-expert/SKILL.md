@@ -1,7 +1,7 @@
 ---
 name: rails-expert
 description: >
-  Optimizes Active Record queries, implements Turbo Frames and Streams, configures Action Cable WebSockets, sets up Sidekiq workers, and writes RSpec test suites for Rails 7+.
+  Otimiza queries em Active Record, implementa Turbo Frames e Streams, configura WebSockets com Action Cable, prepara workers com Sidekiq e escreve suítes de teste em RSpec para Rails 7+.
 metadata:
   sources:
     - kind: github-file

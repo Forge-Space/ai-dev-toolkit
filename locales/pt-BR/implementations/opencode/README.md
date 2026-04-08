@@ -1,68 +1,74 @@
-# OpenCode Implementation
+# Implementação para OpenCode
 
-Reference implementation of the toolkit patterns for [OpenCode](https://opencode.ai).
+Implementação de referência dos patterns do toolkit para [OpenCode](https://opencode.ai).
 
 ## Setup
 
 ```bash
-# Core OpenCode config
+# Config principal do OpenCode
 cp opencode.jsonc ~/.config/opencode/opencode.jsonc
 cp dcp.jsonc ~/.config/opencode/dcp.jsonc
 
-# oh-my-openagent plugin config (if using oh-my-openagent)
+# Config do plugin oh-my-openagent (se estiver usando oh-my-openagent)
 cp oh-my-openagent.jsonc ~/.config/opencode/oh-my-opencode.jsonc
 ```
 
 ## oh-my-openagent
 
-[oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) replaces the local plugin `.ts` files with a batteries-included npm plugin. When using it, skip the `plugin/` step above.
+[oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) substitui os
+arquivos locais de plugin `.ts` por um plugin npm com tudo incluído. Ao usá-lo,
+pule a etapa `plugin/` acima.
 
-Add to `opencode.jsonc` plugins:
+Adicione aos plugins de `opencode.jsonc`:
 
 ```json
 { "plugin": ["oh-my-openagent"] }
 ```
 
-Configure agents and category routing in `oh-my-openagent.jsonc`. The `prompt_append` field on Sisyphus injects your `AGENTS.md` rules into every session automatically.
+Configure agentes e roteamento por categoria em `oh-my-openagent.jsonc`. O campo
+`prompt_append` do Sisyphus injeta automaticamente as suas regras de `AGENTS.md`
+em toda sessão.
 
-If you install with `forge-kit`, run with `--oh-my-compat` to copy this reference config to `~/.config/opencode/oh-my-opencode.jsonc` when it does not exist yet.
+Se você instalar com `forge-kit`, rode com `--oh-my-compat` para copiar esta
+configuração de referência para `~/.config/opencode/oh-my-opencode.jsonc` quando
+ela ainda não existir.
 
 ## Plugins
 
-| Plugin               | Pattern                                                    | Description                                               |
-| -------------------- | ---------------------------------------------------------- | --------------------------------------------------------- |
-| `orchestrator.ts`    | [Task Orchestration](../../patterns/task-orchestration.md) | Centralized backlog, auto-dispatch, completion monitoring |
-| `session-manager.ts` | [Session Management](../../patterns/session-management.md) | Auto-cleanup, status tagging, per-project limits          |
-| `session-resume.ts`  | [Session Management](../../patterns/session-management.md) | Persist and resume interrupted work                       |
-| `perf-optimizer.ts`  | [Session Management](../../patterns/session-management.md) | Auto-compact for faster switching                         |
-| `notify.ts`          | —                                                          | Native OS notifications for events                        |
+| Plugin               | Pattern                                                    | Descrição                                               |
+| -------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| `orchestrator.ts`    | [Task Orchestration](../../patterns/task-orchestration.md) | Backlog centralizado, auto-dispatch, monitoramento de conclusão |
+| `session-manager.ts` | [Session Management](../../patterns/session-management.md) | Auto-cleanup, marcação de status, limites por projeto   |
+| `session-resume.ts`  | [Session Management](../../patterns/session-management.md) | Persiste e retoma trabalho interrompido                 |
+| `perf-optimizer.ts`  | [Session Management](../../patterns/session-management.md) | Auto-compacta para alternar mais rápido                 |
+| `notify.ts`          | —                                                          | Notificações nativas do SO para eventos                 |
 
 ## Commands
 
-| Command      | Description                                    |
-| ------------ | ---------------------------------------------- |
-| `/plan`      | Analyze repos, create prioritized task backlog |
-| `/backlog`   | Show task status across all projects           |
-| `/next`      | Manually dispatch next ready task              |
-| `/resume`    | Load git state, suggest next task              |
-| `/verify`    | Run lint + type-check + test + build           |
-| `/ship`      | Commit + push + create PR                      |
-| `/commit`    | Conventional commit without push               |
-| `/test`      | Run tests, report results                      |
-| `/clean`     | Clear build artifacts                          |
-| `/validate`  | Full repo health scorecard                     |
-| `/ecosystem` | Health check across all repos                  |
+| Command      | Descrição                                         |
+| ------------ | ------------------------------------------------- |
+| `/plan`      | Analisa repositórios e cria backlog priorizado    |
+| `/backlog`   | Mostra o status das tarefas em todos os projetos  |
+| `/next`      | Dispara manualmente a próxima tarefa pronta       |
+| `/resume`    | Carrega estado do git e sugere a próxima tarefa   |
+| `/verify`    | Roda lint + type-check + test + build             |
+| `/ship`      | Commit + push + criação de PR                     |
+| `/commit`    | Conventional commit sem push                      |
+| `/test`      | Executa testes e reporta os resultados            |
+| `/clean`     | Limpa artefatos de build                          |
+| `/validate`  | Scorecard completo de saúde do repo               |
+| `/ecosystem` | Health check em todos os repositórios             |
 
 ## Adapting to Other Tools
 
-Each plugin implements a pattern. To port to another tool:
+Cada plugin implementa um pattern. Para portar para outra ferramenta:
 
-1. Read the pattern doc in `patterns/`
-2. Use the plugin as a reference for logic
-3. Implement using your tool's extension API
+1. Leia a documentação do pattern em `patterns/`
+2. Use o plugin como referência da lógica
+3. Implemente usando a API de extensão da sua ferramenta
 
-For example, `orchestrator.ts` could become:
+Por exemplo, `orchestrator.ts` poderia virar:
 
-- A **Cursor extension** using the Cursor API
-- A **shell script** with `claude --session-id` for Claude Code
-- A **VS Code task** with workspace automation
+- uma **extensão do Cursor** usando a API do Cursor
+- um **script shell** com `claude --session-id` para Claude Code
+- uma **task do VS Code** com automação de workspace

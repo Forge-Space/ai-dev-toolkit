@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: >
-  Analyzes code diffs and files to identify bugs, security vulnerabilities, code smells, and architectural concerns, then produces a structured review report with prioritized, actionable feedback.
+  Analisa diffs e arquivos de código para identificar bugs, vulnerabilidades de segurança, code smells e preocupações arquiteturais, e então produz um relatório estruturado de review com feedback priorizado e acionável.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: atlassian-mcp
 description: >
-  Integrates with Atlassian products to manage project tracking and documentation via MCP protocol, including Jira issue management, Confluence page editing, sprint and backlog management.
+  Integra produtos Atlassian para gerenciar acompanhamento de projeto e documentação via protocolo MCP, incluindo gestão de issues no Jira, edição de páginas no Confluence e gestão de sprints e backlog.
 metadata:
   sources:
     - kind: github-file

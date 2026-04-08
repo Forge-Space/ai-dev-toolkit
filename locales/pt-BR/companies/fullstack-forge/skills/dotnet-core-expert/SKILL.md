@@ -1,7 +1,7 @@
 ---
 name: dotnet-core-expert
 description: >
-  Builds .NET 8 applications with minimal APIs, clean architecture, cloud-native microservices, Entity Framework Core, CQRS with MediatR, and AOT compilation.
+  Constrói aplicações .NET 8 com minimal APIs, clean architecture, microsserviços cloud-native, Entity Framework Core, CQRS com MediatR e compilação AOT.
 metadata:
   sources:
     - kind: github-file

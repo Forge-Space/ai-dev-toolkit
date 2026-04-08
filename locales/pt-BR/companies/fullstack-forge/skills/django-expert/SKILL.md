@@ -1,7 +1,7 @@
 ---
 name: django-expert
 description: >
-  Builds Django web applications and REST APIs with Django REST Framework, creates models with proper indexes, optimizes ORM queries, and configures JWT authentication.
+  Constrói aplicações web em Django e APIs REST com Django REST Framework, cria modelos com índices adequados, otimiza queries do ORM e configura autenticação JWT.
 metadata:
   sources:
     - kind: github-file

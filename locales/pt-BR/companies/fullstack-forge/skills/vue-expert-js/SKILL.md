@@ -1,7 +1,7 @@
 ---
 name: vue-expert-js
 description: >
-  Creates Vue 3 components with vanilla JS composables, configures Vite projects, and sets up routing and state management using JavaScript only with JSDoc typing.
+  Cria componentes Vue 3 com composables em JavaScript puro, configura projetos com Vite e prepara roteamento e gerenciamento de estado usando apenas JavaScript com tipagem via JSDoc.
 metadata:
   sources:
     - kind: github-file

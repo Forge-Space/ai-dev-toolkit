@@ -1,6 +1,6 @@
 ---
 name: Data & ML
-description: Data engineering, machine learning, and AI specialists covering pandas, Spark, ML pipelines, fine-tuning, prompt engineering, and RAG
+description: Especialistas em engenharia de dados, machine learning e IA cobrindo pandas, Spark, pipelines de ML, fine-tuning, prompt engineering e RAG
 slug: data-ml
 manager: ../../agents/data-lead/AGENTS.md
 includes:
@@ -13,4 +13,4 @@ tags:
   - ai
 ---
 
-The data and ML team handles data processing, machine learning pipelines, model training, and AI application development. Covers pandas, Spark, MLOps, LLM fine-tuning, prompt engineering, and RAG systems. Led by the Data Lead.
+A equipe de dados e ML cuida de processamento de dados, pipelines de machine learning, treinamento de modelos e desenvolvimento de aplicações de IA. Cobre pandas, Spark, MLOps, fine-tuning de LLMs, prompt engineering e sistemas de RAG. Liderada pelo Data Lead.

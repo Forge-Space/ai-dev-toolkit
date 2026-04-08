@@ -1,7 +1,7 @@
 ---
 name: wordpress-pro
 description: >
-  Develops custom WordPress themes and plugins, creates Gutenberg blocks, configures WooCommerce stores, implements REST API endpoints, and applies security hardening.
+  Desenvolve temas e plugins customizados para WordPress, cria blocos Gutenberg, configura lojas WooCommerce, implementa endpoints de API REST e aplica hardening de segurança.
 metadata:
   sources:
     - kind: github-file

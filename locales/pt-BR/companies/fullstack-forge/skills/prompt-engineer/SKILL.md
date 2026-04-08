@@ -1,7 +1,7 @@
 ---
 name: prompt-engineer
 description: >
-  Writes, refactors, and evaluates prompts for LLMs generating optimized templates, structured output schemas, evaluation rubrics, and test suites.
+  Escreve, refatora e avalia prompts para LLMs, gerando templates otimizados, schemas de saída estruturada, rubricas de avaliação e suítes de teste.
 metadata:
   sources:
     - kind: github-file

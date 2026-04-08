@@ -1,7 +1,7 @@
 ---
 name: spark-engineer
 description: >
-  Writes Spark jobs, debugs performance issues, configures cluster settings for distributed data processing, DataFrame transformations, and structured streaming analytics.
+  Escreve jobs em Spark, depura problemas de performance, configura clusters para processamento distribuído de dados, transformações com DataFrames e analytics com structured streaming.
 metadata:
   sources:
     - kind: github-file

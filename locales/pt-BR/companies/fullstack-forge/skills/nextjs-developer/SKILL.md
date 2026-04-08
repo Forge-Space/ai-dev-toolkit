@@ -1,7 +1,7 @@
 ---
 name: nextjs-developer
 description: >
-  Builds Next.js 14+ applications with App Router, server components, server actions, middleware, streaming SSR, and Vercel deployment.
+  Constrói aplicações Next.js 14+ com App Router, server components, server actions, middleware, streaming SSR e deploy na Vercel.
 metadata:
   sources:
     - kind: github-file

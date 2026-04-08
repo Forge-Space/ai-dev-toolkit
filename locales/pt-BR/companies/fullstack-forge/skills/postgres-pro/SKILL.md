@@ -1,7 +1,7 @@
 ---
 name: postgres-pro
 description: >
-  Optimizes PostgreSQL queries, configures replication, implements advanced features including EXPLAIN analysis, JSONB operations, extension usage, and VACUUM tuning.
+  Otimiza queries em PostgreSQL, configura replicação e implementa recursos avançados, incluindo análise com EXPLAIN, operações com JSONB, uso de extensões e ajuste de VACUUM.
 metadata:
   sources:
     - kind: github-file

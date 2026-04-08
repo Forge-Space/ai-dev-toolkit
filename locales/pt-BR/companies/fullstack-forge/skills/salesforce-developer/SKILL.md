@@ -1,7 +1,7 @@
 ---
 name: salesforce-developer
 description: >
-  Writes Apex code, builds Lightning Web Components, optimizes SOQL queries, implements triggers, batch jobs, platform events, and Salesforce DX CI/CD pipelines.
+  Escreve código Apex, constrói Lightning Web Components, otimiza queries SOQL, implementa triggers, batch jobs, platform events e pipelines de CI/CD com Salesforce DX.
 metadata:
   sources:
     - kind: github-file

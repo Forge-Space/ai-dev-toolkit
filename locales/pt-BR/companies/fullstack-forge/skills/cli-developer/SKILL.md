@@ -1,7 +1,7 @@
 ---
 name: cli-developer
 description: >
-  Builds CLI tools with argument parsing, interactive prompts, progress bars, spinners, and shell completion scripts using commander, click, typer, or cobra.
+  Constrói ferramentas CLI com parsing de argumentos, prompts interativos, barras de progresso, spinners e scripts de autocompletar de shell usando commander, click, typer ou cobra.
 metadata:
   sources:
     - kind: github-file

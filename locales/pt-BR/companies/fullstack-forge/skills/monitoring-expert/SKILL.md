@@ -1,7 +1,7 @@
 ---
 name: monitoring-expert
 description: >
-  Configures monitoring systems, implements structured logging, creates Prometheus/Grafana dashboards, defines alerting rules, instruments distributed tracing, and performs load testing.
+  Configura sistemas de monitoramento, implementa logging estruturado, cria dashboards em Prometheus/Grafana, define regras de alerta, instrumenta tracing distribuído e realiza testes de carga.
 metadata:
   sources:
     - kind: github-file

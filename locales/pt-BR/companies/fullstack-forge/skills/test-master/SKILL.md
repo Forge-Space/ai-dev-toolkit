@@ -1,7 +1,7 @@
 ---
 name: test-master
 description: >
-  Generates test files, creates mocking strategies, analyzes code coverage, designs test architectures, and produces test plans across functional, performance, and security testing.
+  Gera arquivos de teste, cria estratégias de mocking, analisa cobertura de código, projeta arquiteturas de teste e produz planos de teste para cenários funcionais, de performance e de segurança.
 metadata:
   sources:
     - kind: github-file

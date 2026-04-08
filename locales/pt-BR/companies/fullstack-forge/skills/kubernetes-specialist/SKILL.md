@@ -1,7 +1,7 @@
 ---
 name: kubernetes-specialist
 description: >
-  Deploys and manages Kubernetes workloads with deployment manifests, pod security policies, RBAC, Helm charts, NetworkPolicies, and multi-cluster management.
+  Faz deploy e gerencia workloads em Kubernetes com manifests de deployment, políticas de segurança de pods, RBAC, charts Helm, NetworkPolicies e gestão multi-cluster.
 metadata:
   sources:
     - kind: github-file

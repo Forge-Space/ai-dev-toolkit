@@ -1,7 +1,7 @@
 ---
 name: spring-boot-engineer
 description: >
-  Generates Spring Boot 3.x configurations, creates REST controllers, implements Spring Security 6, sets up Spring Data JPA, and configures reactive WebFlux endpoints.
+  Gera configurações para Spring Boot 3.x, cria controllers REST, implementa Spring Security 6, configura Spring Data JPA e endpoints reativos com WebFlux.
 metadata:
   sources:
     - kind: github-file

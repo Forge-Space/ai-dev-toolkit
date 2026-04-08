@@ -1,40 +1,42 @@
-# OpenCode Plugins
+# Plugins do OpenCode
 
-## Task Orchestrator (`orchestrator.ts`)
+## Orquestrador de Tarefas (`orchestrator.ts`)
 
-Centralized task backlog with automatic dispatch — the brain that manages what gets worked on, when, and where.
+Backlog centralizado de tarefas com dispatch automático — o cérebro que gerencia
+o que será feito, quando e onde.
 
-### The Problem
+### O Problema
 
-Manually opening each session and pasting "continue with next priorities" is repetitive. You're acting as the scheduler when the machine should do it.
+Abrir cada sessão manualmente e colar "continue with next priorities" é
+repetitivo. Você está atuando como scheduler quando a máquina deveria fazer isso.
 
-### How It Works
+### Como Funciona
 
 ```
-/plan  →  Analyzes repos, creates prioritized task backlog
+/plan  →  Analisa repositórios e cria backlog priorizado de tarefas
            ↓
-orchestrator  →  Every 60s, picks next "ready" task
+orchestrator  →  A cada 60s, escolhe a próxima tarefa "ready"
            ↓
-         Creates new session for the task's project directory
+         Cria uma nova sessão no diretório do projeto da tarefa
            ↓
-         Sends detailed prompt with task description
+         Envia um prompt detalhado com a descrição da tarefa
            ↓
-         Monitors session → marks task "done" when idle + todos complete
+         Monitora a sessão → marca a tarefa como "done" quando fica idle + todos completos
            ↓
-         Picks up next task automatically
+         Pega a próxima tarefa automaticamente
 ```
 
 ### Commands
 
-| Command | What it does |
-|---------|-------------|
-| `/plan` | Analyze projects, create execution plan with prioritized tasks |
-| `/backlog` | Show current task status (in_progress, ready, backlog, done) |
-| `/next` | Manually trigger dispatch of next ready task |
+| Command | O que faz |
+|---------|-----------|
+| `/plan` | Analisa projetos e cria plano de execução com tarefas priorizadas |
+| `/backlog` | Mostra o status atual das tarefas (`in_progress`, `ready`, `backlog`, `done`) |
+| `/next` | Dispara manualmente a próxima tarefa pronta |
 
 ### Task Schema
 
-Tasks are stored in `~/.local/share/opencode/orchestrator/backlog.json`:
+As tarefas são armazenadas em `~/.local/share/opencode/orchestrator/backlog.json`:
 
 ```json
 {
@@ -54,7 +56,7 @@ Tasks are stored in `~/.local/share/opencode/orchestrator/backlog.json`:
 }
 ```
 
-### Task Lifecycle
+### Ciclo de Vida da Tarefa
 
 ```
 backlog → ready → in_progress → done
@@ -62,22 +64,24 @@ backlog → ready → in_progress → done
                     blocked
 ```
 
-- **backlog**: Planned but waiting for dependencies
-- **ready**: Can be dispatched immediately
-- **in_progress**: Assigned to a session, agent is working
-- **done**: Session went idle, all todos completed
-- **blocked**: Session errored or was deleted
+- **backlog**: planejada, mas aguardando dependências
+- **ready**: pode ser despachada imediatamente
+- **in_progress**: atribuída a uma sessão, agente em execução
+- **done**: a sessão ficou idle e todos os todos foram concluídos
+- **blocked**: a sessão deu erro ou foi apagada
 
-### Configuration
+### Configuração
 
 ```typescript
-const MAX_CONCURRENT = 2        // max sessions working at once
-const POLL_INTERVAL_MS = 60000  // check every 60s
+const MAX_CONCURRENT = 2        // máximo de sessões trabalhando ao mesmo tempo
+const POLL_INTERVAL_MS = 60000  // verifica a cada 60s
 ```
 
-### Plans (Sequential Tasks)
+### Planos (Tarefas Sequenciais)
 
-Use `/plan` and the orchestrator supports parent-child task relationships. Child tasks start as "backlog" and get promoted to "ready" as their predecessors complete.
+Use `/plan` e o orquestrador dá suporte a relações pai-filho entre tarefas.
+As tarefas filhas começam como `backlog` e são promovidas para `ready` conforme
+as predecessoras terminam.
 
 ### Install
 
@@ -87,26 +91,27 @@ cp opencode/plugin/orchestrator.ts ~/.config/opencode/plugin/
 
 ---
 
-## Session Resume (`session-resume.ts`)
+## Retomada de Sessão (`session-resume.ts`)
 
-Automatically resumes interrupted sessions after OpenCode restarts.
+Retoma automaticamente sessões interrompidas depois que o OpenCode reinicia.
 
-When you restart OpenCode, sessions with pending tasks pick up where they left off — no need to manually re-prompt each one.
+Quando você reinicia o OpenCode, sessões com tarefas pendentes retomam de onde
+pararam — sem necessidade de re-prompt manual em cada uma.
 
-### How it works
+### Como funciona
 
-1. **On idle**: Saves each session's pending todos and last prompt to `~/.local/share/opencode/session-state/`
-2. **On startup** (8s delay): Scans for sessions with saved state, checks if they're idle, and sends a resume prompt with their pending task list
-3. **On new message**: Tracks the last user prompt per session
-4. **On session delete**: Cleans up the state file
+1. **On idle**: salva os todos pendentes e o último prompt de cada sessão em `~/.local/share/opencode/session-state/`
+2. **On startup** (com atraso de 8s): procura sessões com estado salvo, verifica se estão idle e envia um prompt de retomada com a lista de tarefas pendentes
+3. **On new message**: rastreia o último prompt do usuário por sessão
+4. **On session delete**: limpa o arquivo de estado
 
-### Behavior
+### Comportamento
 
-- Only sessions with pending/in-progress todos are saved
-- State files older than 48h are automatically discarded
-- Sessions that no longer exist are cleaned up
-- Resume uses `promptAsync` so multiple sessions can resume in parallel
-- State files are deleted after successful resume
+- Apenas sessões com todos pendentes/em progresso são salvas
+- Arquivos de estado com mais de 48h são descartados automaticamente
+- Sessões que não existem mais são limpas
+- A retomada usa `promptAsync`, então várias sessões podem retomar em paralelo
+- Os arquivos de estado são apagados após uma retomada bem-sucedida
 
 ### Install
 
@@ -114,16 +119,17 @@ When you restart OpenCode, sessions with pending tasks pick up where they left o
 cp opencode/plugin/session-resume.ts ~/.config/opencode/plugin/
 ```
 
-## Session Manager (`session-manager.ts`)
+## Gerenciador de Sessões (`session-manager.ts`)
 
-Auto-manages OpenCode sessions to keep the sidebar clean across multiple projects.
+Gerencia automaticamente as sessões do OpenCode para manter a sidebar limpa em
+vários projetos.
 
 | Trigger | Action |
 |---------|--------|
-| Every 30 min + startup | Deletes sessions >24h old with no file changes |
-| Every 30 min | Keeps max 3 sessions per project, deletes oldest empty ones |
-| Session goes idle | Prefixes title with `[IDLE]` or `[WIP]` |
-| Session becomes active | Removes status prefix |
+| A cada 30 min + startup | Apaga sessões com mais de 24h e sem mudanças de arquivo |
+| A cada 30 min | Mantém no máximo 3 sessões por projeto, apagando as vazias mais antigas |
+| Sessão fica idle | Prefixa o título com `[IDLE]` ou `[WIP]` |
+| Sessão volta a ficar ativa | Remove o prefixo de status |
 
 ### Install
 
@@ -131,34 +137,38 @@ Auto-manages OpenCode sessions to keep the sidebar clean across multiple project
 cp opencode/plugin/session-manager.ts ~/.config/opencode/plugin/
 ```
 
-### Configuration
+### Configuração
 
-Edit the constants at the top of `session-manager.ts`:
+Edite as constantes no topo de `session-manager.ts`:
 
 ```typescript
-const IDLE_THRESHOLD_MS = 2 * 60 * 60 * 1000     // 2h — when to mark [IDLE]
-const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000   // 24h — when to auto-delete
-const MAX_SESSIONS_PER_PROJECT = 3                 // max sessions kept per project
-const AUTO_CLEAN_INTERVAL_MS = 30 * 60 * 1000     // cleanup frequency
+const IDLE_THRESHOLD_MS = 2 * 60 * 60 * 1000     // 2h — quando marcar [IDLE]
+const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000   // 24h — quando apagar automaticamente
+const MAX_SESSIONS_PER_PROJECT = 3                 // máximo de sessões mantidas por projeto
+const AUTO_CLEAN_INTERVAL_MS = 30 * 60 * 1000     // frequência da limpeza
 ```
 
-### Behavior
+### Comportamento
 
-- Sessions with uncommitted file changes are **never auto-deleted** — only tagged `[WIP]`
-- Sessions with no changes older than 24h are auto-deleted
-- When you exceed 3 sessions per project, oldest empty sessions are pruned
-- Status prefixes are removed automatically when you resume a session
+- Sessões com mudanças de arquivo ainda não commitadas **nunca são apagadas automaticamente** — apenas recebem a tag `[WIP]`
+- Sessões sem mudanças e com mais de 24h são apagadas automaticamente
+- Quando você excede 3 sessões por projeto, as sessões vazias mais antigas são podadas
+- Os prefixos de status são removidos automaticamente ao retomar uma sessão
 
-## Performance Optimizer (`perf-optimizer.ts`)
+## Otimizador de Performance (`perf-optimizer.ts`)
 
-Auto-compacts idle sessions so they load faster when you switch to them.
+Auto-compacta sessões idle para que carreguem mais rápido quando você alternar
+para elas.
 
-The main cause of slow session switching in OpenCode is rendering large message histories in the Tauri WebView. This plugin compacts sessions after 5 minutes of idle, reducing the message count and making the switch near-instant.
+A principal causa de lentidão ao trocar de sessão no OpenCode é renderizar
+históricos grandes de mensagens no Tauri WebView. Este plugin compacta sessões
+depois de 5 minutos em idle, reduzindo a contagem de mensagens e tornando a
+troca quase instantânea.
 
 | Trigger | Action |
 |---------|--------|
-| Session idle (>20 messages) | Summarizes/compacts the session |
-| Session gets new activity | Resets compaction flag |
+| Sessão idle (>20 mensagens) | Resume/compacta a sessão |
+| Sessão recebe nova atividade | Reseta a flag de compactação |
 
 ### Install
 
@@ -168,14 +178,14 @@ cp opencode/plugin/perf-optimizer.ts ~/.config/opencode/plugin/
 
 ## Notify (`notify.ts`)
 
-Native macOS notification plugin — no audio interruptions.
+Plugin de notificação nativa do macOS — sem interrupções sonoras desnecessárias.
 
 | Event | Notification | Sound |
 |-------|-------------|-------|
-| Session idle | "Ready for next task" | Silent |
+| Sessão idle | "Ready for next task" | Silent |
 | `git push` | "Changes pushed" | Silent |
 | `gh pr create` | "PR opened" | Ding |
-| Tests fail | "Check test output" | Ding |
+| Testes falham | "Check test output" | Ding |
 
 ### Install
 

@@ -1,7 +1,7 @@
 ---
 name: playwright-expert
 description: >
-  Writes E2E tests with Playwright including test scripts, page objects, test fixtures, reporters, CI integration, API mocking, and visual regression testing.
+  Escreve testes E2E com Playwright, incluindo scripts de teste, page objects, fixtures, reporters, integração com CI, mocking de APIs e testes de regressão visual.
 metadata:
   sources:
     - kind: github-file

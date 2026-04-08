@@ -1,7 +1,7 @@
 ---
 name: database-optimizer
 description: >
-  Optimizes database queries and improves performance across PostgreSQL and MySQL systems including index design, query rewrites, configuration tuning, and partitioning strategies.
+  Otimiza queries de banco de dados e melhora a performance em sistemas PostgreSQL e MySQL, incluindo desenho de índices, reescrita de queries, ajuste de configuração e estratégias de particionamento.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: laravel-specialist
 description: >
-  Builds Laravel 10+ applications with Eloquent models, Sanctum authentication, Horizon queues, RESTful APIs with API resources, and Livewire reactive interfaces.
+  Constrói aplicações Laravel 10+ com modelos Eloquent, autenticação com Sanctum, filas com Horizon, APIs RESTful com API resources e interfaces reativas com Livewire.
 metadata:
   sources:
     - kind: github-file

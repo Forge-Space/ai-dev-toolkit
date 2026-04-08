@@ -1,7 +1,7 @@
 ---
 name: spec-miner
 description: >
-  Reverse-engineers specifications from existing codebases, maps code dependencies, generates API documentation from source, and identifies undocumented business logic.
+  Faz engenharia reversa de especificações a partir de codebases existentes, mapeia dependências de código, gera documentação de API a partir do código-fonte e identifica lógica de negócio não documentada.
 metadata:
   sources:
     - kind: github-file

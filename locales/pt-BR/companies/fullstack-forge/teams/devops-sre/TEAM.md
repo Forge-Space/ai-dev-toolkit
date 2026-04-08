@@ -1,6 +1,6 @@
 ---
 name: DevOps & SRE
-description: DevOps and site reliability engineers handling CI/CD, monitoring, chaos engineering, and production reliability
+description: Especialistas em DevOps e confiabilidade de sites cuidando de CI/CD, monitoramento, chaos engineering e confiabilidade em produção
 slug: devops-sre
 manager: ../../agents/devops-lead/AGENTS.md
 includes:
@@ -12,4 +12,4 @@ tags:
   - operations
 ---
 
-The DevOps and SRE team handles deployment automation, monitoring, reliability, and chaos engineering. Covers CI/CD pipelines, Docker, Kubernetes manifests, Prometheus/Grafana, SLOs, and resilience testing. Led by the DevOps Lead.
+A equipe de DevOps e SRE cuida de automação de deploy, monitoramento, confiabilidade e chaos engineering. Cobre pipelines de CI/CD, Docker, manifests de Kubernetes, Prometheus/Grafana, SLOs e testes de resiliência. Liderada pelo DevOps Lead.

@@ -1,6 +1,6 @@
 ---
 name: Language Engineering
-description: 12 programming language specialists covering Python, TypeScript, Go, Rust, C++, C#, Java, Kotlin, Swift, PHP, JavaScript, and SQL
+description: 12 especialistas em linguagens de programação cobrindo Python, TypeScript, Go, Rust, C++, C#, Java, Kotlin, Swift, PHP, JavaScript e SQL
 slug: language-engineering
 manager: ../../agents/language-engineering-lead/AGENTS.md
 includes:
@@ -17,4 +17,4 @@ tags:
   - engineering
 ---
 
-The language engineering team provides deep expertise in 12 programming languages. Each specialist focuses on idiomatic patterns, performance optimization, and best practices for their language. Led by the Language Engineering Lead.
+A equipe de engenharia de linguagens oferece expertise profunda em 12 linguagens de programação. Cada especialista foca em padrões idiomáticos, otimização de performance e boas práticas da sua linguagem. Liderada pelo Language Engineering Lead.

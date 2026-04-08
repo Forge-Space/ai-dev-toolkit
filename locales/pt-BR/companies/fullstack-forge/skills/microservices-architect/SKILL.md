@@ -1,7 +1,7 @@
 ---
 name: microservices-architect
 description: >
-  Designs distributed system architectures, decomposes monoliths into bounded-context services, recommends communication patterns, and produces resilience strategies.
+  Projeta arquiteturas de sistemas distribuídos, decompõe monólitos em serviços com bounded contexts, recomenda padrões de comunicação e produz estratégias de resiliência.
 metadata:
   sources:
     - kind: github-file

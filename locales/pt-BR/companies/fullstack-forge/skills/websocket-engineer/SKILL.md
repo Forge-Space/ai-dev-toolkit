@@ -1,7 +1,7 @@
 ---
 name: websocket-engineer
 description: >
-  Builds real-time communication systems with WebSockets or Socket.IO including bidirectional messaging, horizontal scaling with Redis, presence tracking, and room management.
+  Constrói sistemas de comunicação em tempo real com WebSockets ou Socket.IO, incluindo mensagens bidirecionais, escalabilidade horizontal com Redis, rastreamento de presença e gerenciamento de salas.
 metadata:
   sources:
     - kind: github-file

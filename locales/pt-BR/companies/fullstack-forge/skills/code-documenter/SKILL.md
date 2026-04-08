@@ -1,7 +1,7 @@
 ---
 name: code-documenter
 description: >
-  Generates and validates technical documentation including docstrings, OpenAPI/Swagger specs, JSDoc annotations, doc portals, and user guides.
+  Gera e valida documentação técnica, incluindo docstrings, especificações OpenAPI/Swagger, anotações JSDoc, portais de documentação e guias do usuário.
 metadata:
   sources:
     - kind: github-file

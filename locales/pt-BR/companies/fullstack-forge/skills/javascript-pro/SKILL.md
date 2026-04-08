@@ -1,7 +1,7 @@
 ---
 name: javascript-pro
 description: >
-  Writes, debugs, and refactors JavaScript code using modern ES2023+ features, async/await patterns, ESM module systems, and Node.js APIs.
+  Escreve, depura e refatora código JavaScript usando recursos modernos de ES2023+, padrões async/await, sistema de módulos ESM e APIs do Node.js.
 metadata:
   sources:
     - kind: github-file

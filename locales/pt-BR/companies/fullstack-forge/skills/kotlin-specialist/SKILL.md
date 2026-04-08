@@ -1,7 +1,7 @@
 ---
 name: kotlin-specialist
 description: >
-  Provides idiomatic Kotlin patterns including coroutine concurrency, Flow streams, multiplatform architecture, Compose UI, Ktor servers, and type-safe DSL design.
+  Fornece padrões idiomáticos em Kotlin, incluindo concorrência com coroutines, streams com Flow, arquitetura multiplataforma, Compose UI, servidores com Ktor e design de DSL type-safe.
 metadata:
   sources:
     - kind: github-file

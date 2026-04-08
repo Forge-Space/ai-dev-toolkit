@@ -1,7 +1,7 @@
 ---
 name: angular-architect
 description: >
-  Generates Angular 17+ standalone components, configures advanced routing with lazy loading and guards, implements NgRx state management, applies RxJS patterns, and optimizes bundle performance.
+  Gera componentes standalone em Angular 17+, configura roteamento avançado com lazy loading e guards, implementa gerenciamento de estado com NgRx, aplica padrões de RxJS e otimiza a performance do bundle.
 metadata:
   sources:
     - kind: github-file

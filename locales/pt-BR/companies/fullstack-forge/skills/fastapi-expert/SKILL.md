@@ -1,7 +1,7 @@
 ---
 name: fastapi-expert
 description: >
-  Builds high-performance async Python APIs with FastAPI and Pydantic V2 including REST endpoints, authentication flows, async SQLAlchemy, and WebSocket endpoints.
+  Constrói APIs Python assíncronas de alta performance com FastAPI e Pydantic V2, incluindo endpoints REST, fluxos de autenticação, SQLAlchemy assíncrono e endpoints WebSocket.
 metadata:
   sources:
     - kind: github-file

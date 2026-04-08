@@ -1,7 +1,7 @@
 ---
 name: php-pro
 description: >
-  Builds PHP applications with modern PHP 8.3+ features, Laravel or Symfony frameworks, strict typing, PHPStan, async patterns with Swoole, and PSR standards.
+  Constrói aplicações PHP com recursos modernos de PHP 8.3+, frameworks Laravel ou Symfony, tipagem estrita, PHPStan, padrões assíncronos com Swoole e padrões PSR.
 metadata:
   sources:
     - kind: github-file

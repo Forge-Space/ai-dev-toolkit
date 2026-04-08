@@ -1,7 +1,7 @@
 ---
 name: legacy-modernizer
 description: >
-  Designs incremental migration strategies using strangler fig pattern, identifies service boundaries, produces dependency maps, and generates API facade designs for aging codebases.
+  Projeta estratégias incrementais de migração usando o padrão strangler fig, identifica limites de serviços, produz mapas de dependências e gera designs de fachadas de API para codebases legadas.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: csharp-developer
 description: >
-  Builds C# applications with .NET 8+, ASP.NET Core APIs, Blazor web apps, Entity Framework Core, async patterns, and CQRS via MediatR.
+  Constrói aplicações C# com .NET 8+, APIs em ASP.NET Core, apps web em Blazor, Entity Framework Core, padrões assíncronos e CQRS via MediatR.
 metadata:
   sources:
     - kind: github-file

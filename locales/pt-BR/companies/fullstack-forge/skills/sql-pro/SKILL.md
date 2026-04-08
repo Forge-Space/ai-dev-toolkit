@@ -1,7 +1,7 @@
 ---
 name: sql-pro
 description: >
-  Optimizes SQL queries, designs database schemas, troubleshoots performance with window functions, CTEs, indexing strategies, and query plan analysis across database dialects.
+  Otimiza queries SQL, projeta schemas de banco de dados e resolve problemas de performance com window functions, CTEs, estratégias de indexação e análise de planos de execução em diferentes dialetos.
 metadata:
   sources:
     - kind: github-file

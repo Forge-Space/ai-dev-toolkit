@@ -1,7 +1,7 @@
 ---
 name: java-architect
 description: >
-  Builds enterprise Java applications with Spring Boot 3.x, microservices, reactive programming, WebFlux, JPA optimization, and Spring Security with OAuth2/JWT.
+  Constrói aplicações Java corporativas com Spring Boot 3.x, microsserviços, programação reativa, WebFlux, otimização com JPA e Spring Security com OAuth2/JWT.
 metadata:
   sources:
     - kind: github-file

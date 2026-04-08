@@ -1,7 +1,7 @@
 ---
 name: architecture-designer
 description: >
-  Designs high-level system architecture, reviews existing designs, makes architectural decisions, creates architecture diagrams, writes ADRs, evaluates technology trade-offs, and plans for scalability.
+  Projeta arquitetura de sistemas em alto nível, revisa designs existentes, toma decisões arquiteturais, cria diagramas de arquitetura, escreve ADRs, avalia trade-offs tecnológicos e planeja escalabilidade.
 metadata:
   sources:
     - kind: github-file

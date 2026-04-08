@@ -1,7 +1,7 @@
 ---
 name: rust-engineer
 description: >
-  Writes idiomatic Rust code with memory safety, zero-cost abstractions, ownership patterns, lifetime management, trait hierarchies, and async applications with tokio.
+  Escreve código Rust idiomático com segurança de memória, abstrações de custo zero, padrões de ownership, gerenciamento de lifetimes, hierarquias de traits e aplicações assíncronas com tokio.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: graphql-architect
 description: >
-  Designs GraphQL schemas, implements Apollo Federation, builds real-time subscriptions, and optimizes queries with DataLoader and federation directives.
+  Projeta schemas GraphQL, implementa Apollo Federation, constrói subscriptions em tempo real e otimiza queries com DataLoader e diretivas de federação.
 metadata:
   sources:
     - kind: github-file

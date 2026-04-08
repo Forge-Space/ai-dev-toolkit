@@ -1,7 +1,7 @@
 ---
 name: game-developer
 description: >
-  Builds game systems with Unity/Unreal Engine, implements ECS architecture, configures physics and multiplayer networking, optimizes frame rates, and develops shaders.
+  Constrói sistemas de jogo com Unity/Unreal Engine, implementa arquitetura ECS, configura física e rede multiplayer, otimiza frame rates e desenvolve shaders.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: pandas-pro
 description: >
-  Performs pandas DataFrame operations for data analysis, manipulation, transformation, time series analysis, merging, aggregation, and performance optimization.
+  Executa operações com DataFrames do pandas para análise, manipulação e transformação de dados, análise de séries temporais, junções, agregações e otimização de performance.
 metadata:
   sources:
     - kind: github-file

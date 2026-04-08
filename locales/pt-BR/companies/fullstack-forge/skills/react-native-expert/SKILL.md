@@ -1,7 +1,7 @@
 ---
 name: react-native-expert
 description: >
-  Builds cross-platform mobile applications with React Native and Expo including navigation, native modules, FlatList optimization, and platform-specific code.
+  Constrói aplicações móveis multiplataforma com React Native e Expo, incluindo navegação, módulos nativos, otimização de FlatList e código específico por plataforma.
 metadata:
   sources:
     - kind: github-file

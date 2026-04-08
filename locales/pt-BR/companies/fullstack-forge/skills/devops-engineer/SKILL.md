@@ -1,7 +1,7 @@
 ---
 name: devops-engineer
 description: >
-  Creates Dockerfiles, configures CI/CD pipelines, writes Kubernetes manifests, and generates Terraform/Pulumi infrastructure templates for deployment automation and GitOps.
+  Cria Dockerfiles, configura pipelines de CI/CD, escreve manifests de Kubernetes e gera templates de infraestrutura em Terraform/Pulumi para automação de deploy e GitOps.
 metadata:
   sources:
     - kind: github-file

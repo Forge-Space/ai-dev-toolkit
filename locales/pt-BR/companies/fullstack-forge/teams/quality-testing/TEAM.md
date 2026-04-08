@@ -1,6 +1,6 @@
 ---
 name: Quality & Testing
-description: Testing and code quality specialists covering unit, integration, E2E, performance testing, code review, and documentation
+description: Especialistas em testes e qualidade de código cobrindo testes unitários, integração, E2E, testes de performance, code review e documentação
 slug: quality-testing
 manager: ../../agents/qa-lead/AGENTS.md
 includes:
@@ -12,4 +12,4 @@ tags:
   - quality
 ---
 
-The quality and testing team ensures code quality across the organization through testing, code review, and documentation. Covers all testing disciplines and structured code review. Led by the QA Lead.
+A equipe de qualidade e testes garante a qualidade do código em toda a organização por meio de testes, code review e documentação. Cobre todas as disciplinas de teste e revisão estruturada de código. Liderada pelo QA Lead.

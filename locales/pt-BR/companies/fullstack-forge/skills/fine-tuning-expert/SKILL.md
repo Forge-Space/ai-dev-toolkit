@@ -1,7 +1,7 @@
 ---
 name: fine-tuning-expert
 description: >
-  Fine-tunes LLMs and trains custom models using LoRA/QLoRA adapters, JSONL training datasets, hyperparameter configuration, RLHF, DPO, and model quantization.
+  Faz fine-tuning de LLMs e treina modelos customizados usando adaptadores LoRA/QLoRA, conjuntos de treino em JSONL, configuração de hiperparâmetros, RLHF, DPO e quantização de modelos.
 metadata:
   sources:
     - kind: github-file

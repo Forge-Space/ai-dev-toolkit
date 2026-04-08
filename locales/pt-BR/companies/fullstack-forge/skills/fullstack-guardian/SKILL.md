@@ -1,7 +1,7 @@
 ---
 name: fullstack-guardian
 description: >
-  Builds security-focused full-stack web applications with integrated frontend and backend components implementing layered security including auth, validation, encoding, and parameterized queries.
+  Constrói aplicações web full-stack focadas em segurança, com componentes integrados de frontend e backend implementando segurança em camadas, incluindo autenticação, validação, encoding e queries parametrizadas.
 metadata:
   sources:
     - kind: github-file

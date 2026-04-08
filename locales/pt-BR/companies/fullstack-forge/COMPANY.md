@@ -1,6 +1,6 @@
 ---
 name: Fullstack Forge
-description: A full-service software development consultancy with 66 specialized skills covering 12 programming languages, 7 backend frameworks, frontend/mobile, infrastructure, security, data science, and DevOps
+description: Uma consultoria completa de desenvolvimento de software com 66 skills especializadas cobrindo 12 linguagens de programação, 7 frameworks backend, frontend/mobile, infraestrutura, segurança, ciência de dados e DevOps
 slug: fullstack-forge
 schema: agentcompanies/v1
 version: 1.0.0
@@ -8,31 +8,31 @@ license: MIT
 authors:
   - name: Jeffallan
 goals:
-  - Deliver expert-level software development across the full technology stack
-  - Match every project to the right specialist with deep domain expertise
+  - Entregar desenvolvimento de software em nível especialista em toda a stack de tecnologia
+  - Conectar cada projeto ao especialista certo com profunda expertise de domínio
 ---
 
-Fullstack Forge is a full-service software development consultancy built from 66 specialized skills. The company uses a hub-and-spoke workflow: the CTO routes work to the appropriate team lead, and team leads assign tasks to specialists with deep domain expertise.
+Fullstack Forge é uma consultoria completa de desenvolvimento de software construída a partir de 66 skills especializadas. A empresa usa um fluxo hub-and-spoke: o CTO encaminha o trabalho para o líder de equipe apropriado, e os líderes de equipe atribuem tarefas a especialistas com profunda expertise de domínio.
 
-The org spans 11 departments covering the entire technology stack:
+A organização abrange 11 departamentos cobrindo toda a stack de tecnologia:
 
-1. **Language Engineering** -- 12 programming languages from Python to Swift
-2. **Backend Engineering** -- 7 frameworks from NestJS to Rails
+1. **Language Engineering** -- 12 linguagens de programação, de Python a Swift
+2. **Backend Engineering** -- 7 frameworks, de NestJS a Rails
 3. **Frontend & Mobile** -- React, Vue, Angular, React Native, Flutter
 4. **Infrastructure & Cloud** -- AWS/Azure/GCP, Terraform, Kubernetes
-5. **API & Architecture** -- REST, GraphQL, microservices, MCP
+5. **API & Architecture** -- REST, GraphQL, microsserviços, MCP
 6. **Quality & Testing** -- Unit, integration, E2E, code review
-7. **DevOps & SRE** -- CI/CD, monitoring, chaos engineering
-8. **Security** -- OWASP Top 10, secure coding, security audits
-9. **Data & ML** -- Pandas, Spark, ML pipelines, RAG, fine-tuning
+7. **DevOps & SRE** -- CI/CD, monitoramento, chaos engineering
+8. **Security** -- OWASP Top 10, secure coding, auditorias de segurança
+9. **Data & ML** -- Pandas, Spark, pipelines de ML, RAG, fine-tuning
 10. **Platform Specialists** -- Salesforce, Shopify, WordPress, Atlassian
-11. **Specialized Engineering** -- Legacy modernization, embedded systems, game dev
+11. **Specialized Engineering** -- Modernização legada, sistemas embarcados, desenvolvimento de jogos
 
-The philosophy: every project gets the right specialist. No generalists pretending to be experts.
+A filosofia: cada projeto recebe o especialista certo. Nada de generalistas fingindo ser especialistas.
 
 ---
 
-Generated from [claude-skills](https://github.com/jeffallan/claude-skills) with the company-creator skill from [Paperclip](https://github.com/paperclipai/paperclip)
+Gerado a partir de [claude-skills](https://github.com/jeffallan/claude-skills) com a skill company-creator do [Paperclip](https://github.com/paperclipai/paperclip)
 ---
 
-Imported from [paperclipai/companies](https://github.com/paperclipai/companies) (MIT). Adapted for ai-dev-toolkit.
+Importado de [paperclipai/companies](https://github.com/paperclipai/companies) (MIT). Adaptado para o ai-dev-toolkit.

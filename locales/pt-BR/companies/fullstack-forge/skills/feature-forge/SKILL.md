@@ -1,7 +1,7 @@
 ---
 name: feature-forge
 description: >
-  Conducts structured requirements workshops to produce feature specifications, user stories, EARS-format functional requirements, acceptance criteria, and implementation checklists.
+  Conduz workshops estruturados de requisitos para produzir especificações de funcionalidades, user stories, requisitos funcionais no formato EARS, critérios de aceitação e checklists de implementação.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: cpp-pro
 description: >
-  Writes, optimizes, and debugs C++ applications using modern C++20/23 features, template metaprogramming, and high-performance systems techniques.
+  Escreve, otimiza e depura aplicações C++ usando recursos modernos de C++20/23, metaprogramação com templates e técnicas de sistemas de alta performance.
 metadata:
   sources:
     - kind: github-file

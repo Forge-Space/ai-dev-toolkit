@@ -1,7 +1,7 @@
 ---
 name: typescript-pro
 description: >
-  Implements advanced TypeScript type systems with custom type guards, utility types, branded types, discriminated unions, and full-stack type safety with tRPC.
+  Implementa sistemas de tipos avançados em TypeScript com type guards customizados, utility types, branded types, discriminated unions e segurança de tipos full-stack com tRPC.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: vue-expert
 description: >
-  Builds Vue 3 components with Composition API, configures Nuxt 3 SSR/SSG, sets up Pinia stores, scaffolds Quasar/Capacitor mobile apps, and implements PWA features.
+  Constrói componentes Vue 3 com Composition API, configura SSR/SSG com Nuxt 3, prepara stores com Pinia, estrutura apps móveis com Quasar/Capacitor e implementa recursos de PWA.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: embedded-systems
 description: >
-  Develops firmware for microcontrollers, implements RTOS applications, optimizes power consumption for STM32, ESP32, FreeRTOS, and bare-metal systems.
+  Desenvolve firmware para microcontroladores, implementa aplicações com RTOS e otimiza o consumo de energia para STM32, ESP32, FreeRTOS e sistemas bare-metal.
 metadata:
   sources:
     - kind: github-file

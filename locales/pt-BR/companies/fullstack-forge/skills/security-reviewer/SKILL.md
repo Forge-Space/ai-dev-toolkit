@@ -1,7 +1,7 @@
 ---
 name: security-reviewer
 description: >
-  Identifies security vulnerabilities, generates structured audit reports with severity ratings, and provides actionable remediation guidance for SAST, DevSecOps, and compliance.
+  Identifica vulnerabilidades de segurança, gera relatórios estruturados de auditoria com classificação de severidade e fornece orientações acionáveis de remediação para SAST, DevSecOps e compliance.
 metadata:
   sources:
     - kind: github-file

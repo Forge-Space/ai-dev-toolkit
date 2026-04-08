@@ -1,129 +1,130 @@
-# Claude Code Implementation
+# Implementação para Claude Code
 
-Comprehensive reference implementation of AI Dev Toolkit patterns for [Claude Code](https://claude.com/claude-code).
+Implementação de referência abrangente dos patterns do AI Dev Toolkit para [Claude Code](https://claude.com/claude-code).
 
-## Overview
+## Visão Geral
 
-Claude Code is Anthropic's official CLI and VSCode extension for Claude. It excels at:
+Claude Code é a CLI oficial e a extensão para VSCode da Anthropic para Claude.
+Ele se destaca em:
 
-- Deep codebase exploration with built-in search tools
-- Persistent memory across sessions
-- Extensibility via MCP servers, skills, and hooks
-- Multi-model routing (Sonnet, Opus, Haiku)
-- Tool-calling workflow with confirmation gates
+- exploração profunda de codebases com ferramentas de busca embutidas
+- memória persistente entre sessões
+- extensibilidade via servidores MCP, skills e hooks
+- roteamento multi-modelo (Sonnet, Opus, Haiku)
+- workflow de tool-calling com gates de confirmação
 
-This implementation shows how to apply the toolkit patterns to Claude Code's architecture.
+Esta implementação mostra como aplicar os patterns do toolkit à arquitetura do Claude Code.
 
-The stable parts of Claude Code guidance are:
+As partes estáveis da guidance do Claude Code são:
 
-- `CLAUDE.md` for repository behavior
-- hierarchical `settings.json` files for actual tool config
-- hooks for guardrails and automation
-- a small always-on plugin set
-- project-local memory and context files
+- `CLAUDE.md` para o comportamento do repositório
+- arquivos hierárquicos `settings.json` para a config real da ferramenta
+- hooks para guardrails e automação
+- um conjunto pequeno de plugins always-on
+- arquivos locais de memória e contexto do projeto
 
-Keep model names and plugin choices in config. Keep workflow rules in `CLAUDE.md`.
+Mantenha nomes de modelo e escolhas de plugin na config. Mantenha regras de workflow em `CLAUDE.md`.
 
 ## Quick Start
 
 ```bash
-# Install (macOS/Linux)
+# Instalação (macOS/Linux)
 curl -fsSL https://claude.com/install.sh | sh
 
-# Initialize project
+# Inicializar projeto
 cd your-project
 cp implementations/claude-code/example-claude-md.md CLAUDE.md
 
-# Setup memory structure
+# Estrutura de memória
 mkdir -p ~/.claude/projects/$(pwd | sed 's/\//-/g')/memory
 echo "# Memory Index" > ~/.claude/projects/$(pwd | sed 's/\//-/g')/memory/MEMORY.md
 
-# Add starter settings (optional)
+# Adicionar settings iniciais (opcional)
 mkdir -p .claude
 cp implementations/claude-code/settings.project.example.json .claude/settings.json
 cp implementations/claude-code/settings.user.example.json ~/.claude/settings.json
 
-# Start session
+# Iniciar sessão
 claude
 ```
 
-## Settings Hierarchy
+## Hierarquia de Settings
 
-Claude Code's official configuration surface is hierarchical:
+A superfície oficial de configuração do Claude Code é hierárquica:
 
-- `~/.claude/settings.json` for global settings
-- `.claude/settings.json` for project-shared settings
-- `.claude/settings.local.json` for local project settings that should not be committed
+- `~/.claude/settings.json` para settings globais
+- `.claude/settings.json` para settings compartilhadas do projeto
+- `.claude/settings.local.json` para settings locais do projeto que não devem ser commitadas
 
-Use `/config` inside Claude Code when you want to inspect or change settings interactively.
+Use `/config` dentro do Claude Code quando quiser inspecionar ou alterar settings de forma interativa.
 
-Best practice:
+Boas práticas:
 
-- keep global settings minimal
-- put team-shared behavior in project `CLAUDE.md`
-- put risky experiments in `.claude/settings.local.json`
-- keep hooks, permissions, plugins, attribution, and model overrides in `settings.json`
+- mantenha settings globais mínimas
+- coloque comportamento compartilhado do time no `CLAUDE.md` do projeto
+- coloque experimentos arriscados em `.claude/settings.local.json`
+- mantenha hooks, permissões, plugins, attribution e overrides de modelo em `settings.json`
 
-Starter templates:
+Templates iniciais:
 
 - [settings.user.example.json](./settings.user.example.json)
 - [settings.project.example.json](./settings.project.example.json)
 
-## oh-my-claudecode Compatibility
+## Compatibilidade com oh-my-claudecode
 
-Use [oh-my-claudecode.md](./oh-my-claudecode.md) as the ownership boundary when combining
-`forge-kit` with oh-my orchestration.
+Use [oh-my-claudecode.md](./oh-my-claudecode.md) como limite de ownership ao combinar
+`forge-kit` com orquestração oh-my.
 
-`forge-kit` can install this reference to `~/.claude/oh-my-claudecode.md` with:
+`forge-kit` pode instalar esta referência em `~/.claude/oh-my-claudecode.md` com:
 
 ```bash
 FORGE_KIT_DIR=./kit sh kit/install.sh --tools claude-code --oh-my-compat
 ```
 
-## Agent Organizations
+## Organizações de Agentes
 
-The `companies/` directory provides pre-built teams of specialized agents with defined roles,
-skills, and routing protocols. These are toolkit-native agent definitions, not Claude-native
-subagents by themselves.
+O diretório `companies/` fornece times prontos de agentes especializados com
+papéis, skills e protocolos de roteamento definidos. Essas definições são
+agentes nativos do toolkit, não subagentes nativos do Claude por si só.
 
 ```bash
-# Export or adapt a toolkit agent into Claude's native subagent format
+# Exportar ou adaptar um agente do toolkit para o formato nativo de subagente do Claude
 mkdir -p .claude/agents
 cp implementations/claude-code/subagents/react-engineer.md .claude/agents/react-engineer.md
 ```
 
-Claude subagents are markdown files placed directly in `.claude/agents/` or
-`~/.claude/agents/` with Claude-native frontmatter such as `name` and `description`.
-Treat `companies/` as the source material and export or adapt it for the target tool.
+Subagentes do Claude são arquivos markdown colocados diretamente em
+`.claude/agents/` ou `~/.claude/agents/` com frontmatter nativo do Claude, como
+`name` e `description`. Trate `companies/` como material-fonte e exporte ou
+adapte para a ferramenta-alvo.
 
-See
-[companies/README.md](../../companies/README.md) for available companies and agent list.
+Veja [companies/README.md](../../companies/README.md) para os companies e a lista de agentes disponíveis.
 
-## Context Building
+## Construção de Contexto
 
-### CLAUDE.md Layering
+### Camadas de CLAUDE.md
 
-Claude Code loads `CLAUDE.md` files with directory hierarchy precedence:
+Claude Code carrega arquivos `CLAUDE.md` respeitando precedência pela hierarquia de diretórios:
 
 ```
 your-project/
-  CLAUDE.md                    # Project-wide rules (always loaded)
+  CLAUDE.md                    # Regras de todo o projeto (sempre carregado)
   apps/
     web/
-      CLAUDE.md                # Web-specific rules (loaded when in apps/web)
+      CLAUDE.md                # Regras específicas do web (carregado em apps/web)
   packages/
     ui/
-      CLAUDE.md                # UI library rules (loaded when in packages/ui)
+      CLAUDE.md                # Regras da biblioteca UI (carregado em packages/ui)
 ```
 
-**Best practices:**
+**Boas práticas:**
 
-- Root CLAUDE.md: architecture, tech stack, workflow, gotchas
-- Subdirectory CLAUDE.md: module-specific conventions, APIs, testing patterns
-- Keep under 500 lines per file (Claude Code loads entire file into context)
-- Use `@filename` references instead of describing file locations
+- `CLAUDE.md` da raiz: arquitetura, stack, workflow, gotchas
+- `CLAUDE.md` de subdiretório: convenções específicas do módulo, APIs, patterns de teste
+- mantenha cada arquivo abaixo de 500 linhas (Claude Code carrega o arquivo inteiro no contexto)
+- use referências `@filename` em vez de descrever caminhos de arquivo
 
-**Structure template:**
+**Template de estrutura:**
 
 ```markdown
 # Project Name
@@ -167,25 +168,25 @@ your-project/
 - Use secret scanning in CI
 ```
 
-See [example-claude-md.md](./example-claude-md.md) for full reference.
+Veja [example-claude-md.md](./example-claude-md.md) para uma referência completa.
 
-### Memory System
+### Sistema de Memória
 
-Claude Code maintains persistent memory at `~/.claude/projects/<path>/memory/`.
+Claude Code mantém memória persistente em `~/.claude/projects/<path>/memory/`.
 
-**Structure:**
+**Estrutura:**
 
 ```
 ~/.claude/projects/-home-user-myproject/
   memory/
-    MEMORY.md              # Index file (200 line limit, always loaded)
-    architecture.md        # Detailed architectural decisions
-    gotchas.md            # Known issues and workarounds
-    dependencies.md       # Package-specific notes
-    workflows.md          # Common task sequences
+    MEMORY.md              # Arquivo índice (limite de 200 linhas, sempre carregado)
+    architecture.md        # Decisões arquiteturais detalhadas
+    gotchas.md            # Issues conhecidas e workarounds
+    dependencies.md       # Notas específicas de pacotes
+    workflows.md          # Sequências de tarefas comuns
 ```
 
-**MEMORY.md template:**
+**Template de MEMORY.md:**
 
 ```markdown
 # Memory Index
@@ -219,46 +220,46 @@ Claude Code maintains persistent memory at `~/.claude/projects/<path>/memory/`.
 File paths: [link to topic files]
 ```
 
-**Memory management workflow:**
+**Workflow de gestão da memória:**
 
-1. **Session start**: Claude auto-loads MEMORY.md
-2. **During work**: Update relevant topic files when you discover new patterns
-3. **Session end**: Run `/sync-memories` skill (or manually update MEMORY.md index)
-4. **Cleanup**: Keep MEMORY.md under 200 lines, move details to topic files
+1. **Início da sessão**: Claude carrega automaticamente o `MEMORY.md`
+2. **Durante o trabalho**: atualize arquivos de tópico relevantes quando descobrir novos patterns
+3. **Fim da sessão**: rode a skill `/sync-memories` (ou atualize manualmente o índice do `MEMORY.md`)
+4. **Limpeza**: mantenha `MEMORY.md` abaixo de 200 linhas; mova detalhes para arquivos de tópico
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- MEMORY.md = [Memory Systems: Session Memory](../../patterns/memory-systems.md#session-memory)
-- Topic files = [Memory Systems: Knowledge Base](../../patterns/memory-systems.md#knowledge-base)
-- Update workflow = [Memory Systems: Update Protocol](../../patterns/memory-systems.md#update-protocol)
+- `MEMORY.md` = [Memory Systems: Session Memory](../../patterns/memory-systems.md#session-memory)
+- arquivos de tópico = [Memory Systems: Knowledge Base](../../patterns/memory-systems.md#knowledge-base)
+- workflow de atualização = [Memory Systems: Update Protocol](../../patterns/memory-systems.md#update-protocol)
 
 ## Hooks
 
-Claude Code hooks are configured in `settings.json`, not by dropping shell scripts into
-`~/.claude/hooks/`.
+Hooks do Claude Code são configurados em `settings.json`, não colocando scripts de shell em `~/.claude/hooks/`.
 
-Use hooks for:
+Use hooks para:
 
-- blocking destructive actions
-- adding explicit review gates
-- logging or notifying after tool use
-- lightweight validation that does not silently rewrite user files
+- bloquear ações destrutivas
+- adicionar gates explícitos de review
+- registrar logs ou emitir notificações após uso de ferramentas
+- fazer validações leves que não reescrevam silenciosamente os arquivos do usuário
 
-The example scripts in [`hooks/`](./hooks/) are starter commands you can wire from
-`settings.json`. They read hook payload JSON from stdin and are safe to adapt.
+Os scripts de exemplo em [`hooks/`](./hooks/) são comandos iniciais que você
+pode conectar a partir de `settings.json`. Eles leem o payload JSON do hook via
+stdin e são seguros para adaptação.
 
-### PreToolUse Hook
+### Hook PreToolUse
 
-Runs **before** Claude executes a tool. Use for:
+Roda **antes** de Claude executar uma ferramenta. Use para:
 
-- Blocking dangerous commands
-- Adding confirmation gates
-- Rewriting commands before execution (e.g. RTK token compression)
-- Injecting environment setup
+- bloquear comandos perigosos
+- adicionar gates de confirmação
+- reescrever comandos antes da execução (ex.: compressão de tokens com RTK)
+- injetar setup de ambiente
 
-**Example:** See [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh)
+**Exemplo:** veja [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh)
 
-**Example `settings.json` wiring:**
+**Exemplo de wiring em `settings.json`:**
 
 ```json
 {
@@ -278,20 +279,20 @@ Runs **before** Claude executes a tool. Use for:
 }
 ```
 
-**Common patterns:**
+**Patterns comuns:**
 
 ```text
-# Block dangerous operations
+# Bloquear operações perigosas
 deny when command matches destructive patterns
 
-# Warn on destructive git operations
+# Alertar sobre operações git destrutivas
 require confirmation or deny when command force-pushes protected branches
 
-# Inject setup
+# Injetar setup
 allow only lightweight, explicit setup checks
 ```
 
-Additional hook events worth knowing:
+Outros eventos de hook importantes:
 
 - `PostToolUse`
 - `SessionStart`
@@ -300,38 +301,40 @@ Additional hook events worth knowing:
 - `PreCompact`
 - `SubagentStop`
 
-Use hooks for guardrails and lightweight automation, not for hiding critical workflow logic that should live in `CLAUDE.md`.
+Use hooks para guardrails e automação leve, não para esconder lógica crítica de workflow que deveria morar em `CLAUDE.md`.
 
-#### RTK: Token-Compressing Hook
+#### RTK: Hook de Compressão de Tokens
 
-[RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) is a PreToolUse hook that
-transparently rewrites Bash commands to pipe output through a Rust binary before it
-lands in the context window. 60-90% savings on `git`, `npm`, `ls`, and other
-high-volume dev commands.
+[RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) é um hook PreToolUse que
+reescreve comandos Bash de forma transparente para canalizar a saída por um
+binário Rust antes que ela entre na janela de contexto. Economiza 60-90% em
+`git`, `npm`, `ls` e outros comandos de alto volume.
 
-**Install and wire (macOS):**
+**Instalação e wiring (macOS):**
 
 ```bash
 brew install rtk
-rtk init -g   # installs hook + patches settings.json
+rtk init -g   # instala hook + altera settings.json
 ```
 
-## Plugin and Tool Surface
+## Superfície de Plugins e Ferramentas
 
-Keep the always-on surface small.
+Mantenha pequena a superfície always-on.
 
-A strong default is:
+Um default forte é:
 
-- core Claude features
-- a small number of high-value plugins
-- project-local hooks
-- project-local memory
+- recursos centrais do Claude
+- um número pequeno de plugins de alto valor
+- hooks locais do projeto
+- memória local do projeto
 
-Prefer on-demand skills and temporary tool activation over a large permanently enabled plugin set. This reduces noise, cost, and unexpected behavior drift.
+Prefira skills on-demand e ativação temporária de ferramentas a um conjunto
+grande de plugins permanentemente habilitados. Isso reduz ruído, custo e deriva
+de comportamento inesperada.
 
-## High-Value Settings to Document Explicitly
+## Settings de Alto Valor para Documentar Explicitamente
 
-The most important Claude settings to standardize are:
+As settings mais importantes do Claude para padronizar são:
 
 - `permissions`
 - `hooks`
@@ -341,31 +344,30 @@ The most important Claude settings to standardize are:
 - `modelOverrides`
 - `attribution`
 
-Useful environment-driven overrides:
+Overrides úteis guiados por variáveis de ambiente:
 
 - `CLAUDE_CODE_SUBAGENT_MODEL`
-- any project-specific env var needed by hooks or MCP servers
+- qualquer env var específica do projeto necessária para hooks ou servidores MCP
 
-Keep the team guidance generic in `CLAUDE.md`, and keep machine-specific choices in
-`settings.json`.
+Mantenha a guidance do time genérica em `CLAUDE.md` e as escolhas específicas da máquina em `settings.json`.
 
-## Subagents
+## Subagentes
 
-Claude Code subagents should be treated as a scaling tool, not the default for every task.
+Subagentes do Claude Code devem ser tratados como ferramenta de escala, não como o default para toda tarefa.
 
-Use subagents when:
+Use subagentes quando:
 
-- tasks are independent
-- the write surfaces are disjoint
-- the main agent can continue useful work in parallel
+- as tarefas forem independentes
+- as superfícies de escrita forem distintas
+- o agente principal puder continuar trabalho útil em paralelo
 
-Avoid subagents when:
+Evite subagentes quando:
 
-- the next step is blocked on the answer
-- the task is tightly coupled to the current local context
-- orchestration overhead exceeds the value of parallelism
+- o próximo passo depende da resposta
+- a tarefa é fortemente acoplada ao contexto local atual
+- o custo de orquestração supera o valor do paralelismo
 
-**Install and wire (Linux):**
+**Instalação e wiring (Linux):**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
@@ -373,28 +375,29 @@ export PATH="$HOME/.local/bin:$PATH"
 rtk init -g
 ```
 
-**Verify:**
+**Verificação:**
 
 ```bash
 rtk --version   # rtk 0.x.x
-rtk gain        # shows cumulative token savings
+rtk gain        # mostra economia acumulada de tokens
 ```
 
-The hook uses an exit-code protocol: exit 0 = rewrite+allow, exit 1 = pass through
-unchanged, exit 2 = deny (let Claude Code handle), exit 3 = rewrite+prompt user.
-Commands RTK doesn't know how to compress pass through at exit 1 with zero overhead.
+O hook usa um protocolo por exit code: exit 0 = reescreve+permite, exit 1 =
+pass through sem mudanças, exit 2 = nega (deixa o Claude Code tratar), exit 3 =
+reescreve+prompta o usuário. Comandos que o RTK não sabe comprimir passam com
+exit 1 e overhead zero.
 
-### PostToolUse Hook
+### Hook PostToolUse
 
-Runs **after** tool execution. Use for:
+Roda **depois** da execução da ferramenta. Use para:
 
-- Running non-mutating checks
-- Validating outputs
-- Logging/metrics
+- rodar checks não mutáveis
+- validar saídas
+- logs/métricas
 
-**Example:** See [hooks/post-tool-use.sh](./hooks/post-tool-use.sh)
+**Exemplo:** veja [hooks/post-tool-use.sh](./hooks/post-tool-use.sh)
 
-**Example `settings.json` wiring:**
+**Exemplo de wiring em `settings.json`:**
 
 ```json
 {
@@ -414,22 +417,22 @@ Runs **after** tool execution. Use for:
 }
 ```
 
-**Important gotchas:**
+**Gotchas importantes:**
 
-- PostToolUse hooks that modify files can create edit loops
-- Prefer notify, lint, or log behavior over hidden edits
-- For multi-file bulk edits, keep hooks lightweight or disable them temporarily
+- hooks PostToolUse que modificam arquivos podem criar loops de edição
+- prefira comportamento de notificação, lint ou log a edições ocultas
+- para edições em massa de vários arquivos, mantenha hooks leves ou desabilite-os temporariamente
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
 - PreToolUse = [Agent Gotchas](../../patterns/agent-gotchas.md)
 - PostToolUse = [Workflow Best Practices](../../best-practices/workflow.md)
 
 ## Skills
 
-Skills are reusable AI workflows defined in markdown files.
+Skills são workflows reutilizáveis de IA definidos em arquivos markdown.
 
-**Structure:**
+**Estrutura:**
 
 ```markdown
 ---
@@ -455,21 +458,21 @@ triggers:
 - [Constraints or gotchas]
 ```
 
-**Location:** `~/.claude/skills/` (global) or `.claude/skills/` (project-local)
+**Local:** `~/.claude/skills/` (global) ou `.claude/skills/` (local do projeto)
 
-**Examples:**
+**Exemplos:**
 
-- [skills/verify.md](./skills/verify.md) - Quality gate (lint, type-check, test, build)
-- [skills/ship.md](./skills/ship.md) - Git workflow skill
+- [skills/verify.md](./skills/verify.md) - skill de quality gate (lint, type-check, test, build)
+- [skills/ship.md](./skills/ship.md) - skill de workflow git
 
-**Best practices:**
+**Boas práticas:**
 
-- Keep skills focused (one workflow per skill)
-- Include error handling instructions
-- Specify success criteria
-- Document prerequisite tools/setup
+- mantenha as skills focadas (um workflow por skill)
+- inclua instruções de tratamento de erro
+- especifique critérios de sucesso
+- documente ferramentas/pré-requisitos
 
-**Creating custom skills:**
+**Criando skills customizadas:**
 
 ````markdown
 ---
@@ -498,22 +501,22 @@ Check that:
    ```
 ````
 
-2. **Deploy to Vercel staging**
+2. **Deploy para Vercel staging**
 
    ```bash
    vercel deploy --prebuilt
    ```
 
 3. **Verify deployment**
-   - Check deployment URL works
-   - Run smoke tests if available
-   - Update MEMORY.md with deployment URL and timestamp
+   - confirme que a deployment URL funciona
+   - rode smoke tests, se existirem
+   - atualize `MEMORY.md` com URL e timestamp do deploy
 
 ## Success Criteria
 
-- Deployment URL returned
-- No build errors
-- Staging environment accessible
+- Deployment URL retornada
+- Sem erros de build
+- Ambiente de staging acessível
 
 ## Rollback
 
@@ -525,26 +528,26 @@ vercel rollback
 
 ```
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 - Skills = [Task Orchestration: Reusable Workflows](../../patterns/task-orchestration.md#reusable-workflows)
 - Skill triggers = [Task Orchestration: Trigger Patterns](../../patterns/task-orchestration.md)
 
-## MCP Server Strategy
+## Estratégia de Servidores MCP
 
-Claude Code supports Model Context Protocol servers for extending capabilities.
+Claude Code suporta servidores Model Context Protocol para ampliar capacidades.
 
-**Config file locations:**
+**Locais dos arquivos de config:**
 
 ```
-~/.claude/.mcp.json              # Global user-level servers (correct path)
-your-project/.mcp.json           # Project-specific servers
+~/.claude/.mcp.json              # Servidores globais no nível do usuário (caminho correto)
+your-project/.mcp.json           # Servidores específicos do projeto
 ```
 
-> **Note:** The correct global config file is `~/.claude/.mcp.json` — not `~/.claude/config.json`
-> or `~/.claude/settings.json`. The `mcpServers` key is **not** valid in `settings.json`;
-> adding it there will produce a schema validation error at startup.
+> **Nota:** o arquivo global correto é `~/.claude/.mcp.json` — não `~/.claude/config.json`
+> nem `~/.claude/settings.json`. A chave `mcpServers` **não** é válida em `settings.json`;
+> adicioná-la ali gera erro de validação de schema no startup.
 
-**Global config example:**
+**Exemplo de config global:**
 
 ```json
 // ~/.claude/.mcp.json
@@ -568,7 +571,7 @@ your-project/.mcp.json           # Project-specific servers
 }
 ```
 
-**Project config example:**
+**Exemplo de config por projeto:**
 
 ```json
 // your-project/.mcp.json
@@ -586,87 +589,88 @@ your-project/.mcp.json           # Project-specific servers
 }
 ```
 
-**Recommended global servers:**
+**Servidores globais recomendados:**
 
-- `@modelcontextprotocol/server-github` - GitHub API access
-- `tavily-mcp` - Web search
-- `@upstash/context7-mcp` - Library documentation lookup
+- `@modelcontextprotocol/server-github` - acesso à API do GitHub
+- `tavily-mcp` - busca na web
+- `@upstash/context7-mcp` - lookup de documentação de bibliotecas
 
-**Recommended per-project:**
+**Recomendados por projeto:**
 
-- Cloud provider SDKs (Supabase, Vercel, AWS)
-- Custom business logic servers
-- Domain-specific tools
+- SDKs de provedores cloud (Supabase, Vercel, AWS)
+- servidores de lógica de negócio customizada
+- ferramentas específicas de domínio
 
-**Performance tips:**
+**Dicas de performance:**
 
-- Keep total servers under 10 (context overhead)
-- Keep total tools under 80 (tool selection accuracy)
-- Use project-local `.mcp.json` for environment-specific tools
+- mantenha menos de 10 servidores no total (overhead de contexto)
+- mantenha menos de 80 ferramentas no total (precisão de seleção de ferramentas)
+- use `.mcp.json` local do projeto para ferramentas dependentes do ambiente
 
-### Plugin System and Dual Registration
+### Sistema de Plugins e Registro Duplo
 
-Claude Code's plugin marketplace can also register MCP servers. This creates a
-**dual-registration problem** you should be aware of:
+O marketplace de plugins do Claude Code também pode registrar servidores MCP.
+Isso cria um **problema de registro duplo** do qual você deve estar ciente:
 
-- A server added to `.mcp.json` registers as `mcp__<server>__*`
-- The same server enabled via a plugin registers as `mcp__plugin_<id>_<server>__*`
-- If both exist, every tool appears **twice** in the tool list — doubling context overhead
+- um servidor adicionado em `.mcp.json` registra como `mcp__<server>__*`
+- o mesmo servidor habilitado via plugin registra como `mcp__plugin_<id>_<server>__*`
+- se ambos existirem, cada ferramenta aparece **duas vezes** na lista — dobrando o overhead de contexto
 
-**Audit your active tools periodically:**
+**Audite suas ferramentas ativas periodicamente:**
 
 ```bash
-# List installed plugins and their status
+# Listar plugins instalados e status
 claude plugin list
 
-# Disable a plugin (use marketplace format)
+# Desabilitar um plugin (use o formato do marketplace)
 claude plugin disable <plugin-name>@claude-plugins-official
 
-# Check what's in your .mcp.json
+# Ver o que está no seu .mcp.json
 cat ~/.claude/.mcp.json
 ```
 
-**Rule of thumb:** For servers you use constantly (github, tavily, playwright), register
-them in `.mcp.json` directly and disable the corresponding plugin. For specialized servers
-used occasionally, prefer the plugin marketplace.
+**Regra prática:** para servidores de uso constante (github, tavily, playwright),
+registre-os diretamente em `.mcp.json` e desabilite o plugin correspondente.
+Para servidores especializados usados ocasionalmente, prefira o marketplace.
 
-### Agent Teams Env Var Warning
+### Alerta da Env Var Agent Teams
 
-If you see `mcp__agents__*` tool names in your session (e.g. `mcp__agents__github__*`),
-the `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` environment variable is set. This duplicates
-**all** registered MCP tools under an `agents` namespace — adding ~70+ extra tool name
-entries to the context window even when no teams are configured.
+Se você vir nomes de ferramenta `mcp__agents__*` na sessão (por exemplo
+`mcp__agents__github__*`), a variável de ambiente
+`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` está definida. Isso duplica **todas** as
+ferramentas MCP registradas sob um namespace `agents` — adicionando ~70+ entradas
+extras de nomes de ferramenta na janela de contexto, mesmo sem teams configurados.
 
-**Fix:**
+**Correção:**
 
 ```json
-// ~/.claude/settings.json — remove this line
+// ~/.claude/settings.json — remova esta linha
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" // <-- remove
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" // <-- remover
   }
 }
 ```
 
-Only set this if you are actively using the agent teams feature with a configured `teams`
-key in `settings.json`.
+Só defina isso se você estiver usando ativamente o recurso agent teams com uma
+chave `teams` configurada em `settings.json`.
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- MCP servers = [Context Building](../../patterns/context-building.md)
-- Server configuration = [Context Building](../../patterns/context-building.md)
+- servidores MCP = [Context Building](../../patterns/context-building.md)
+- configuração de servidores = [Context Building](../../patterns/context-building.md)
 
-## Multi-Model Routing
+## Roteamento Multi-Model
 
-Claude Code supports three model tiers:
+Claude Code suporta três tiers de modelo:
 
 | Model                     | ID         | Use For                              | Cost (in/out) | Context |
 | ------------------------- | ---------- | ------------------------------------ | ------------- | ------- |
-| claude-sonnet-4-6         | Sonnet 4.6 | Default work, most tasks             | $3/$15        | 200K    |
-| claude-opus-4-6           | Opus 4.6   | Complex architecture, deep analysis  | $15/$75       | 1M      |
-| claude-haiku-4-5-20251001 | Haiku 4.5  | Sub-agents, quick checks, formatting | $1/$5         | 200K    |
+| claude-sonnet-4-6         | Sonnet 4.6 | Trabalho default, maior parte das tarefas | $3/$15        | 200K    |
+| claude-opus-4-6           | Opus 4.6   | Arquitetura complexa, análise profunda | $15/$75       | 1M      |
+| claude-haiku-4-5-20251001 | Haiku 4.5  | Subagentes, checks rápidos, formatação | $1/$5         | 200K    |
 
-**Routing strategy:**
+**Estratégia de roteamento:**
 
 ```markdown
 ## Multi-Model Routing (in CLAUDE.md)
@@ -683,18 +687,18 @@ Claude Code supports three model tiers:
   - Documentation updates
 ```
 
-**Model selection workflow:**
+**Workflow de seleção de modelo:**
 
-1. Start with Sonnet for general work
-2. Switch to Opus if Claude struggles after 2-3 turns
-3. Use Haiku for batch operations (via programmatic API, not CLI)
+1. Comece com Sonnet para trabalho geral
+2. Troque para Opus se Claude travar depois de 2-3 turnos
+3. Use Haiku para operações em lote (via API programática, não pela CLI)
 
-### Sub-Agent Model Routing
+### Roteamento de Modelo para Subagentes
 
-Claude Code spawns sub-agents for background work (compaction, parallel tasks). By default they
-use the same model as your main session. Route them to Haiku automatically:
+Claude Code cria subagentes para trabalho em background (compactação, tarefas paralelas).
+Por padrão, eles usam o mesmo modelo da sessão principal. Direcione-os para Haiku automaticamente:
 
-In `~/.claude/settings.json` (or run `bash tools/setup-claude-code.sh` — it does this for you):
+Em `~/.claude/settings.json` (ou rode `bash tools/setup-claude-code.sh` — ele faz isso por você):
 
 ```json
 {
@@ -704,14 +708,15 @@ In `~/.claude/settings.json` (or run `bash tools/setup-claude-code.sh` — it do
 }
 ```
 
-Expected savings: 60-80% on sub-agent costs with no quality impact on main session work.
+Economia esperada: 60-80% no custo de subagentes sem impacto de qualidade na sessão principal.
 
 ### Claude Code Router (CCR)
 
-[CCR](https://github.com/musistudio/claude-code-router) is a local proxy that routes Claude Code
-requests to different model slots, enabling finer-grained cost control.
+[CCR](https://github.com/musistudio/claude-code-router) é um proxy local que
+roteia requests do Claude Code para slots de modelo diferentes, permitindo
+controle de custo mais fino.
 
-**Install:**
+**Instalação:**
 
 ```bash
 npm install -g @musistudio/claude-code-router
@@ -746,67 +751,68 @@ npm install -g @musistudio/claude-code-router
 }
 ```
 
-Slots: `default` (interactive work), `background` (auto-compaction, sub-agents), `think` (complex reasoning), `longContext` (>120K tokens).
+Slots: `default` (trabalho interativo), `background` (auto-compactação, subagentes),
+`think` (raciocínio complexo), `longContext` (>120K tokens).
 
 ```bash
 ccr my-preset start && eval "$(ccr activate)" && claude
 ```
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Model routing = [Multi-Model Routing](../../patterns/multi-model-routing.md)
-- Cost optimization = [Context Management](../../best-practices/context-management.md)
+- roteamento de modelo = [Multi-Model Routing](../../patterns/multi-model-routing.md)
+- otimização de custo = [Context Management](../../best-practices/context-management.md)
 
-## Session Workflow
+## Workflow de Sessão
 
-Recommended workflow for effective sessions:
+Workflow recomendado para sessões eficazes:
 
-### Session Start
+### Início da Sessão
 
 ```bash
-# 1. Navigate to project
+# 1. Navegue até o projeto
 cd ~/projects/myproject
 
-# 2. Start Claude Code
+# 2. Inicie Claude Code
 claude
 
-# Claude auto-loads:
-# - CLAUDE.md (project root + subdirectory)
-# - MEMORY.md (session memory)
-# - MCP servers (global + project)
+# Claude carrega automaticamente:
+# - CLAUDE.md (raiz do projeto + subdiretórios)
+# - MEMORY.md (memória da sessão)
+# - servidores MCP (globais + do projeto)
 
-# 3. (Optional) Load specific context
-# @path/to/file.ts - File reference
+# 3. (Opcional) Carregue contexto específico
+# @path/to/file.ts - Referência de arquivo
 # @**/*.test.ts - Glob pattern
 ```
 
-**Automatic checks** (via skill or manual):
+**Checks automáticos** (via skill ou manual):
 
-- Check git status, current branch
-- Review open issues/PRs
-- Check active tasks from MEMORY.md
+- verificar git status e branch atual
+- revisar issues/PRs abertos
+- checar tarefas ativas no `MEMORY.md`
 
-### During Work
+### Durante o Trabalho
 
-**Context management:**
+**Gestão de contexto:**
 
-- Use `@filename` references instead of describing locations
-- Run `/compact` when context reaches **60-70%** of 200K tokens — don't wait until 90%
-- Use `/clear` between unrelated tasks
+- use referências `@filename` em vez de descrever localizações
+- rode `/compact` quando o contexto atingir **60-70%** dos 200K tokens — não espere 90%
+- use `/clear` entre tarefas não relacionadas
 
 **Quality gates:**
 
-- Run `/verify` skill after significant changes
-- Commit frequently with meaningful messages
-- Update MEMORY.md when discovering new patterns
+- rode a skill `/verify` após mudanças relevantes
+- faça commits frequentes com mensagens significativas
+- atualize `MEMORY.md` ao descobrir novos patterns
 
-**Gotcha prevention:**
+**Prevenção de gotchas:**
 
-- Read existing files before editing (Edit tool requires prior Read)
-- Check test output for false positives
-- Validate CI passes before requesting PR creation
+- leia arquivos existentes antes de editar (a ferramenta Edit exige leitura prévia)
+- confira a saída dos testes para evitar falsos positivos
+- valide que o CI passa antes de pedir criação de PR
 
-### Session End
+### Fim da Sessão
 
 ```markdown
 ## End-of-Session Checklist (via skill or manual)
@@ -831,15 +837,15 @@ claude
    - [ ] Close unused branches
 ```
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Session workflow = [Session Management](../../patterns/session-management.md)
-- Commit workflow = [Workflow Best Practices](../../best-practices/workflow.md)
-- Memory sync = [Memory Systems: Update Protocol](../../patterns/memory-systems.md#update-protocol)
+- workflow de sessão = [Session Management](../../patterns/session-management.md)
+- workflow de commit = [Workflow Best Practices](../../best-practices/workflow.md)
+- sync de memória = [Memory Systems: Update Protocol](../../patterns/memory-systems.md#update-protocol)
 
-## Task Orchestration
+## Orquestração de Tarefas
 
-For multi-step workflows, use skills with explicit state management:
+Para workflows de múltiplas etapas, use skills com gestão explícita de estado:
 
 ````markdown
 ---
@@ -862,30 +868,30 @@ description: Complete feature development workflow
    ```
 ````
 
-2. **Implement feature**
-   - Write code
-   - Add tests
-   - Update CHANGELOG.md
+2. **Implementar a feature**
+   - escrever código
+   - adicionar testes
+   - atualizar `CHANGELOG.md`
 
 3. **Quality gates**
-   - Run `/verify` skill
-   - Fix any issues
-   - Commit: `feat: [description]`
+   - rodar a skill `/verify`
+   - corrigir quaisquer issues
+   - commit: `feat: [description]`
 
-4. **Create PR**
-   - Push branch
-   - Run `/ship` skill
-   - Link related issues
+4. **Criar PR**
+   - push da branch
+   - rodar a skill `/ship`
+   - vincular issues relacionadas
 
-5. **Update memory**
-   - Add to MEMORY.md active tasks
-   - Document any gotchas discovered
+5. **Atualizar memória**
+   - adicionar em `MEMORY.md` as tarefas ativas
+   - documentar quaisquer gotchas descobertos
 
 ```
 
-**Progress tracking:**
+**Rastreamento de progresso:**
 
-Use MEMORY.md for lightweight tracking:
+Use `MEMORY.md` para rastreamento leve:
 
 ```markdown
 ## Active Tasks
@@ -900,21 +906,21 @@ Use MEMORY.md for lightweight tracking:
 Next: Write logout handler, then E2E tests
 ```
 
-For complex projects, use external tools (Linear, GitHub Projects) and sync via MCP.
+Para projetos complexos, use ferramentas externas (Linear, GitHub Projects) e sincronize via MCP.
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Multi-step workflows = [Task Orchestration](../../patterns/task-orchestration.md)
-- Progress tracking = [Task Orchestration: State Management](../../patterns/task-orchestration.md#state-management)
+- workflows de múltiplas etapas = [Task Orchestration](../../patterns/task-orchestration.md)
+- rastreamento de progresso = [Task Orchestration: State Management](../../patterns/task-orchestration.md#state-management)
 
-## Security & Safety
+## Segurança & Safety
 
-### Secret Management
+### Gestão de Segredos
 
-**Prevention (PreToolUse hook):**
+**Prevenção (hook PreToolUse):**
 
 ```bash
-# Block commits containing secrets
+# Bloquear commits contendo segredos
 if [[ "$TOOL_NAME" == "Bash" ]] && [[ "$COMMAND" =~ "git commit" ]]; then
   if git diff --cached | grep -qE 'sk_live_|AKIA|-----BEGIN PRIVATE KEY-----'; then
     echo "BLOCKED: Potential secret detected"
@@ -923,10 +929,10 @@ if [[ "$TOOL_NAME" == "Bash" ]] && [[ "$COMMAND" =~ "git commit" ]]; then
 fi
 ```
 
-**Detection (PostToolUse hook):**
+**Detecção (hook PostToolUse):**
 
 ```bash
-# Scan written files for secrets
+# Fazer scan de arquivos escritos em busca de segredos
 if [[ "$TOOL_NAME" == "Write" ]] || [[ "$TOOL_NAME" == "Edit" ]]; then
   if command -v gitleaks &> /dev/null; then
     gitleaks detect --no-git --source="$FILE_PATH"
@@ -934,97 +940,98 @@ if [[ "$TOOL_NAME" == "Write" ]] || [[ "$TOOL_NAME" == "Edit" ]]; then
 }
 ```
 
-**Best practices:**
+**Boas práticas:**
 
-- Use environment variables for all secrets
-- Add `.env` to `.gitignore`
-- Use secret scanning in CI (GitGuardian, Gitleaks, Trivy)
-- Never put secrets in CLAUDE.md or memory files
+- use variáveis de ambiente para todos os segredos
+- adicione `.env` ao `.gitignore`
+- use secret scanning no CI (GitGuardian, Gitleaks, Trivy)
+- nunca coloque segredos em `CLAUDE.md` ou em arquivos de memória
 
-### Tool Safeguards
+### Salvaguardas de Ferramentas
 
-See [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh) for comprehensive examples:
+Veja [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh) para exemplos completos:
 
-- Block `rm -rf /`, `dd`, `mkfs` (destructive file operations)
-- Warn on `git push --force` to protected branches
-- Confirm `git branch -D` (permanent deletion)
-- Validate database migrations before applying
+- bloquear `rm -rf /`, `dd`, `mkfs` (operações destrutivas em arquivos)
+- alertar sobre `git push --force` em branches protegidas
+- confirmar `git branch -D` (deleção permanente)
+- validar migrations de banco antes de aplicar
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Secret scanning = [Security Best Practices](../../best-practices/security.md)
-- Safeguards = [Agent Gotchas](../../patterns/agent-gotchas.md)
+- secret scanning = [Security Best Practices](../../best-practices/security.md)
+- safeguards = [Agent Gotchas](../../patterns/agent-gotchas.md)
 
-## Performance Optimization
+## Otimização de Performance
 
-### Token Budget Management
+### Gestão do Orçamento de Tokens
 
-Claude Code has a 200K token context window (Sonnet) or 1M (Opus).
+Claude Code tem janela de contexto de 200K tokens (Sonnet) ou 1M (Opus).
 
-**Monitoring:**
+**Monitoramento:**
 
-- Check token usage in bottom status bar
-- Run `/compact` at **60-70%** (120-140K tokens for Sonnet) — waiting until 90% risks hitting session limits on long tasks
-- Use `/clear` between unrelated tasks
+- verifique o uso de tokens na barra de status inferior
+- rode `/compact` em **60-70%** (120-140K tokens para Sonnet) — esperar até 90% aumenta o risco de bater limite em tarefas longas
+- use `/clear` entre tarefas não relacionadas
 
-**Reduction strategies:**
+**Estratégias de redução:**
 
-1. **RTK hook (highest impact, zero workflow change)**
-   Install RTK to compress Bash outputs before they reach the model. A single
-   `git log` can produce 10K tokens of raw output; RTK filters it to under 1K.
+1. **Hook RTK (maior impacto, nenhuma mudança de workflow)**
+   Instale RTK para comprimir saídas de Bash antes de chegarem ao modelo. Um
+   único `git log` pode produzir 10K tokens de saída bruta; RTK filtra para
+   menos de 1K.
 
    ```bash
    brew install rtk && rtk init -g   # macOS
-   # or: curl installer + rtk init -g  (Linux)
+   # ou: curl installer + rtk init -g  (Linux)
    ```
 
-   See [RTK hook setup](#rtk-token-compressing-hook) for full instructions.
+   Veja [RTK hook setup](#rtk-hook-de-compressão-de-tokens) para as instruções completas.
 
-2. **Targeted file reading**
-
-   ```
-   Instead of: "Read all files in src/"
-   Do: "@src/components/Button.tsx @src/hooks/useAuth.ts"
-   ```
-
-3. **Glob patterns for specific files**
+2. **Leitura direcionada de arquivos**
 
    ```
-   Instead of: "@**/*"
-   Do: "@**/*.test.ts" or "@src/lib/**/*.ts"
+   Em vez de: "Read all files in src/"
+   Faça: "@src/components/Button.tsx @src/hooks/useAuth.ts"
    ```
 
-4. **Summarize before loading**
+3. **Glob patterns para arquivos específicos**
+
+   ```
+   Em vez de: "@**/*"
+   Faça: "@**/*.test.ts" ou "@src/lib/**/*.ts"
+   ```
+
+4. **Resumir antes de carregar**
 
    ```
    "List files in src/components/, then I'll tell you which to read"
    ```
 
-5. **Use memory files**
-   - Store architectural decisions in memory/architecture.md
-   - Reference: "Check architecture.md for DB schema"
-   - Avoids re-reading large files
+5. **Usar arquivos de memória**
+   - armazene decisões arquiteturais em `memory/architecture.md`
+   - referencie: "Check architecture.md for DB schema"
+   - isso evita reler arquivos grandes
 
-### Caching
+### Cache
 
-Claude Code caches tool definitions and file contents between turns.
+Claude Code faz cache de definições de ferramentas e conteúdo de arquivos entre turnos.
 
-**Optimization:**
+**Otimização:**
 
-- Re-use `@filename` references (cached after first read)
-- Keep CLAUDE.md stable (re-parsed on change)
-- Minimize MCP server restarts (tools re-indexed on restart)
+- reutilize referências `@filename` (entram em cache após a primeira leitura)
+- mantenha `CLAUDE.md` estável (ele é reparseado quando muda)
+- minimize reinícios de servidores MCP (as ferramentas são reindexadas no restart)
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Token management = [Context Management](../../best-practices/context-management.md)
-- Caching = [Context Management](../../best-practices/context-management.md)
+- gestão de tokens = [Context Management](../../best-practices/context-management.md)
+- cache = [Context Management](../../best-practices/context-management.md)
 
-## Testing Strategy
+## Estratégia de Testes
 
-### Test Generation
+### Geração de Testes
 
-Use skills for consistent test generation:
+Use skills para geração consistente de testes:
 
 ```markdown
 ---
@@ -1065,7 +1072,7 @@ description: Generate comprehensive tests for a module
 
 ### Quality Gates
 
-Integrate with existing CI:
+Integre com o CI existente:
 
 ```yaml
 # .github/workflows/quality.yml
@@ -1096,7 +1103,7 @@ jobs:
         run: npm run build
 ```
 
-**Local verification** (via `/verify` skill):
+**Verificação local** (via skill `/verify`):
 
 ```bash
 npm run lint && \
@@ -1105,108 +1112,108 @@ npm test && \
 npm run build
 ```
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Test generation = [Testing](../../patterns/testing.md)
-- Quality gates = [Workflow Best Practices](../../best-practices/workflow.md)
+- geração de testes = [Testing](../../patterns/testing.md)
+- quality gates = [Workflow Best Practices](../../best-practices/workflow.md)
 
 ## Troubleshooting
 
-### Common Issues
+### Issues Comuns
 
-**1. Edit tool fails with "file not read"**
-
-```
-Solution: Read file first with @filename or Read tool
-Always: Read → Edit workflow
-```
-
-**2. Hooks create infinite loops**
+**1. A ferramenta Edit falha com "file not read"**
 
 ```
-Problem: PostToolUse hook modifies file → triggers another Edit
-Solution: Add conditional check in hook to skip if already formatted
+Solução: leia o arquivo primeiro com @filename ou Read tool
+Sempre: workflow Read → Edit
 ```
 
-**3. MCP server timeout**
+**2. Hooks criam loops infinitos**
 
 ```
-Problem: Server takes >30s to respond
-Solution: Reduce tool count, optimize server startup, check network
+Problema: hook PostToolUse modifica arquivo → dispara outro Edit
+Solução: adicione uma checagem condicional no hook para pular se já estiver formatado
 ```
 
-**4. Memory file not loading**
+**3. Timeout do servidor MCP**
 
 ```
-Problem: MEMORY.md over 200 lines
-Solution: Move details to topic files, keep index under limit
+Problema: o servidor leva >30s para responder
+Solução: reduza a quantidade de tools, otimize o startup do servidor, confira a rede
 ```
 
-**5. Git hooks conflict with Claude Code hooks**
+**4. Arquivo de memória não carrega**
 
 ```
-Problem: Pre-commit hook fails but Claude Code proceeds
-Solution: PreToolUse hook should exit 1 on failure to block
+Problema: MEMORY.md passou de 200 linhas
+Solução: mova detalhes para arquivos de tópico, mantenha o índice abaixo do limite
 ```
 
-**6. RTK not rewriting commands**
+**5. Hooks do git conflitam com hooks do Claude Code**
 
 ```
-Problem: rtk binary not in PATH when hook runs
-Solution: Use full path in hook or ensure PATH includes ~/.local/bin
-         Run: rtk --version to confirm binary is reachable
+Problema: hook de pre-commit falha, mas Claude Code continua
+Solução: o hook PreToolUse deve sair com exit 1 para bloquear
 ```
 
-### Debug Mode
+**6. RTK não está reescrevendo comandos**
 
-Enable verbose logging:
+```
+Problema: binário rtk não está no PATH quando o hook roda
+Solução: use o caminho completo no hook ou garanta que PATH inclua ~/.local/bin
+         Rode: rtk --version para confirmar que o binário é acessível
+```
+
+### Modo de Debug
+
+Habilite logging verboso:
 
 ```bash
-# Set environment variable
+# Defina a variável de ambiente
 export CLAUDE_DEBUG=1
 
-# Or run with flag
+# Ou rode com flag
 claude --debug
 ```
 
-**Log locations:**
+**Locais de log:**
 
-- `~/.claude/logs/` - Session logs
-- `~/.claude/mcp-logs/` - MCP server logs
+- `~/.claude/logs/` - logs de sessão
+- `~/.claude/mcp-logs/` - logs dos servidores MCP
 
-## Advanced Patterns
+## Patterns Avançados
 
-### Parallel Sub-Agents
+### Subagentes em Paralelo
 
-For independent tasks, invoke multiple Claude instances:
+Para tarefas independentes, invoque múltiplas instâncias do Claude:
 
 ```bash
-# Terminal 1: Frontend work
+# Terminal 1: trabalho de frontend
 cd apps/web && claude --prompt "Implement login form"
 
-# Terminal 2: Backend work
+# Terminal 2: trabalho de backend
 cd apps/api && claude --prompt "Add authentication endpoint"
 
-# Terminal 3: Testing
+# Terminal 3: testes
 cd apps/web && claude --prompt "Write E2E tests for login"
 ```
 
-**When to use:**
+**Quando usar:**
 
-- 3+ independent tasks
-- No shared state/files
-- Clear file boundaries
-- Parallel CI jobs
+- 3+ tarefas independentes
+- sem estado/arquivos compartilhados
+- limites claros entre arquivos
+- jobs de CI em paralelo
 
-**Coordination:**
+**Coordenação:**
 
-- Use git branches (merge after completion)
-- Update shared MEMORY.md last (to avoid conflicts)
-- Communication via GitHub issues/PRs
+- use branches git (faça merge depois)
+- atualize o `MEMORY.md` compartilhado por último (para evitar conflitos)
+- comunique-se via GitHub issues/PRs
 
-### Sequential Dependencies
+### Dependências Sequenciais
 
-For tasks where B depends on A output:
+Para tarefas em que B depende da saída de A:
 
 ```markdown
 ## Workflow: API + Client Generation
@@ -1230,7 +1237,7 @@ For tasks where B depends on A output:
 3. Run type-check to verify
 ```
 
-Use skills to encode these dependencies:
+Use skills para codificar essas dependências:
 
 ```markdown
 ---
@@ -1264,35 +1271,35 @@ Check that Step 2 completed:
 Then update components...
 ```
 
-**Mapping to toolkit patterns:**
+**Mapeamento para os patterns do toolkit:**
 
-- Parallel work = [Task Orchestration: Parallel Execution](../../patterns/task-orchestration.md#parallel-execution)
-- Sequential deps = [Task Orchestration: Dependency Management](../../patterns/task-orchestration.md#dependency-management)
+- trabalho em paralelo = [Task Orchestration: Parallel Execution](../../patterns/task-orchestration.md#parallel-execution)
+- dependências sequenciais = [Task Orchestration: Dependency Management](../../patterns/task-orchestration.md#dependency-management)
 
-## Examples
+## Exemplos
 
-See the following files for complete examples:
+Veja os arquivos abaixo para exemplos completos:
 
-- [example-claude-md.md](./example-claude-md.md) - Full CLAUDE.md for TypeScript + React + Supabase project
-- [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh) - PreToolUse hook with safeguards
-- [hooks/post-tool-use.sh](./hooks/post-tool-use.sh) - PostToolUse hook with formatting
-- [skills/verify.md](./skills/verify.md) - Quality gate skill
-- [skills/ship.md](./skills/ship.md) - Git workflow skill
+- [example-claude-md.md](./example-claude-md.md) - `CLAUDE.md` completo para projeto TypeScript + React + Supabase
+- [hooks/pre-tool-use.sh](./hooks/pre-tool-use.sh) - hook PreToolUse com safeguards
+- [hooks/post-tool-use.sh](./hooks/post-tool-use.sh) - hook PostToolUse com formatação
+- [skills/verify.md](./skills/verify.md) - skill de quality gate
+- [skills/ship.md](./skills/ship.md) - skill de workflow git
 
-## Contributing
+## Contribuindo
 
-Improvements welcome! If you discover better patterns or encounter issues:
+Melhorias são bem-vindas. Se você descobrir patterns melhores ou encontrar issues:
 
-1. Open an issue describing the pattern/problem
-2. Submit a PR with example code
-3. Update this README with lessons learned
+1. Abra uma issue descrevendo o pattern/problema
+2. Envie um PR com código de exemplo
+3. Atualize este README com as lições aprendidas
 
-## Resources
+## Recursos
 
 - [Claude Code Documentation](https://docs.anthropic.com/en/docs/claude-code/overview)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [AI Dev Toolkit Patterns](../../patterns/)
 
-## License
+## Licença
 
 MIT

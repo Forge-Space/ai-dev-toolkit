@@ -1,30 +1,37 @@
-# Codex CLI Implementation
+# Implementação para Codex CLI
 
-Reference implementation of the toolkit patterns for [Codex CLI](https://github.com/openai/codex).
+Implementação de referência dos patterns do toolkit para [Codex CLI](https://github.com/openai/codex).
 
-## How Codex Differs from Other AI Coding Tools
+## Como o Codex Difere de Outras Ferramentas de IA para Código
 
-Most AI coding tools (Claude Code, OpenCode, Cursor) are **trust-first**: they assume you want maximum access and require explicit setup to add isolation. Codex is the opposite — **sandbox-first by default**.
+A maioria das ferramentas de IA para código (Claude Code, OpenCode, Cursor) é
+**trust-first**: elas assumem que você quer acesso máximo e exigem setup
+explícito para adicionar isolamento. O Codex é o oposto — **sandbox-first por
+padrão**.
 
-Documented defaults are conservative:
+Os defaults documentados são conservadores:
 
-- `read-only` sandbox
-- network disabled unless you explicitly broaden access
-- approval prompts when the agent needs to go beyond its current trust boundary
+- sandbox `read-only`
+- rede desabilitada, a menos que você amplie o acesso explicitamente
+- prompts de aprovação quando o agente precisa ir além do limite atual de confiança
 
-For active implementation work, many teams intentionally move to `workspace-write`
-with `on-request` approval. That is a recommended dev posture, not the documented
-baseline.
+Para trabalho ativo de implementação, muitos times migram de propósito para
+`workspace-write` com aprovação `on-request`. Essa é uma postura recomendada
+para desenvolvimento, não o baseline documentado.
 
-**Approval policy as an autonomy dial:**
+**Policy de aprovação como dial de autonomia:**
 
 ```
 untrusted ──── on-request ──── on-failure ──── never
-  (pause        (pause when      (pause on      (full
-every action)   uncertain)       errors only)    auto)
+  (pausa        (pausa quando     (pausa só      (automação
+a cada ação)   houver dúvida)     em erros)       total)
 ```
 
-Use `on-request` for interactive dev — not `untrusted`. The difference: `untrusted` interrupts every shell command and file write, breaking your flow. `on-request` lets Codex proceed when it's confident and only pauses when it genuinely needs your input. You get oversight without constant interruption.
+Use `on-request` para desenvolvimento interativo — não `untrusted`. A diferença:
+`untrusted` interrompe cada comando de shell e cada escrita em arquivo, quebrando
+o seu fluxo. `on-request` deixa o Codex seguir quando ele está confiante e só
+pausa quando realmente precisa da sua entrada. Você mantém supervisão sem
+interrupção constante.
 
 ## Setup
 
@@ -32,63 +39,69 @@ Use `on-request` for interactive dev — not `untrusted`. The difference: `untru
 # Install
 npm install -g @openai/codex
 
-# Copy global config
+# Copiar config global
 cp config.toml ~/.codex/config.toml
 
-# Copy global instructions
+# Copiar instruções globais
 cp ../../rules/AGENTS.md ~/.codex/AGENTS.md
 
-# Copy project instructions (run in your repo root)
+# Copiar instruções do projeto (rode na raiz do seu repo)
 cp ../../rules/AGENTS.md your-project/AGENTS.md
 ```
 
-Set your API key:
+Defina sua chave de API:
 
 ```bash
 export OPENAI_API_KEY=sk-...
 ```
 
-Prefer keeping the live model choice in `~/.codex/config.toml` or per-session flags.
-Model names change faster than workflow patterns, so this guide stays tier-based
-and only uses concrete model names as examples when necessary.
+Prefira manter a escolha real do modelo em `~/.codex/config.toml` ou em flags de
+sessão. Os nomes de modelo mudam mais rápido que os patterns de workflow, então
+este guia permanece orientado a tiers e só usa nomes concretos como exemplo
+quando necessário.
 
-## oh-my-codex Compatibility
+## Compatibilidade com oh-my-codex
 
-Use [oh-my-codex.md](./oh-my-codex.md) as the ownership boundary when combining
-`forge-kit` with an oh-my-codex orchestration layer.
+Use [oh-my-codex.md](./oh-my-codex.md) como limite de ownership ao combinar
+`forge-kit` com uma camada de orquestração oh-my-codex.
 
-`forge-kit` can install this reference to `~/.codex/oh-my-codex.md` with:
+`forge-kit` pode instalar esta referência em `~/.codex/oh-my-codex.md` com:
 
 ```bash
 FORGE_KIT_DIR=./kit sh kit/install.sh --tools codex --oh-my-compat
 ```
 
-## AGENTS.md Scope Rules
+## Regras de Escopo do AGENTS.md
 
-Codex reads `AGENTS.md` hierarchically — more deeply nested files take precedence:
+Codex lê `AGENTS.md` de forma hierárquica — arquivos mais profundos têm precedência:
 
 ```
-~/.codex/AGENTS.md          ← global (all projects)
-your-project/AGENTS.md      ← project root
-your-project/src/AGENTS.md  ← scoped to src/ subtree
+~/.codex/AGENTS.md          ← global (todos os projetos)
+your-project/AGENTS.md      ← raiz do projeto
+your-project/src/AGENTS.md  ← escopo do subtree src/
 ```
 
-Instructions in a deeper file override the parent for any file modified within that directory tree. Direct prompt instructions always override `AGENTS.md`.
+Instruções em um arquivo mais profundo sobrescrevem as do pai para qualquer
+arquivo modificado dentro daquela árvore de diretórios. Instruções do prompt
+direto sempre sobrescrevem `AGENTS.md`.
 
-See [Context Building pattern](../../patterns/context-building.md).
+Veja o [pattern de Context Building](../../patterns/context-building.md).
 
-## Approval Policies
+## Policies de Aprovação
 
-| Policy       | Interrupts on | When to use                                     |
-| ------------ | ------------- | ----------------------------------------------- |
-| `untrusted`  | Every action  | Security audits, untrusted codebases            |
-| `on-request` | Uncertainty   | **Interactive dev** — flow-preserving oversight |
-| `on-failure` | Errors only   | Repetitive tasks you've already validated       |
-| `never`      | Nothing       | CI pipelines, containers, fully scripted runs   |
+| Policy       | Interrompe em | Quando usar                                   |
+| ------------ | ------------- | --------------------------------------------- |
+| `untrusted`  | Toda ação     | Auditorias de segurança, codebases não confiáveis |
+| `on-request` | Incerteza     | **Dev interativo** — supervisão sem quebrar o fluxo |
+| `on-failure` | Só em erros   | Tarefas repetitivas que você já validou       |
+| `never`      | Nada          | Pipelines de CI, containers, execuções totalmente roteirizadas |
 
-`on-request` is the right default for dev because Codex only pauses when it's genuinely uncertain — not on every routine file write or shell command. `untrusted` looks safer but trains you to click through every prompt, which defeats the point of oversight.
+`on-request` é o default certo para desenvolvimento porque o Codex só pausa
+quando há incerteza real — não a cada escrita de arquivo ou comando rotineiro.
+`untrusted` parece mais seguro, mas treina você a aprovar prompts sem pensar,
+o que destrói a utilidade da supervisão.
 
-Override per session:
+Override por sessão:
 
 ```bash
 codex --approval-mode on-request "refactor the auth module"
@@ -96,100 +109,103 @@ codex --approval-mode on-failure "run tests and fix any failures"
 codex --approval-mode never "generate a changelog summary"  # CI
 ```
 
-## Sandbox Modes
+## Modos de Sandbox
 
-| Mode                 | File access          | Network  | Use case        |
-| -------------------- | -------------------- | -------- | --------------- |
-| `read-only`          | Read only            | Disabled | Audit / explain |
-| `workspace-write`    | Write within project | Disabled | Recommended active-dev mode |
-| `danger-full-access` | Unrestricted         | Enabled  | Containers only |
+| Mode                 | Acesso a arquivos     | Rede     | Caso de uso      |
+| -------------------- | -------------------- | -------- | ---------------- |
+| `read-only`          | Somente leitura      | Disabled | Audit / explain  |
+| `workspace-write`    | Escreve dentro do projeto | Disabled | Modo recomendado para dev ativo |
+| `danger-full-access` | Irrestrito           | Enabled  | Apenas containers |
 
-## Common Workflows
+## Workflows Comuns
 
 ```bash
-# Explore the codebase
+# Explorar a base de código
 codex "explain the architecture of this project"
 
-# Implement a feature with review
+# Implementar uma feature com review
 codex --approval-mode on-request "add rate limiting to the /api/auth route"
 
-# Run and fix tests automatically
+# Rodar e corrigir testes automaticamente
 codex --approval-mode on-failure "run tests and fix any failures"
 
-# Non-interactive CI mode
+# Modo CI não interativo
 codex -q --json --approval-mode never "generate a summary of recent changes"
 
-# Use a stronger reasoning model only when the task needs it
+# Use um modelo de raciocínio mais forte apenas quando a tarefa exigir
 codex --model <deep-reasoning-model> "review this PR diff for security issues"
 ```
 
-## Multi-Model Routing
+## Roteamento Multi-Model
 
-Prefer stable tiers instead of hardcoding model names in team guidance:
+Prefira tiers estáveis em vez de fixar nomes de modelo nas diretrizes do time:
 
-| Task type | Recommended tier | How to choose |
+| Tipo de tarefa | Tier recomendado | Como escolher |
 | --- | --- | --- |
-| Exploration, explanation | Fast or balanced coding tier | Use the current default fast or balanced coding model from official OpenAI docs |
-| Quick edits, formatting | Fast tier | Optimize for speed and low cost |
-| Standard implementation | Balanced coding tier | Use your default coding model |
-| Complex architecture or debugging | Deep reasoning tier | Switch only when the task clearly needs stronger reasoning |
-| Full codebase review | Balanced or deep reasoning tier | Start balanced, escalate only if the task stalls |
+| Exploração, explicação | Tier rápido ou equilibrado para código | Use o modelo rápido ou equilibrado atual recomendado pela documentação oficial da OpenAI |
+| Edições rápidas, formatação | Tier rápido | Otimize por velocidade e baixo custo |
+| Implementação padrão | Tier equilibrado para código | Use seu modelo de código default |
+| Arquitetura complexa ou debugging | Tier de raciocínio profundo | Só troque quando a tarefa realmente exigir mais raciocínio |
+| Review de codebase inteira | Tier equilibrado ou profundo | Comece no equilibrado, escale só se travar |
 
-See [Multi-Model Routing pattern](../../patterns/multi-model-routing.md).
+Veja o [pattern de Multi-Model Routing](../../patterns/multi-model-routing.md).
 
-As of today, the safest operational rule is:
+Hoje, a regra operacional mais segura é:
 
-- keep the repository guidance tier-based
-- keep the actual model names in local config
-- periodically verify the current recommended coding models in official OpenAI docs
+- manter a guidance do repositório orientada a tiers
+- manter os nomes reais de modelos na config local
+- verificar periodicamente os modelos de código recomendados na documentação oficial da OpenAI
 
-Current OpenAI examples that fit those tiers:
+Exemplos atuais da OpenAI que se encaixam nesses tiers:
 
-- fast: `gpt-5.4-mini` or `gpt-5.4-nano`
+- fast: `gpt-5.4-mini` ou `gpt-5.4-nano`
 - balanced: `gpt-5.4`
 - long-horizon coding: `gpt-5.2-codex`
 
-## Memory
+## Memória
 
-Treat Codex memory as an external layer, not a built-in toggle in this starter config.
+Trate a memória do Codex como uma camada externa, não como um toggle embutido
+nesta configuração inicial.
 
-For cross-session context, follow the [Memory Systems pattern](../../patterns/memory-systems.md):
+Para contexto entre sessões, siga o [pattern de Memory Systems](../../patterns/memory-systems.md):
 
-- Keep a `DECISIONS.md` or `.codex/context/` directory
-- Reference it in your root `AGENTS.md`: "Read `.codex/context/` for project decisions"
-- Add an MCP memory server only if you actually use one
-- Prefer simple handoff files over always-on memory complexity when a project is small
+- Mantenha um `DECISIONS.md` ou um diretório `.codex/context/`
+- Referencie isso no `AGENTS.md` raiz: "Read `.codex/context/` for project decisions"
+- Adicione um servidor MCP de memória apenas se você realmente usar um
+- Prefira arquivos simples de handoff em vez de complexidade de memória always-on quando o projeto for pequeno
 
-## MCP Servers
+## Servidores MCP
 
-Enable servers in `config.toml` only for projects that need them — each active server adds context overhead.
+Habilite servidores em `config.toml` apenas para projetos que realmente precisam
+deles — cada servidor ativo aumenta o custo de contexto.
 
 ```bash
-# Override at runtime
+# Override em tempo de execução
 codex --mcp-server filesystem --mcp-server github "list open PRs"
 ```
 
-See [config.toml](config.toml) for the reference MCP setup.
+Veja [config.toml](config.toml) para o setup de referência de MCP.
 
-Keep the always-on set small. A lean default usually looks like:
+Mantenha pequeno o conjunto always-on. Um default enxuto costuma parecer com:
 
 - filesystem
-- git or GitHub
-- fetch or docs retrieval
-- one memory system if you actually use it
+- git ou GitHub
+- fetch ou retrieval de docs
+- um sistema de memória se você realmente usar
 
-Everything else should be project-specific or turned on only when needed.
+Todo o resto deve ser específico de projeto ou habilitado apenas quando necessário.
 
-## Task Orchestration
+## Orquestração de Tarefas
 
-Codex does not have a built-in backlog. Use the shell-level approach:
+Codex não tem backlog embutido. Use a abordagem no nível do shell:
 
 ```bash
-# Feed tasks from a backlog file
+# Alimente tarefas a partir de um arquivo de backlog
 cat .codex/tasks/next.md | codex --approval-mode on-request
 
-# Chain tasks
+# Encadeie tarefas
 codex "implement feature X" && codex "write tests for feature X"
 ```
 
-See [Task Orchestration pattern](../../patterns/task-orchestration.md) for queue management strategies.
+Veja o [pattern de Task Orchestration](../../patterns/task-orchestration.md)
+para estratégias de gestão de fila.

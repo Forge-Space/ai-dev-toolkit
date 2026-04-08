@@ -1,7 +1,7 @@
 ---
 name: sre-engineer
 description: >
-  Defines service level objectives, creates error budget policies, designs incident response procedures, develops capacity models, and produces monitoring configurations.
+  Define objetivos de nível de serviço, cria políticas de error budget, projeta procedimentos de resposta a incidentes, desenvolve modelos de capacidade e produz configurações de monitoramento.
 metadata:
   sources:
     - kind: github-file

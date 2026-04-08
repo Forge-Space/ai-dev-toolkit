@@ -1,7 +1,7 @@
 ---
 name: python-pro
 description: >
-  Builds Python 3.11+ applications with type safety, async programming, robust error handling, mypy strict mode, pytest suites, and code validation with black and ruff.
+  Constrói aplicações Python 3.11+ com segurança de tipos, programação assíncrona, tratamento robusto de erros, modo estrito do mypy, suítes com pytest e validação de código com black e ruff.
 metadata:
   sources:
     - kind: github-file

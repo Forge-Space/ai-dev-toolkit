@@ -1,7 +1,7 @@
 ---
 name: react-expert
 description: >
-  Builds React 18+ applications with components, custom hooks, Server Components, Suspense boundaries, state management, and performance optimization.
+  Constrói aplicações React 18+ com componentes, custom hooks, Server Components, boundaries de Suspense, gerenciamento de estado e otimização de performance.
 metadata:
   sources:
     - kind: github-file

@@ -1,7 +1,7 @@
 ---
 name: ml-pipeline
 description: >
-  Designs production-grade ML pipeline infrastructure with experiment tracking, Kubeflow/Airflow DAGs, feature store schemas, model registries, and automated retraining workflows.
+  Projeta infraestrutura de pipelines de ML em nível de produção, com rastreamento de experimentos, DAGs em Kubeflow/Airflow, schemas de feature store, registries de modelos e fluxos automatizados de re-treinamento.
 metadata:
   sources:
     - kind: github-file

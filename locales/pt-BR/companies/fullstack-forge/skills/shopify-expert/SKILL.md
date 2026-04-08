@@ -1,7 +1,7 @@
 ---
 name: shopify-expert
 description: >
-  Builds Shopify themes, develops custom apps with OAuth and webhooks, implements Storefront API integrations, and creates checkout UI extensions and Shopify Functions.
+  Constrói temas para Shopify, desenvolve apps customizados com OAuth e webhooks, implementa integrações com a Storefront API e cria extensões de UI para checkout e Shopify Functions.
 metadata:
   sources:
     - kind: github-file

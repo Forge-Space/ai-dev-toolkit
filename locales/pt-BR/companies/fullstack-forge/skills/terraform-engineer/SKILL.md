@@ -1,7 +1,7 @@
 ---
 name: terraform-engineer
 description: >
-  Implements infrastructure as code with Terraform across AWS, Azure, or GCP including module development, state management, provider configuration, and multi-environment workflows.
+  Implementa infraestrutura como código com Terraform em AWS, Azure ou GCP, incluindo desenvolvimento de módulos, gerenciamento de state, configuração de providers e fluxos multiambiente.
 metadata:
   sources:
     - kind: github-file

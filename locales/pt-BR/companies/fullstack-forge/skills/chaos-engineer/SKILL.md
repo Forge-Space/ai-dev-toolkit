@@ -1,7 +1,7 @@
 ---
 name: chaos-engineer
 description: >
-  Designs chaos experiments, creates failure injection frameworks, and facilitates game day exercises for distributed systems with runbooks, experiment manifests, and rollback procedures.
+  Projeta experimentos de caos, cria frameworks de injeção de falhas e facilita exercícios de game day para sistemas distribuídos com runbooks, manifests de experimento e procedimentos de rollback.
 metadata:
   sources:
     - kind: github-file

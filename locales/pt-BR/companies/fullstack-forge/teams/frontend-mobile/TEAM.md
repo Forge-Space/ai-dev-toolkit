@@ -1,6 +1,6 @@
 ---
 name: Frontend & Mobile
-description: Frontend and mobile specialists covering React, Next.js, Vue, Angular, React Native, and Flutter
+description: Especialistas em frontend e mobile cobrindo React, Next.js, Vue, Angular, React Native e Flutter
 slug: frontend-mobile
 manager: ../../agents/frontend-lead/AGENTS.md
 includes:
@@ -14,4 +14,4 @@ tags:
   - engineering
 ---
 
-The frontend and mobile team builds user interfaces and cross-platform mobile applications. Covers all major frontend frameworks and both React Native and Flutter for mobile. Led by the Frontend Lead.
+A equipe de frontend e mobile constrói interfaces de usuário e aplicações móveis multiplataforma. Cobre todos os principais frameworks de frontend e também React Native e Flutter para mobile. Liderada pelo Frontend Lead.

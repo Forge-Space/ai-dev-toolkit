@@ -1,6 +1,6 @@
 ---
 name: Backend Engineering
-description: Backend framework specialists covering NestJS, Django, FastAPI, Spring Boot, .NET, Rails, and Laravel
+description: Especialistas em frameworks backend cobrindo NestJS, Django, FastAPI, Spring Boot, .NET, Rails e Laravel
 slug: backend-engineering
 manager: ../../agents/backend-lead/AGENTS.md
 includes:
@@ -14,4 +14,4 @@ tags:
   - engineering
 ---
 
-The backend engineering team builds server-side applications and APIs across 7 major frameworks. Each specialist handles a specific framework ecosystem with deep domain expertise. Led by the Backend Lead.
+A equipe de engenharia backend constrói aplicações server-side e APIs em 7 frameworks principais. Cada especialista cuida de um ecossistema de framework específico com profunda expertise de domínio. Liderada pelo Backend Lead.

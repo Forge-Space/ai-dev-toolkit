@@ -1,7 +1,7 @@
 ---
 name: swift-expert
 description: >
-  Builds iOS/macOS/watchOS/tvOS applications with Swift 5.9+, SwiftUI, async/await concurrency, actors, protocol-oriented programming, and Vapor.
+  Constrói aplicações para iOS/macOS/watchOS/tvOS com Swift 5.9+, SwiftUI, concorrência com async/await, actors, programação orientada a protocolos e Vapor.
 metadata:
   sources:
     - kind: github-file

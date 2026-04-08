@@ -1,7 +1,7 @@
 ---
 name: secure-code-guardian
 description: >
-  Implements authentication/authorization, secures user input, and prevents OWASP Top 10 vulnerabilities with bcrypt/argon2, parameterized queries, CORS/CSP, and JWT tokens.
+  Implementa autenticação/autorização, protege entradas do usuário e previne vulnerabilidades do OWASP Top 10 com bcrypt/argon2, queries parametrizadas, CORS/CSP e tokens JWT.
 metadata:
   sources:
     - kind: github-file
