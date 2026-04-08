@@ -1,68 +1,66 @@
 # Implementação para Gemini
 
-Implementação de referência dos patterns do toolkit para Gemini CLI e Gemini Code Assist.
+Implementação de referência dos padrões do toolkit para Gemini CLI e superfícies relacionadas do Gemini.
 
-## O Que Continua Genérico
+## Como o Gemini se Encaixa no Toolkit
 
-Antes de pensar em Gemini, a ideia central continua a mesma:
+Gemini usa `GEMINI.md` como superfície primária de instruções persistentes. No GitHub, Gemini Code Assist também usa `.gemini/styleguide.md` para guidance de repositório.
 
-- use `rules/` para comportamento padrão
-- use `patterns/` para workflow
-- use `best-practices/` para o checklist operacional
+No toolkit, isso significa:
 
-Entre em `implementations/gemini/` apenas quando você realmente precisar de setup específico do Gemini.
+- `rules/GEMINI.md` é o arquivo-base de comportamento
+- a implementação em `implementations/gemini/` mostra como adaptar patterns do toolkit para superfícies do Gemini
+- `forge-kit` pode instalar a camada de regras do Gemini da mesma forma que faz para outras ferramentas
 
-## Gemini CLI
-
-Gemini CLI é um agente de terminal com ferramentas embutidas, suporte a MCP, janelas grandes de contexto e arquivo de comportamento por projeto.
-
-### Setup
+## Configuração
 
 ```bash
-npm install -g @google/gemini-cli
-cp rules/GEMINI.md your-project/GEMINI.md
+# Copie as regras globais do Gemini
+cp ../../rules/GEMINI.md ~/.gemini/GEMINI.md
+
+# Ou copie para a raiz do projeto
+cp ../../rules/GEMINI.md your-project/GEMINI.md
 ```
 
-Autentique com um dos métodos suportados:
-
-- login do Google para uso individual
-- `GEMINI_API_KEY` para uso via API
-- variáveis de ambiente do Vertex AI para uso corporativo
-
-Depois inicie o Gemini no projeto:
+Se você também usa Gemini Code Assist no GitHub, adapte as mesmas regras para:
 
 ```bash
-cd your-project
-gemini
+mkdir -p .gemini
+cp ../../rules/GEMINI.md .gemini/styleguide.md
 ```
 
-## Contexto e Regras no Gemini
+## Modelo Mental
 
-Use `GEMINI.md` como arquivo estável de instruções do projeto.
+Use Gemini da mesma forma que as outras ferramentas no toolkit:
 
-Guarde esta divisão:
+- regras definem o comportamento padrão
+- patterns explicam os workflows
+- skills definem procedimentos reutilizáveis
+- implementações mostram como tudo isso se traduz para uma ferramenta concreta
 
-- `GEMINI.md` para comportamento e expectativas
-- prompts para ações concretas
-- padrões duráveis no `GEMINI.md`
-- contexto temporário em prompts ou arquivos de memória do projeto
+O nome do arquivo muda, mas o modelo operacional não.
 
-## Gemini Code Assist no GitHub
+## O Que Preservar ao Adaptar
 
-No GitHub, a superfície principal de instrução é `.gemini/styleguide.md`.
+Ao converter guidance do toolkit para Gemini, preserve:
 
-Use esse arquivo para:
+- identidade e estilo de colaboração
+- padrões de código e limites de complexidade
+- workflow de branching, commit e PR
+- gates de teste e verificação
+- regras de documentação
+- disciplina de segurança
+- expectativa de execução durável
 
-- padrões de código
-- expectativas de teste
-- heurísticas de review
-- preferências de arquitetura e do repositório
+## Integração com o Restante do Repo
 
-O repositório também pode incluir `.gemini/config.yaml` quando você precisar de flags ou regras de ignore.
+Use esta implementação junto com:
 
-## Mapeamento Recomendado
+- `rules/GEMINI.md`
+- `patterns/context-building.md`
+- `patterns/task-orchestration.md`
+- `patterns/code-review.md`
+- `patterns/testing.md`
+- `best-practices/context-management.md`
 
-- `rules/GEMINI.md` -> `GEMINI.md` na raiz do projeto
-- `.gemini/styleguide.md` -> guidance de review do Gemini no GitHub
-- `patterns/` -> playbooks de workflow
-- `best-practices/` -> checklists curtos de operação
+Se precisar de bootstrap entre ferramentas, use `forge-kit` em vez de gerenciar arquivos manualmente.

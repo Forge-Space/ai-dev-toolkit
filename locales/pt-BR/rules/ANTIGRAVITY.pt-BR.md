@@ -13,10 +13,10 @@ Use este arquivo como base para `~/.antigravity/rules.md` ou como referência de
 - sem features especulativas
 - testes úteis
 - segurança por padrão
-- preferir `unknown` a `any`
+- prefira `unknown` a `any`
 
 ## Workflow
-- branches por intenção
+- branches nomeadas pela intenção
 - commits pequenos
 - lint + build + test antes de PR
 - PR em vez de push direto para `main`

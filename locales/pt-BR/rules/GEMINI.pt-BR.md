@@ -13,15 +13,15 @@ Use este arquivo como ponto de partida para um `GEMINI.md` na raiz do projeto em
 - sem abstração prematura
 - testes significativos
 - segurança por padrão
-- preferir `unknown` a `any`
+- prefira `unknown` a `any`
 
 ## Workflow
-- branch curta e nomeada por intenção
+- branch curta e nomeada pela intenção
 - commits pequenos e com valor
 - lint + build + test antes de PR
 - nada de push direto para `main`
 
 ## Diretriz Específica do Gemini
-- use `GEMINI.md` para comportamento estável do projeto
+- use `GEMINI.md` para o comportamento estável do projeto
 - use prompts para ações concretas
 - mantenha regras duráveis no arquivo e contexto temporário fora dele

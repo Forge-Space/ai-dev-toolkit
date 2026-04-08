@@ -1,6 +1,6 @@
 ---
-name: Open Source Maintainer Collective
-description: A company template for maintainers who balance triage, docs, releases, and contributor support.
+name: Coletivo de Mantenedores Open Source
+description: Um template de empresa para mantenedores que equilibram triagem, documentação, releases e suporte a contribuidores.
 slug: open-source-maintainer
 schema: agentcompanies/v1
 version: 1.0.0
@@ -8,8 +8,8 @@ license: MIT
 authors:
   - name: Forge Space
 goals:
-  - Keep open-source maintenance sustainable and predictable
-  - Separate community, release, docs, and issue triage responsibilities
+  - Manter a manutenção open source sustentável e previsível
+  - Separar responsabilidades de comunidade, releases, documentação e triagem de issues
 ---
 
-Open Source Maintainer Collective is a lightweight company template for maintainers who need structure around releases, documentation, community support, and issue triage.
+Coletivo de Mantenedores Open Source é um template leve de empresa para mantenedores que precisam de estrutura em torno de releases, documentação, suporte à comunidade e triagem de issues.

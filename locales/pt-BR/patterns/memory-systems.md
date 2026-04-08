@@ -1,92 +1,92 @@
-# Memory Systems
+# Sistemas de Memória
 
-> Every session should make the next one better.
+> Toda sessão deveria tornar a próxima melhor.
 
-## The Problem
+## O Problema
 
-You explain the same thing to the AI every Monday. "We use trunk-based development." "The auth middleware is in this file." "Don't mock the database in integration tests." Without persistent memory, every session starts from zero.
+Você explica a mesma coisa para a IA toda segunda-feira. “Usamos trunk-based development.” “O middleware de auth está neste arquivo.” “Não faça mock do banco em testes de integração.” Sem memória persistente, toda sessão começa do zero.
 
-## The Pattern
+## O Pattern
 
-### Three Layers of Memory
+### Três Camadas de Memória
 
 ```
 ┌─────────────────────────────────────────────┐
-│  Layer 1: Static Context (always loaded)    │
-│  CLAUDE.md, .cursorrules, AGENTS.md         │
-│  → Project rules, architecture, commands    │
+│  Camada 1: Contexto estático (sempre lido) │
+│  CLAUDE.md, .cursorrules, AGENTS.md        │
+│  → Regras do projeto, arquitetura, comandos│
 ├─────────────────────────────────────────────┤
-│  Layer 2: Dynamic Memory (loaded on demand) │
-│  Memory files, learned patterns, decisions  │
-│  → What was done, why, what to avoid        │
+│  Camada 2: Memória dinâmica (sob demanda)  │
+│  Arquivos de memória, decisões, padrões    │
+│  → O que foi feito, por quê, o que evitar  │
 ├─────────────────────────────────────────────┤
-│  Layer 3: Session State (ephemeral)         │
-│  Conversation history, current task context │
-│  → Discarded after session ends             │
+│  Camada 3: Estado da sessão (efêmero)      │
+│  Histórico da conversa, contexto atual     │
+│  → Descartado quando a sessão termina      │
 └─────────────────────────────────────────────┘
 ```
 
-### What to Remember
+### O que lembrar
 
-| Memory Type | Example | Where to Store |
+| Tipo de memória | Exemplo | Onde armazenar |
 |-------------|---------|---------------|
-| **User preferences** | "Never add co-authored-by to commits" | Global memory |
-| **Feedback** | "Don't mock the DB — we got burned last quarter" | Project memory |
-| **Decisions** | "We chose Supabase over Firebase because of row-level security" | Project memory |
-| **References** | "Pipeline bugs are tracked in Linear project INGEST" | Project memory |
-| **Gotchas** | "pre-commit runs full monorepo type-check, use HUSKY=0 for docs" | Project rules file |
+| **Preferências do usuário** | “Nunca adicione co-authored-by em commits” | Memória global |
+| **Feedback** | “Não faça mock do DB — isso já nos queimou” | Memória do projeto |
+| **Decisões** | “Escolhemos Supabase em vez de Firebase por causa de RLS” | Memória do projeto |
+| **Referências** | “Bugs do pipeline estão no projeto Linear INGEST” | Memória do projeto |
+| **Gotchas** | “pre-commit roda type-check do monorepo inteiro, use HUSKY=0 para docs” | Arquivo de regras do projeto |
 
-### What NOT to Remember
+### O que NÃO lembrar
 
-- Code patterns (read from the current codebase)
-- Git history (use `git log` / `git blame`)
-- Debugging solutions (the fix is in the code, the context is in the commit)
-- Ephemeral task details (current session handles these)
+- Patterns de código (leia do codebase atual)
+- Histórico do Git (use `git log` / `git blame`)
+- Soluções de debugging (a correção está no código, o contexto está no commit)
+- Detalhes efêmeros da tarefa atual (a sessão atual já lida com isso)
 
-### Memory File Structure
+### Estrutura de Arquivos de Memória
 
 ```
-.claude/memory/          # or .serena/memories/, .cursor/context/
-  MEMORY.md              ← Index file (always loaded, kept short)
-  user-preferences.md    ← How to work with this user
-  project-decisions.md   ← Why we made certain choices
-  gotchas.md             ← Things that break if you're not careful
-  integrations.md        ← External systems and how to access them
+.claude/memory/          # ou .serena/memories/, .cursor/context/
+  MEMORY.md              ← Índice (sempre lido, mantido curto)
+  user-preferences.md    ← Como trabalhar com este usuário
+  project-decisions.md   ← Por que tomamos certas decisões
+  gotchas.md             ← O que quebra se você não tomar cuidado
+  integrations.md        ← Sistemas externos e como acessá-los
 ```
 
-### The Index Pattern
+### O Pattern de Índice
 
-Keep the index file (MEMORY.md) as a table of contents, not a dumping ground:
+Mantenha o arquivo de índice (`MEMORY.md`) como sumário, não como depósito:
 
 ```markdown
-# Memory Index
+# Índice de Memória
 
-## User
-- [user-preferences.md](user-preferences.md) — Work style, model preferences
+## Usuário
+- [user-preferences.md](user-preferences.md) — Estilo de trabalho, preferências de modelo
 
-## Project
-- [decisions.md](decisions.md) — Architecture choices and rationale
-- [gotchas.md](gotchas.md) — Known foot-guns
+## Projeto
+- [decisions.md](decisions.md) — Escolhas arquiteturais e seus motivos
+- [gotchas.md](gotchas.md) — Armadilhas conhecidas
 ```
 
-### Cross-Session Memory
+### Memória entre sessões
 
-For memory that persists across tools and machines:
-- **Git-committed** memory files (shared with team)
-- **Local** memory files (personal, gitignored)
-- **External** memory services (vector DBs, Supermemory, claude-mem)
-- **Dotfiles repo** (synced via chezmoi)
+Para memória que persiste entre ferramentas e máquinas:
+- Arquivos de memória **versionados em Git** (compartilhados com o time)
+- Arquivos de memória **locais** (pessoais, ignorados pelo Git)
+- **Serviços externos** de memória (vector DB, Supermemory, claude-mem)
+- **Repo de dotfiles** (sincronizado via chezmoi)
 
-### Memory Hygiene
+### Higiene de memória
 
-- **Update, don't append** — Fix stale memories instead of adding contradicting new ones
-- **Delete when obsolete** — A decision that was reversed is worse than no memory
-- **Date your memories** — "Merge freeze begins 2026-03-05" not "merge freeze next Thursday"
-- **Include the why** — "Use Supabase RLS" means nothing without "because we need row-level tenant isolation"
+- **Atualize, não apenas acrescente** — corrija memórias desatualizadas em vez de adicionar novas informações contraditórias
+- **Apague quando ficar obsoleto** — uma decisão revertida é pior do que nenhuma memória
+- **Date suas memórias** — “merge freeze começa em 2026-03-05”, não “merge freeze na próxima quinta”
+- **Inclua o porquê** — “usar Supabase RLS” não significa nada sem “porque precisamos de isolamento por tenant no nível de linha”
 
 ## Anti-Patterns
 
-- **Memory hoarding**: 50 memory files nobody reads
-- **Stale memories**: Rules from 6 months ago that contradict current code
-- **Index bloat**: MEMORY.md with 500 lines (should be <100)
-- **Duplicate memories**: Same fact in 3 different files
+- **Acumular memória demais**: 50 arquivos de memória que ninguém lê
+- **Memória desatualizada**: regras de 6 meses atrás que contradizem o código atual
+- **Índice inchado**: `MEMORY.md` com 500 linhas (deveria ter <100)
+- **Memórias duplicadas**: o mesmo fato em 3 arquivos diferentes

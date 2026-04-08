@@ -1,99 +1,99 @@
 ---
-name: Project Decisions
-description: Key architectural decisions and their rationale
+name: Decisões do Projeto
+description: Principais decisões arquiteturais e sua justificativa
 type: project
 created: 2026-02-15
 updated: 2026-03-14
 ---
 
-# Project Decisions
+# Decisões do Projeto
 
-## 1. Monorepo with Turborepo (2026-02-15)
+## 1. Monorepo com Turborepo (2026-02-15)
 
-### Why
-- Share TypeScript configs, ESLint rules, and utilities across 3 apps
-- Atomic commits across frontend + backend for feature development
-- Single CI pipeline, unified deployment process
-- Team is small (4 devs) — coordination overhead is minimal
+### Por quê
+- Compartilhar configs de TypeScript, regras de ESLint e utilitários entre 3 apps
+- Commits atômicos entre frontend + backend para desenvolvimento de features
+- Pipeline único de CI, processo de deploy unificado
+- O time é pequeno (4 devs) — o overhead de coordenação é mínimo
 
-### How to Apply
-- New packages go in `packages/` (shared code) or `apps/` (deployable apps)
-- Use workspace protocol for internal dependencies: `"@company/utils": "workspace:*"`
-- Run tasks from root: `pnpm turbo lint test build`
-- Each package has its own `package.json` and `tsconfig.json` extending root configs
+### Como Aplicar
+- Novos packages entram em `packages/` (código compartilhado) ou `apps/` (apps implantáveis)
+- Use workspace protocol para dependências internas: `"@company/utils": "workspace:*"`
+- Rode tasks a partir da raiz: `pnpm turbo lint test build`
+- Cada package tem seu próprio `package.json` e `tsconfig.json`, estendendo as configs da raiz
 
-### Consequences
-- Slightly longer CI times (all packages checked on every PR)
-- Need careful dependency management to avoid circular deps
-- Tooling must support monorepos (Vercel, Railway both do)
-
----
-
-## 2. PostgreSQL over MongoDB (2026-02-20)
-
-### Why
-- Data model has clear relationships (users → teams → projects)
-- Need ACID guarantees for billing and permissions
-- Strong typing via Prisma schema
-- Team has more SQL experience than NoSQL
-
-### How to Apply
-- Use Prisma for schema + migrations + type-safe client
-- Indexes on foreign keys and frequently queried columns
-- Use `SELECT` with explicit columns, not `SELECT *`
-- Transactions for multi-table operations (e.g., create team + assign owner)
-
-### Consequences
-- Schema changes require migrations (not as flexible as schemaless)
-- Need connection pooling for serverless (using PgBouncer on Railway)
-- Joins can get expensive — denormalize for read-heavy tables if needed
+### Consequências
+- Tempo de CI um pouco maior (todos os packages são verificados em cada PR)
+- Exige gestão cuidadosa de dependências para evitar circular deps
+- O tooling precisa suportar monorepos (Vercel e Railway suportam)
 
 ---
 
-## 3. Feature Flags with Database Table (2026-03-01)
+## 2. PostgreSQL em vez de MongoDB (2026-02-20)
 
-### Why
-- Need to toggle features per-user and per-organization
-- Tried environment variables — too coarse-grained (all-or-nothing)
-- LaunchDarkly/Unleash overkill for 50-user beta
-- Simple `feature_flags` table + Redis cache = fast + flexible
+### Por quê
+- O modelo de dados tem relações claras (usuários → times → projetos)
+- Precisamos de garantias ACID para billing e permissões
+- Tipagem forte via schema do Prisma
+- O time tem mais experiência com SQL do que com NoSQL
 
-### How to Apply
-- Schema: `feature_flags(id, key, enabled, scope, scope_id)` where scope is `global|user|org`
-- Check flag: `await isFeatureEnabled('new-dashboard', { userId: '123' })`
-- Cache in Redis with 5min TTL to avoid DB hit on every request
-- Add new flags via migration, not manual SQL
+### Como Aplicar
+- Use Prisma para schema + migrations + client type-safe
+- Índices em foreign keys e colunas consultadas com frequência
+- Use `SELECT` com colunas explícitas, não `SELECT *`
+- Use transações para operações em múltiplas tabelas (ex.: criar time + atribuir owner)
 
-### Consequences
-- Cache invalidation complexity — need to bust Redis on flag update
-- No A/B testing built in (just on/off) — will migrate to proper platform at 1000+ users
-- Requires flag cleanup discipline (remove after rollout complete)
+### Consequências
+- Mudanças de schema exigem migrations (menos flexível do que schemaless)
+- É preciso connection pooling para serverless (usando PgBouncer no Railway)
+- Joins podem ficar caros — desnormalize tabelas com muita leitura, se necessário
 
 ---
 
-## 4. Client-Side Error Tracking with Sentry (2026-03-10)
+## 3. Feature Flags com Tabela no Banco (2026-03-01)
 
-### Why
-- Users reporting "it doesn't work" without details
-- Browser DevTools not accessible in production
-- Need stack traces + user context + breadcrumbs
-- Sentry free tier covers beta traffic (<5k events/month)
+### Por quê
+- Precisamos ativar/desativar features por usuário e por organização
+- Já tentamos variáveis de ambiente — granularidade grosseira demais (tudo ou nada)
+- LaunchDarkly/Unleash é excesso para uma beta com 50 usuários
+- Uma tabela simples `feature_flags` + cache em Redis = rápido + flexível
 
-### How to Apply
-- Initialize Sentry in `_app.tsx` with `environment`, `release`, `userId` tags
-- Wrap API calls in try-catch and send to Sentry with context:
+### Como Aplicar
+- Schema: `feature_flags(id, key, enabled, scope, scope_id)` em que `scope` é `global|user|org`
+- Verificação de flag: `await isFeatureEnabled('new-dashboard', { userId: '123' })`
+- Faça cache no Redis com TTL de 5min para evitar hits no banco em toda request
+- Adicione novas flags via migration, não via SQL manual
+
+### Consequências
+- Complexidade de invalidação de cache — é preciso limpar o Redis ao atualizar flags
+- Sem A/B testing embutido (apenas on/off) — migraremos para uma plataforma adequada com 1000+ usuários
+- Exige disciplina de cleanup de flags (remover após rollout completo)
+
+---
+
+## 4. Rastreamento de Erros no Client com Sentry (2026-03-10)
+
+### Por quê
+- Usuários relatando "não funciona" sem detalhes
+- Browser DevTools não acessível em produção
+- Precisamos de stack traces + contexto do usuário + breadcrumbs
+- O tier gratuito do Sentry cobre o tráfego da beta (<5k eventos/mês)
+
+### Como Aplicar
+- Inicialize o Sentry em `_app.tsx` com tags `environment`, `release`, `userId`
+- Envolva chamadas de API em try-catch e envie para o Sentry com contexto:
   ```ts
   try {
     await apiCall();
   } catch (err) {
     Sentry.captureException(err, { tags: { endpoint: '/api/users' } });
-    throw err; // re-throw after logging
+    throw err; // relança depois de registrar
   }
   ```
-- Use `Sentry.setUser()` after auth to track errors per user
-- Filter out known third-party script errors (ads, extensions)
+- Use `Sentry.setUser()` após a autenticação para rastrear erros por usuário
+- Filtre erros conhecidos de scripts de terceiros (ads, extensões)
 
-### Consequences
-- PII concern — sanitize user data before sending to Sentry
-- Error noise from bots — filter by user agent
-- Free tier limit — will need paid plan at scale
+### Consequências
+- Preocupação com PII — sanitize os dados do usuário antes de enviar ao Sentry
+- Ruído de erro gerado por bots — filtre por user agent
+- Limite do tier gratuito — precisará de plano pago em escala

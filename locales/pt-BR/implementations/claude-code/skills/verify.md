@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Run full quality gate suite (lint, type-check, test, build) to verify code before commit or PR
+description: Rodar a suíte completa de gates de qualidade (lint, type-check, test, build) para verificar o código antes de commit ou PR
 triggers:
   - verify code quality
   - run quality gates
@@ -9,41 +9,41 @@ triggers:
   - pre-commit checks
 ---
 
-# Verify Code Quality
+# Verificar Qualidade do Código
 
-Runs comprehensive quality checks to ensure code meets project standards before committing or creating a PR.
+Roda checks abrangentes de qualidade para garantir que o código atenda aos padrões do projeto antes de commitar ou criar um PR.
 
-## Prerequisites
+## Pré-requisitos
 
-Check that the following tools are available:
-- Linter (ESLint, Ruff, golangci-lint, etc.)
-- Type checker (TypeScript, mypy, etc.)
-- Test runner (Jest, Vitest, pytest, etc.)
-- Build tool (tsc, webpack, vite, cargo, go build, etc.)
+Confira se as seguintes ferramentas estão disponíveis:
+- Linter (ESLint, Ruff, golangci-lint etc.)
+- Type checker (TypeScript, mypy etc.)
+- Test runner (Jest, Vitest, pytest etc.)
+- Ferramenta de build (tsc, webpack, vite, cargo, go build etc.)
 
-## Steps
+## Etapas
 
-### 1. Check Git Status
+### 1. Verificar Status do Git
 
-First, verify current state:
+Primeiro, confira o estado atual:
 
 ```bash
 git status
 ```
 
-**Verify:**
-- On correct branch
-- No unexpected changes
-- No merge conflicts
+**Verifique:**
+- Está na branch correta
+- Não há mudanças inesperadas
+- Não há conflitos de merge
 
-If there are uncommitted changes, that's fine - we're testing them.
+Se houver mudanças não commitadas, tudo bem, estamos testando justamente isso.
 
-### 2. Install Dependencies
+### 2. Instalar Dependências
 
-Ensure all dependencies are up to date:
+Garanta que todas as dependências estejam atualizadas:
 
 ```bash
-# For Node.js projects
+# Para projetos Node.js
 if [ -f package-lock.json ]; then
   npm ci
 elif [ -f yarn.lock ]; then
@@ -52,27 +52,27 @@ elif [ -f pnpm-lock.yaml ]; then
   pnpm install --frozen-lockfile
 fi
 
-# For Python projects
+# Para projetos Python
 if [ -f requirements.txt ]; then
   pip install -r requirements.txt
 elif [ -f pyproject.toml ]; then
   pip install -e .
 fi
 
-# For Go projects
+# Para projetos Go
 if [ -f go.mod ]; then
   go mod download
 fi
 
-# For Rust projects
+# Para projetos Rust
 if [ -f Cargo.toml ]; then
   cargo fetch
 fi
 ```
 
-### 3. Run Linter
+### 3. Rodar o Linter
 
-Check code style and catch common errors:
+Confira estilo de código e erros comuns:
 
 ```bash
 # Node.js / TypeScript
@@ -91,51 +91,51 @@ golangci-lint run
 cargo clippy -- -D warnings
 ```
 
-**Success criteria:**
-- Zero linting errors
-- Zero warnings (or only acceptable warnings documented in CLAUDE.md)
+**Critérios de sucesso:**
+- Zero erros de lint
+- Zero warnings (ou apenas warnings aceitáveis documentados em `CLAUDE.md`)
 
-**If errors found:**
-1. Review output
-2. Fix issues manually or run auto-fix:
+**Se encontrar erros:**
+1. Revise a saída
+2. Corrija manualmente ou rode auto-fix:
    - `npm run lint -- --fix`
    - `ruff check --fix .`
    - `eslint --fix .`
-3. Re-run linter to verify
-4. Commit fixes separately if major changes
+3. Rode o linter novamente para confirmar
+4. Faça commit das correções separadamente se forem mudanças grandes
 
-### 4. Run Type Checker
+### 4. Rodar o Type Checker
 
-Verify type safety (for statically-typed languages):
+Verifique segurança de tipos (para linguagens estaticamente tipadas):
 
 ```bash
 # TypeScript
 npm run type-check
-# or
+# ou
 tsc --noEmit
 
 # Python (mypy)
 mypy .
 
-# Go (built into compiler)
+# Go (embutido no compilador)
 go build ./...
 
-# Rust (built into compiler)
+# Rust (embutido no compilador)
 cargo check
 ```
 
-**Success criteria:**
-- Zero type errors
+**Critérios de sucesso:**
+- Zero erros de tipo
 
-**If errors found:**
-1. Review type errors
-2. Fix type issues
-3. Re-run type checker
-4. Consider if changes require updating type definitions
+**Se encontrar erros:**
+1. Revise os erros de tipo
+2. Corrija os problemas
+3. Rode o type checker novamente
+4. Considere se as mudanças exigem atualizar definições de tipos
 
-### 5. Run Tests
+### 5. Rodar os Testes
 
-Execute test suite with coverage:
+Execute a suíte de testes com cobertura:
 
 ```bash
 # Node.js (Jest)
@@ -154,33 +154,33 @@ go test ./... -cover
 cargo test
 ```
 
-**Success criteria:**
-- All tests pass
-- Coverage meets threshold (typically >80%, check CLAUDE.md)
-- No flaky tests (run twice if suspicious)
+**Critérios de sucesso:**
+- Todos os testes passam
+- Cobertura atinge o limiar (tipicamente >80%, confira em `CLAUDE.md`)
+- Nada de testes flaky (rode duas vezes se houver suspeita)
 
-**If tests fail:**
-1. Review failures - are they legitimate bugs or bad tests?
-2. If legitimate bugs:
-   - Fix the code
-   - Re-run tests
-3. If bad tests:
-   - Fix test logic
-   - Ensure tests reflect actual requirements
-4. If flaky tests:
-   - Document in MEMORY.md
-   - Fix race conditions or timing issues
-   - Consider marking as skip with ticket
+**Se os testes falharem:**
+1. Revise as falhas, são bugs legítimos ou testes ruins?
+2. Se forem bugs legítimos:
+   - Corrija o código
+   - Rode os testes novamente
+3. Se forem testes ruins:
+   - Corrija a lógica do teste
+   - Garanta que os testes reflitam os requisitos reais
+4. Se forem testes flaky:
+   - Documente em `MEMORY.md`
+   - Corrija race conditions ou problemas de timing
+   - Considere marcar como skip com ticket
 
-### 6. Run Build
+### 6. Rodar o Build
 
-Verify the project builds successfully:
+Verifique se o projeto builda com sucesso:
 
 ```bash
 # Node.js (TypeScript)
 npm run build
 
-# Python (build package)
+# Python (build do pacote)
 python -m build
 
 # Go
@@ -190,22 +190,22 @@ go build ./...
 cargo build --release
 ```
 
-**Success criteria:**
-- Build completes without errors
-- No warnings about missing files or broken imports
-- Output artifacts are generated in expected locations
+**Critérios de sucesso:**
+- O build termina sem erros
+- Não há warnings sobre arquivos ausentes ou imports quebrados
+- Os artefatos de saída são gerados nos locais esperados
 
-**If build fails:**
-1. Review build output for specific errors
-2. Common issues:
-   - Missing type definitions
-   - Broken imports
-   - Invalid tsconfig/cargo/go.mod configuration
-3. Fix and re-run build
+**Se o build falhar:**
+1. Revise a saída para erros específicos
+2. Problemas comuns:
+   - Definições de tipo ausentes
+   - Imports quebrados
+   - Configuração inválida de `tsconfig`/`cargo`/`go.mod`
+3. Corrija e rode o build novamente
 
-### 7. Security Scan (Optional but Recommended)
+### 7. Varredura de Segurança (Opcional, mas Recomendada)
 
-Run security checks if available:
+Rode checks de segurança se estiverem disponíveis:
 
 ```bash
 # Node.js (npm audit)
@@ -220,111 +220,111 @@ gosec ./...
 # Rust (cargo-audit)
 cargo audit
 
-# General (Trivy)
+# Geral (Trivy)
 trivy fs .
 ```
 
-**Success criteria:**
-- No high or critical vulnerabilities
-- Known low/medium vulnerabilities documented in MEMORY.md
+**Critérios de sucesso:**
+- Nenhuma vulnerabilidade high ou critical
+- Vulnerabilidades conhecidas low/medium documentadas em `MEMORY.md`
 
-**If vulnerabilities found:**
-1. Review severity
-2. For high/critical: must fix before PR
-3. For medium/low: document and plan fix
-4. Update dependencies if patches available
+**Se encontrar vulnerabilidades:**
+1. Revise a severidade
+2. Para high/critical: precisa corrigir antes do PR
+3. Para medium/low: documente e planeje a correção
+4. Atualize dependências se houver patches disponíveis
 
-### 8. Summary Report
+### 8. Relatório de Resumo
 
-After all checks complete, provide a summary:
-
-```
-✅ Quality Gate Results
-━━━━━━━━━━━━━━━━━━━━━━━
-
-✓ Linting       - Passed
-✓ Type Check    - Passed
-✓ Tests         - Passed (428/428, 87% coverage)
-✓ Build         - Passed
-✓ Security      - Passed (0 high/critical)
-
-All checks passed! Safe to commit/PR.
-```
-
-If any check failed:
+Depois que todos os checks terminarem, forneça um resumo:
 
 ```
-❌ Quality Gate Results
-━━━━━━━━━━━━━━━━━━━━━━━
+✅ Resultados dos Gates de Qualidade
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ Linting       - Passed
-✗ Type Check    - Failed (3 errors)
-✓ Tests         - Passed (428/428, 87% coverage)
-✗ Build         - Failed
-- Security      - Skipped (build failed)
+✓ Linting       - Passou
+✓ Tipagem       - Passou
+✓ Testes        - Passou (428/428, 87% de cobertura)
+✓ Build         - Passou
+✓ Segurança     - Passou (0 high/critical)
 
-Fix errors above before committing.
+Todos os checks passaram! Seguro para commit/PR.
 ```
 
-## Next Steps
+Se algum check falhar:
 
-### If all checks passed:
+```
+❌ Resultados dos Gates de Qualidade
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. **Commit changes:**
+✓ Linting       - Passou
+✗ Tipagem       - Falhou (3 errors)
+✓ Testes        - Passou (428/428, 87% de cobertura)
+✗ Build         - Falhou
+- Segurança     - Ignorado (build falhou)
+
+Corrija os erros acima antes de commitar.
+```
+
+## Próximos Passos
+
+### Se todos os checks passaram:
+
+1. **Commitar mudanças:**
    ```bash
    git add .
    git commit -m "feat: your conventional commit message"
    ```
 
-2. **Push to remote:**
+2. **Enviar para o remoto:**
    ```bash
    git push origin <branch-name>
    ```
 
-3. **Create PR** (if ready):
-   - Use `/ship` skill, or
+3. **Criar PR** (se estiver pronto):
+   - Use a skill `/ship`, ou
    - `gh pr create --title "..." --body "..."`
 
-### If checks failed:
+### Se os checks falharam:
 
-1. Fix issues one at a time
-2. Re-run `/verify` after fixes
-3. Do NOT commit until all checks pass
+1. Corrija os problemas um por vez
+2. Rode `/verify` novamente após as correções
+3. Não faça commit até tudo passar
 
-## Configuration
+## Configuração
 
-### Project-Specific Gates
+### Gates Específicos do Projeto
 
-Projects may have additional quality gates. Check `CLAUDE.md` for:
-- Custom test commands
-- Specific coverage thresholds
-- Additional validation scripts
-- Framework-specific checks (e.g., Lighthouse for web, load tests)
+Projetos podem ter gates adicionais de qualidade. Confira `CLAUDE.md` para:
+- comandos de teste customizados
+- limiares específicos de cobertura
+- scripts adicionais de validação
+- checks específicos do framework (ex.: Lighthouse para web, load tests)
 
-### Skip Options (Use Sparingly)
+### Opções de Skip (Use com Moderação)
 
-For emergency fixes or documented exceptions:
+Para correções emergenciais ou exceções documentadas:
 
 ```bash
-# Skip specific checks (not recommended)
+# Pular checks específicos (não recomendado)
 SKIP_LINT=1 npm run verify
 SKIP_TESTS=1 npm run verify
 
-# Skip all checks (use only for docs/config changes)
+# Pular todos os checks (use apenas para docs/config)
 git commit --no-verify
 ```
 
-**WARNING:** Only skip checks when:
-- Changes are documentation-only
-- Changes are non-code config files
-- You have explicit approval from team lead
-- Document reason in commit message
+**AVISO:** só pule checks quando:
+- as mudanças forem apenas documentação
+- as mudanças forem apenas arquivos de configuração sem código
+- você tiver aprovação explícita do líder da equipe
+- documentar o motivo na mensagem de commit
 
-## Troubleshooting
+## Solução de Problemas
 
-### "Command not found" errors
+### Erros de "Command not found"
 
-Install missing tools:
+Instale as ferramentas ausentes:
 
 ```bash
 # ESLint
@@ -343,50 +343,50 @@ pip install ruff
 pip install pytest pytest-cov
 ```
 
-### Tests pass locally but fail in CI
+### Testes passam localmente, mas falham no CI
 
-Common causes:
-1. **Environment differences:**
-   - Check Node.js/Python version matches CI
-   - Check environment variables in CI
-   - Check file paths (absolute vs relative)
+Causas comuns:
+1. **Diferenças de ambiente:**
+   - Confira se a versão de Node.js/Python bate com a do CI
+   - Confira variáveis de ambiente no CI
+   - Confira caminhos de arquivo (absoluto vs relativo)
 
-2. **Timing issues:**
-   - Increase timeouts in flaky tests
-   - Use proper async/await patterns
-   - Mock time-dependent functions
+2. **Problemas de timing:**
+   - Aumente timeouts em testes flaky
+   - Use padrões corretos de async/await
+   - Faça mock de funções dependentes de tempo
 
-3. **Missing dependencies:**
-   - Ensure package-lock.json is committed
-   - Check CI installs all dev dependencies
+3. **Dependências ausentes:**
+   - Garanta que `package-lock.json` esteja commitado
+   - Confira se o CI instala todas as dev dependencies
 
-### Build succeeds but runtime errors
+### Build funciona, mas há erros em runtime
 
-Run additional checks:
+Rode checks adicionais:
 ```bash
-# For web apps, run dev server and test manually
+# Para apps web, suba o servidor dev e teste manualmente
 npm run dev
 
-# For CLIs, test actual execution
+# Para CLIs, teste a execução real
 ./dist/cli.js --help
 
-# For libraries, test in a consumer project
+# Para libs, teste em um projeto consumidor
 npm link && cd ../test-project && npm link your-lib
 ```
 
-## Success Criteria
+## Critérios de Sucesso
 
-**This skill succeeds when:**
-- All quality gates pass
-- No errors or critical warnings
-- Coverage meets threshold
-- Build artifacts are valid
-- Summary report shows all green checks
+**Esta skill tem sucesso quando:**
+- Todos os gates de qualidade passam
+- Não há erros nem warnings críticos
+- A cobertura atinge o limiar
+- Os artefatos de build são válidos
+- O relatório final mostra todos os checks verdes
 
-**This skill fails when:**
-- Any quality gate fails
-- Critical vulnerabilities found
-- Coverage below threshold
-- Build produces invalid artifacts
+**Esta skill falha quando:**
+- Qualquer gate de qualidade falha
+- Vulnerabilidades críticas são encontradas
+- A cobertura fica abaixo do limiar
+- O build produz artefatos inválidos
 
-Report both the final status and specific failing checks for easy remediation.
+Relate tanto o status final quanto os checks específicos que falharam para facilitar a correção.

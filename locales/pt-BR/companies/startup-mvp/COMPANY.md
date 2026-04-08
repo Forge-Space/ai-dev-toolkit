@@ -1,6 +1,6 @@
 ---
-name: Startup MVP Lab
-description: A startup-focused company template optimized for rapid MVP shipping, customer discovery, and launch iteration.
+name: Laboratório de MVP para Startup
+description: Um template de empresa focado em startups, otimizado para entregar MVP rapidamente, fazer customer discovery e iterar no lançamento.
 slug: startup-mvp
 schema: agentcompanies/v1
 version: 1.0.0
@@ -8,8 +8,8 @@ license: MIT
 authors:
   - name: Forge Space
 goals:
-  - Ship an MVP fast without losing product clarity
-  - Balance customer discovery, product execution, and launch readiness
+  - Entregar um MVP rapidamente sem perder clareza de produto
+  - Equilibrar customer discovery, execução de produto e prontidão para lançamento
 ---
 
-Startup MVP Lab is a small company template for early-stage startups. It separates product direction, implementation, and launch so teams move fast without blurring ownership.
+Laboratório de MVP para Startup é um template pequeno de empresa para startups em estágio inicial. Ele separa direção de produto, implementação e lançamento para que os times avancem rápido sem borrar ownership.

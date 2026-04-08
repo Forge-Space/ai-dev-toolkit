@@ -1,103 +1,103 @@
-# Context Building
+# Construção de Contexto
 
-> The single most impactful thing you can do for AI-assisted development is give the agent the right context before it writes a single line of code.
+> A ação mais impactante que você pode tomar em desenvolvimento assistido por IA é dar ao agente o contexto certo antes que ele escreva uma única linha de código.
 
-## The Problem
+## O Problema
 
-AI agents are only as good as the context they receive. A powerful model with zero project context produces generic code. A mediocre model with excellent context produces code that fits your project perfectly.
+Agentes de IA são tão bons quanto o contexto que recebem. Um modelo poderoso com zero contexto de projeto gera código genérico. Um modelo mediano com excelente contexto produz código que se encaixa perfeitamente no seu projeto.
 
-## The Pattern
+## O Pattern
 
-Every project should have a **context layer** — a set of files that any AI agent reads before doing work. The filenames vary by tool, but the content pattern is universal.
+Todo projeto deveria ter uma **camada de contexto** — um conjunto de arquivos que qualquer agente de IA lê antes de começar a trabalhar. Os nomes dos arquivos variam por ferramenta, mas o pattern de conteúdo é universal.
 
-### Context File Mapping
+### Mapeamento de Arquivos de Contexto
 
-| Tool | Primary File | Secondary File |
+| Ferramenta | Arquivo principal | Arquivo secundário |
 |------|-------------|----------------|
 | Claude Code | `CLAUDE.md` | — |
 | OpenCode | `AGENTS.md` | `CLAUDE.md` |
 | Cursor | `.cursorrules` | `.cursor/rules/*.mdc` |
 | GitHub Copilot | `COPILOT.md` | `.github/copilot-instructions.md` |
 | Windsurf | `.windsurfrules` | — |
-| Any tool | `CONVENTIONS.md` | — |
+| Qualquer ferramenta | `CONVENTIONS.md` | — |
 
-### What to Include
+### O que incluir
 
-**Always include (high signal):**
+**Sempre inclua (alto sinal):**
 
 ```markdown
-# Project Name
+# Nome do Projeto
 
-## Quick Reference
+## Referência Rápida
 - Build: `npm run build`
-- Test: `npm test`
+- Teste: `npm test`
 - Lint: `npm run lint`
 - Dev: `npm run dev`
 
-## Architecture
-- Brief description of project structure
-- Key directories and their purpose
-- Tech stack (framework, database, deployment)
+## Arquitetura
+- Descrição breve da estrutura do projeto
+- Diretórios principais e seu propósito
+- Stack técnica (framework, banco, deploy)
 
-## Code Standards
-- Language conventions (functional vs OOP, naming)
-- Line length, function size limits
-- Import ordering, file organization
+## Padrões de Código
+- Convenções de linguagem (funcional vs OOP, naming)
+- Limites de tamanho de linha e de função
+- Ordem de imports, organização de arquivos
 
 ## Workflow
-- Branch naming convention
-- Commit message format
-- PR process
+- Convenção de nomes de branch
+- Formato das mensagens de commit
+- Processo de PR
 ```
 
-**Never include (noise):**
-- Full API documentation (agent can read the code)
-- Dependency lists (agent reads package.json)
-- Historical changelog (agent reads git log)
-- Tutorial-style explanations
+**Nunca inclua (ruído):**
+- Documentação completa da API (o agente pode ler o código)
+- Listas de dependências (o agente lê `package.json`)
+- Changelog histórico (o agente lê `git log`)
+- Explicações em estilo tutorial
 
-### The 80/20 Rule
+### A Regra 80/20
 
-80% of context value comes from:
-1. **How to run things** — build, test, lint commands
-2. **Where things are** — project structure, key directories
-3. **What not to do** — gotchas, anti-patterns, past mistakes
+80% do valor do contexto vem de:
+1. **Como rodar as coisas** — comandos de build, teste e lint
+2. **Onde as coisas estão** — estrutura do projeto, diretórios-chave
+3. **O que não fazer** — gotchas, anti-patterns e erros passados
 
-## Progressive Context
+## Contexto Progressivo
 
-Don't dump everything in one file. Layer context:
+Não despeje tudo em um único arquivo. Faça camadas de contexto:
 
 ```
-Project root/
-  CLAUDE.md          ← Project-wide rules (always loaded)
+Raiz do projeto/
+  CLAUDE.md          ← Regras globais do projeto (sempre carregadas)
   src/
     api/
-      CLAUDE.md      ← API-specific conventions (loaded when working in api/)
+      CLAUDE.md      ← Convenções específicas de API (carregadas ao trabalhar em api/)
     frontend/
-      CLAUDE.md      ← Frontend-specific patterns
+      CLAUDE.md      ← Patterns específicos de frontend
 ```
 
-## Memory Systems
+## Sistemas de Memória
 
-Context files are the **static** layer. For **dynamic** context (what was done, what's next, decisions made), use:
+Arquivos de contexto são a camada **estática**. Para contexto **dinâmico** (o que foi feito, o que vem a seguir, decisões tomadas), use:
 
-1. **File-based memory** — `.claude/memory/`, `.serena/memories/`
-2. **Session persistence** — tools that save/restore session state
-3. **Git history** — commit messages as context (write good ones)
+1. **Memória baseada em arquivo** — `.claude/memory/`, `.serena/memories/`
+2. **Persistência de sessão** — ferramentas que salvam/restauram o estado da sessão
+3. **Histórico do Git** — mensagens de commit como contexto (escreva bons commits)
 
-See: [Memory Systems](memory-systems.md)
+Veja: [Sistemas de Memória](memory-systems.md)
 
 ## Anti-Patterns
 
-- **Context overload**: 500-line rules files that the agent skims past
-- **Stale context**: Rules that describe how the project worked 6 months ago
-- **Duplicated context**: Same rules in CLAUDE.md, .cursorrules, and README
-- **Vague context**: "Write clean code" teaches nothing; "Functions <50 lines, no comments unless asked" does
+- **Sobrecarga de contexto**: arquivos de regras com 500 linhas que o agente passa por cima
+- **Contexto desatualizado**: regras que descrevem como o projeto funcionava 6 meses atrás
+- **Contexto duplicado**: as mesmas regras em `CLAUDE.md`, `.cursorrules` e `README`
+- **Contexto vago**: “escreva código limpo” não ensina nada; “funções <50 linhas, sem comentários a menos que peçam” ensina
 
-## Measuring Context Quality
+## Como medir a qualidade do contexto
 
-Your context is working when:
-- The agent's first attempt is usable 80%+ of the time
-- You rarely need to explain project conventions mid-session
-- New sessions don't repeat mistakes from old sessions
-- The agent makes the same architectural choices you would
+Seu contexto está funcionando quando:
+- A primeira tentativa do agente é utilizável em 80%+ dos casos
+- Você raramente precisa explicar convenções do projeto no meio da sessão
+- Sessões novas não repetem erros de sessões antigas
+- O agente faz as mesmas escolhas arquiteturais que você faria

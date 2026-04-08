@@ -1,69 +1,69 @@
-# Session Management
+# Gestão de Sessões
 
-> A clean workspace is a fast workspace. Automate the cleanup.
+> Um workspace limpo é um workspace rápido. Automatize a limpeza.
 
-## The Problem
+## O Problema
 
-After a week of work across 8 projects, you have 30+ sessions. Most are stale. Switching between them is slow. Finding the one with your in-progress work takes scrolling and guessing.
+Depois de uma semana trabalhando em 8 projetos, você tem 30+ sessões. A maioria está obsoleta. Alternar entre elas fica lento. Encontrar a sessão com seu trabalho em andamento exige rolagem e adivinhação.
 
-## The Pattern
+## O Pattern
 
-### Session Lifecycle
+### Ciclo de vida da sessão
 
 ```
-Active  →  Idle  →  Stale  →  Archived/Deleted
+Ativa  →  Ociosa  →  Obsoleta  →  Arquivada/Apagada
   ↑          |
-  └──────────┘  (resumed)
+  └──────────┘  (retomada)
 ```
 
-**Active**: Message sent in the last 30 minutes
-**Idle**: No activity for 30min-2h
-**Stale**: No activity for 2h+
-**Archived**: Deleted (no uncommitted changes) or compacted (has changes)
+**Ativa**: mensagem enviada nos últimos 30 minutos
+**Ociosa**: sem atividade há 30 min–2 h
+**Obsoleta**: sem atividade há 2h+
+**Arquivada**: apagada (sem mudanças não commitadas) ou compactada (com mudanças)
 
-### Auto-Cleanup Rules
+### Regras de auto-limpeza
 
-| Condition | Action |
+| Condição | Ação |
 |-----------|--------|
-| >24h old, no file changes | Delete |
-| >2h idle, has file changes | Tag `[WIP]` |
-| >3 sessions per project | Delete oldest empty ones |
-| Session becomes active | Remove status tags |
+| >24h, sem mudanças de arquivo | Apagar |
+| >2h ociosa, com mudanças | Marcar `[WIP]` |
+| >3 sessões por projeto | Apagar as vazias mais antigas |
+| Sessão volta a ficar ativa | Remover tags de status |
 
-### Status Prefixes
+### Prefixos de status
 
-Tag session titles so you can scan the sidebar instantly:
+Marque títulos de sessão para escanear a barra lateral instantaneamente:
 
-| Prefix | Meaning |
+| Prefixo | Significado |
 |--------|---------|
-| (none) | Active — currently being worked on |
-| `[IDLE]` | Inactive, no uncommitted changes |
-| `[WIP]` | Inactive, has uncommitted changes — don't delete |
+| (nenhum) | Ativa — está sendo usada agora |
+| `[IDLE]` | Inativa, sem mudanças não commitadas |
+| `[WIP]` | Inativa, com mudanças não commitadas — não apagar |
 
 ### Performance
 
-The biggest session performance killer is **message history size**. A session with 200+ messages renders slowly in any tool. Mitigate:
+O maior inimigo da performance de sessão é o **tamanho do histórico de mensagens**. Uma sessão com 200+ mensagens renderiza lentamente em qualquer ferramenta. Mitigue isso:
 
-1. **Auto-compact** idle sessions (summarize message history)
-2. **Limit sessions per project** (fewer to render)
-3. **Start fresh** for new tasks instead of reusing bloated sessions
+1. **Auto-compacte** sessões ociosas (resuma o histórico)
+2. **Limite sessões por projeto** (menos itens para renderizar)
+3. **Comece do zero** em tarefas novas em vez de reutilizar sessões inchadas
 
-### Resume After Restart
+### Retomar após reinício
 
-When the tool restarts, sessions with pending work should auto-resume. Track:
-- Pending todos at idle time → save to state file
-- On restart → scan state files → re-prompt sessions with pending work
+Quando a ferramenta reinicia, sessões com trabalho pendente deveriam ser retomadas automaticamente. Rastreie:
+- TODOs pendentes no momento em que a sessão ficou ociosa → salve em arquivo de estado
+- Ao reiniciar → escaneie arquivos de estado → reative as sessões com trabalho pendente
 
-## Implementation
+## Implementação
 
-These patterns can be implemented as:
-- **Plugins** (OpenCode, Cursor extensions)
-- **Shell scripts** (cron-based cleanup via CLI)
-- **Discipline** (manual cleanup habit — delete sessions when done)
+Esses patterns podem ser implementados como:
+- **Plugins** (OpenCode, extensões do Cursor)
+- **Scripts de shell** (limpeza por cron via CLI)
+- **Disciplina** (hábito manual de apagar sessões ao terminar)
 
-### Reference Implementation
+### Implementação de referência
 
-See: [`implementations/opencode/plugin/`](../implementations/opencode/plugin/)
-- `session-manager.ts` — auto-cleanup and status tagging
-- `session-resume.ts` — persist and restore interrupted work
-- `perf-optimizer.ts` — auto-compact for faster switching
+Veja: [`implementations/opencode/plugin/`](../implementations/opencode/plugin/)
+- `session-manager.ts` — auto-cleanup e marcação de status
+- `session-resume.ts` — persistência e retomada de trabalho interrompido
+- `perf-optimizer.ts` — auto-compact para acelerar a troca entre sessões

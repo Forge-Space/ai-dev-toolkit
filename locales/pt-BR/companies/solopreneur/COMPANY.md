@@ -1,6 +1,6 @@
 ---
-name: Solopreneur Studio
-description: A lean one-founder company template for shipping product, growth, and support work without a large team.
+name: Estúdio de Solopreneur
+description: Um template enxuto de empresa para uma única pessoa fundadora entregar produto, crescimento e suporte sem um grande time.
 slug: solopreneur
 schema: agentcompanies/v1
 version: 1.0.0
@@ -8,8 +8,8 @@ license: MIT
 authors:
   - name: Forge Space
 goals:
-  - Ship product quickly with one decision-maker
-  - Balance product, engineering, and growth without role confusion
+  - Entregar produto rapidamente com uma única pessoa tomando decisões
+  - Equilibrar produto, engenharia e crescimento sem confusão de papéis
 ---
 
-Solopreneur Studio is a compact agent company for a founder-led product. It keeps the org simple: one founder/operator drives priorities, one product engineer ships, and one growth operator closes the loop with users.
+Estúdio de Solopreneur é uma empresa de agentes compacta para um produto liderado por fundador. Ela mantém a organização simples: uma pessoa founder/operator define prioridades, uma product engineer entrega e uma growth operator fecha o ciclo com os usuários.

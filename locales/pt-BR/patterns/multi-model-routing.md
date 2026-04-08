@@ -1,64 +1,64 @@
-# Multi-Model Routing
+# Roteamento Multi-Modelo
 
-> Use the cheapest model that can do the job. Escalate only when needed.
+> Use o modelo mais barato capaz de fazer o trabalho. Só escale quando necessário.
 
-## The Problem
+## O Problema
 
-Using a frontier model for every task wastes money and time. Using a weak model for hard tasks wastes your time fixing its output. The optimal strategy routes tasks to the right capability tier.
+Usar um modelo de fronteira para toda tarefa desperdiça dinheiro e tempo. Usar um modelo fraco em tarefas difíceis desperdiça seu tempo corrigindo o resultado. A estratégia ideal roteia cada tarefa para o tier certo de capacidade.
 
-## The Pattern
+## O Pattern
 
-### Three-Tier Routing
+### Roteamento em Três Tiers
 
-| Tier | Use For | Examples |
+| Tier | Use para | Exemplos |
 |------|---------|---------|
-| **Fast** (Haiku, GPT-5.4 mini, Flash) | Simple edits, formatting, config changes, file renames, quick lookups | Fix a typo, rename a variable, update a dependency version |
-| **Standard** (Sonnet, GPT-5.4, Pro) | Implementation, debugging, refactoring, test writing | Build a feature, fix a bug, write tests, code review |
-| **Deep** (Opus, GPT-5-Codex, Deep Research) | Architecture design, cross-system impact, complex debugging, planning | Design an API, analyze a race condition, plan a migration |
+| **Rápido** (Haiku, GPT-5.4 mini, Flash) | Edições simples, formatação, mudanças de config, renomear arquivos, lookups rápidos | Corrigir typo, renomear variável, atualizar versão de dependência |
+| **Padrão** (Sonnet, GPT-5.4, Pro) | Implementação, debugging, refatoração, escrita de testes | Construir feature, corrigir bug, escrever testes, fazer code review |
+| **Profundo** (Opus, GPT-5-Codex, Deep Research) | Design de arquitetura, impacto cross-system, debugging complexo, planejamento | Desenhar API, analisar race condition, planejar migração |
 
-### Routing Heuristics
+### Heurísticas de Roteamento
 
-**Route to Fast when:**
-- The task is mechanical (formatting, renaming, moving)
-- The output is easily verified (linting, type errors)
-- The context is small (<5 files)
-- You could do it yourself in 2 minutes
+**Roteie para Rápido quando:**
+- A tarefa é mecânica (formatar, renomear, mover)
+- O resultado é fácil de verificar (lint, type errors)
+- O contexto é pequeno (<5 arquivos)
+- Você mesmo faria isso em 2 minutos
 
-**Route to Standard when:**
-- The task requires understanding business logic
-- Multiple files need coordinated changes
-- Tests need to be written or fixed
-- The output needs code review
+**Roteie para Padrão quando:**
+- A tarefa exige entender lógica de negócio
+- Vários arquivos precisam de mudanças coordenadas
+- Testes precisam ser escritos ou corrigidos
+- O resultado precisa passar por code review
 
-**Route to Deep when:**
-- The decision has cross-repo impact
-- Multiple valid approaches exist and the tradeoffs matter
-- The problem requires reasoning across >10 files
-- You're planning, not implementing
+**Roteie para Profundo quando:**
+- A decisão afeta vários repositórios
+- Existem várias abordagens válidas e os tradeoffs importam
+- O problema exige raciocínio em >10 arquivos
+- Você está planejando, não implementando
 
-### Cost Math
+### Matemática de custo
 
-| Tier | Relative Cost | Speed |
+| Tier | Custo relativo | Velocidade |
 |------|--------------|-------|
-| Fast | 1x | Instant |
-| Standard | 5-10x | Fast |
-| Deep | 20-50x | Slow |
+| Rápido | 1x | Instantâneo |
+| Padrão | 5-10x | Rápido |
+| Profundo | 20-50x | Lento |
 
-A typical day might be: 70% Fast, 25% Standard, 5% Deep.
+Um dia típico pode ser: 70% Rápido, 25% Padrão, 5% Profundo.
 
-## Tool-Specific Mapping
+## Mapeamento por ferramenta
 
 | Tier | Claude | OpenAI | Google |
 |------|--------|--------|--------|
-| Fast | Haiku 4.5 | GPT-5.4 mini | Flash 2.5 |
-| Standard | Sonnet 4.6 | GPT-5.4 | Pro 2.5 |
-| Deep | Opus 4.6 | GPT-5-Codex | Deep Research |
+| Rápido | Haiku 4.5 | GPT-5.4 mini | Flash 2.5 |
+| Padrão | Sonnet 4.6 | GPT-5.4 | Pro 2.5 |
+| Profundo | Opus 4.6 | GPT-5-Codex | Deep Research |
 
-## Implementation
+## Implementação
 
-### Agent Definitions
+### Definições de agentes
 
-Define named agents with fixed model assignments:
+Defina agentes nomeados com assignments fixos de modelo:
 
 ```json
 {
@@ -70,83 +70,16 @@ Define named agents with fixed model assignments:
 }
 ```
 
-### Tool Allocation
+### Alocação de ferramentas
 
-Not every agent needs every tool:
-- **Fast**: Core only (read, write, edit, bash, glob, grep)
-- **Standard**: All tools including web fetch, task management
-- **Deep**: All tools — the cost is in reasoning, not tool calls
+Nem todo agente precisa de todas as ferramentas:
+- **Rápido**: apenas o core (`read`, `write`, `edit`, `bash`, `glob`, `grep`)
+- **Padrão**: todas as ferramentas, incluindo web fetch e task management
+- **Profundo**: todas as ferramentas — o custo está no raciocínio, não nos tool calls
 
 ### Anti-Patterns
 
-- **Always-Opus syndrome**: Using the most expensive model for everything "just to be safe"
-- **Penny-wise routing**: Using Fast for tasks that clearly need Standard, then spending 3x the tokens fixing the output
-- **No routing at all**: One model, one agent, one price for everything
-- **Ignoring sub-agents**: Claude Code spawns sub-agents for compaction and background work — they use your default model unless you override `CLAUDE_CODE_SUBAGENT_MODEL`
-
-## Sub-Agent Routing
-
-Claude Code sub-agents (background compaction, parallel task agents) default to the same model as the main session. This is wasteful — sub-agents do summarization and simple coordination, not complex reasoning.
-
-**Override in `settings.json` `env` block:**
-
-```json
-{
-  "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001"
-  }
-}
-```
-
-`bash tools/setup-claude-code.sh` sets this automatically.
-
-Expected savings: 60-80% on sub-agent costs with no quality impact on main session work.
-
-## Claude Code Router (CCR)
-
-[CCR](https://github.com/musistudio/claude-code-router) is a local proxy for Claude Code that
-routes requests to different models based on request slot type.
-
-**Slots:**
-
-| Slot | Triggered by | Recommended model |
-|------|-------------|-------------------|
-| `default` | Interactive work | Sonnet |
-| `background` | Auto-compaction, sub-agents | Haiku |
-| `think` | Complex reasoning tasks | Opus |
-| `longContext` | Conversations > threshold | Opus |
-
-**Minimal preset** (`~/.claude-code-router/presets/<name>/manifest.json`):
-
-```json
-{
-  "name": "my-preset",
-  "PORT": 3456,
-  "Providers": [
-    {
-      "name": "anthropic",
-      "api_base_url": "https://api.anthropic.com/v1/messages",
-      "api_key": "$ANTHROPIC_API_KEY",
-      "models": ["claude-sonnet-4-6", "claude-opus-4-6", "claude-haiku-4-5-20251001"],
-      "transformer": { "use": ["Anthropic"] }
-    }
-  ],
-  "Router": {
-    "default": "anthropic,claude-sonnet-4-6",
-    "background": "anthropic,claude-haiku-4-5-20251001",
-    "think": "anthropic,claude-opus-4-6",
-    "longContext": "anthropic,claude-opus-4-6",
-    "longContextThreshold": 120000
-  }
-}
-```
-
-**Use:**
-```bash
-npm install -g @musistudio/claude-code-router
-ccr my-preset start
-eval "$(ccr activate)"   # sets ANTHROPIC_BASE_URL for current shell
-claude
-```
-
-CCR and `CLAUDE_CODE_SUBAGENT_MODEL` are complementary — CCR handles slot routing for the main session flow, `CLAUDE_CODE_SUBAGENT_MODEL` handles agent spawning.
+- **Síndrome do Always-Opus**: usar o modelo mais caro para tudo “por segurança”
+- **Economia burra**: usar um tier Rápido onde claramente seria necessário o Padrão e depois gastar 3x corrigindo a saída
+- **Sem roteamento nenhum**: um modelo, um agente, um preço para tudo
+- **Ignorar subagentes**: Claude Code cria subagentes para compactação e trabalho em background — eles usam o modelo padrão da sessão a menos que você sobrescreva `CLAUDE_CODE_SUBAGENT_MODEL`

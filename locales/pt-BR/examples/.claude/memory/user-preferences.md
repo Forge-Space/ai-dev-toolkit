@@ -1,39 +1,39 @@
 ---
-name: User Preferences
-description: Developer workflow preferences, coding style, and communication patterns
+name: Preferências do Usuário
+description: Preferências de workflow do desenvolvedor, estilo de código e padrões de comunicação
 type: user
 created: 2026-03-01
 updated: 2026-03-15
 ---
 
-# User Preferences
+# Preferências do Usuário
 
-## Communication Style
-- Direct and concise — skip pleasantries, get to the point
-- Wants opinions and pushback, not blind compliance
-- Prefers "here's what I think, here's why" over "what would you like me to do?"
-- Assumes competence — explain edge cases, not basics
+## Estilo de Comunicação
+- Direto e conciso — sem rodeios, vá ao ponto
+- Quer opiniões e contrapontos, não concordância cega
+- Prefere "aqui está o que penso, e por quê" em vez de "o que você gostaria que eu fizesse?"
+- Assume competência — explique edge cases, não o básico
 
 ## Workflow
-- Commit constantly with value: after each functional step, commit + push
-- Quality-first: run lint/security/tests frequently, catch issues early
-- Philosophy: deliver fast, fail early, fix early
-- Work autonomously — only confirm for truly destructive/irreversible actions
+- Faça commits constantes com valor: depois de cada etapa funcional, commit + push
+- Qualidade em primeiro lugar: rode lint/security/tests com frequência, detecte issues cedo
+- Filosofia: entregar rápido, falhar cedo, corrigir cedo
+- Trabalhe com autonomia — confirme apenas ações realmente destrutivas/irreversíveis
 
-## Code Preferences
-- TypeScript strict mode always enabled
-- Functional programming style over OOP where possible
-- No premature abstraction — wait until pattern appears 3+ times
-- Error handling: explicit over implicit (no silent failures)
-- Prefer composition over inheritance
-- Keep functions small: <50 lines, cyclomatic complexity <10
+## Preferências de Código
+- TypeScript strict mode sempre habilitado
+- Estilo funcional acima de OOP sempre que possível
+- Sem abstração prematura — espere até o padrão aparecer 3+ vezes
+- Tratamento de erros: explícito acima de implícito (sem falhas silenciosas)
+- Prefira composição a herança
+- Mantenha funções pequenas: <50 linhas, complexidade ciclomática <10
 
-## Testing Philosophy
-- Coverage target: >80% (no false positives)
-- Test business logic and user value, NOT trivial getters/setters
-- Edge cases and error conditions matter more than happy paths
-- Integration tests > unit tests for API routes
-- Mock external dependencies, not internal modules
+## Filosofia de Testes
+- Meta de cobertura: >80% (sem falsos positivos)
+- Teste lógica de negócio e valor para o usuário, NÃO getters/setters triviais
+- Edge cases e condições de erro importam mais do que caminhos felizes
+- Testes de integração > testes unitários para rotas de API
+- Faça mock de dependências externas, não de módulos internos
 
 ## Tech Stack
 - **Frontend**: React 19, TypeScript, Tailwind CSS, Radix UI
@@ -43,9 +43,9 @@ updated: 2026-03-15
 - **Testing**: Vitest, Playwright
 - **Linting**: ESLint 9, Prettier, TypeScript ESLint
 
-## Anti-Patterns to Avoid
-- Don't add comments explaining what the code does — write self-documenting code
-- Don't create task-specific documentation files (STATUS.md, PROGRESS.md)
-- Don't use `any` types — use `unknown` and type guards
-- Don't swallow errors — log and propagate or handle explicitly
-- Don't add dependencies without checking bundle impact
+## Anti-Patterns a Evitar
+- Não adicione comentários explicando o que o código faz — escreva código autoexplicativo
+- Não crie arquivos de documentação específicos de tarefa (STATUS.md, PROGRESS.md)
+- Não use tipos `any` — use `unknown` e type guards
+- Não engula erros — registre e propague ou trate explicitamente
+- Não adicione dependências sem checar o impacto no bundle

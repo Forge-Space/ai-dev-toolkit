@@ -1,107 +1,107 @@
-# TaskFlow - Project Management SaaS
+# TaskFlow - SaaS de Gestão de Projetos
 
-## Quick Reference
+## Referência Rápida
 
 **Stack:**
 - Frontend: Next.js 15, React 19, TypeScript 5.7, TailwindCSS
 - Backend: Next.js API Routes, Supabase (PostgreSQL, Auth, Realtime)
-- State: TanStack Query, Zustand
-- Testing: Vitest, Playwright, React Testing Library
+- Estado: TanStack Query, Zustand
+- Testes: Vitest, Playwright, React Testing Library
 - Build: Turbo, pnpm workspaces
 
-**Commands:**
+**Comandos:**
 ```bash
-pnpm dev              # Start dev server (localhost:3000)
-pnpm build            # Production build
-pnpm test             # Run unit tests
-pnpm test:e2e         # Run E2E tests
-pnpm lint             # ESLint check
-pnpm type-check       # TypeScript check
-pnpm db:push          # Push schema to Supabase
-pnpm db:seed          # Seed development data
+pnpm dev              # Inicia o servidor dev (localhost:3000)
+pnpm build            # Build de produção
+pnpm test             # Roda testes unitários
+pnpm test:e2e         # Roda testes E2E
+pnpm lint             # Verificação ESLint
+pnpm type-check       # Verificação TypeScript
+pnpm db:push          # Envia schema para o Supabase
+pnpm db:seed          # Popula dados de desenvolvimento
 ```
 
-**Key Paths:**
-- `apps/web/` - Next.js app
-- `packages/ui/` - Shared React components
-- `packages/db/` - Supabase schema & migrations
-- `packages/api/` - API client & types
+**Caminhos Principais:**
+- `apps/web/` - app Next.js
+- `packages/ui/` - componentes React compartilhados
+- `packages/db/` - schema e migrations do Supabase
+- `packages/api/` - cliente de API e tipos
 
-## Architecture
+## Arquitetura
 
-TaskFlow is a monorepo using Turborepo for task orchestration. The architecture follows Feature-Sliced Design principles:
+TaskFlow é um monorepo usando Turborepo para orquestração de tarefas. A arquitetura segue os princípios de Feature-Sliced Design:
 
 ```
 apps/web/src/
-  app/              # Next.js App Router pages
-  features/         # Feature modules (tasks, projects, teams)
-  entities/         # Business entities (user, workspace)
-  shared/           # Shared utilities, hooks, components
-  widgets/          # Composite UI blocks
+  app/              # páginas App Router do Next.js
+  features/         # módulos de funcionalidades (tasks, projects, teams)
+  entities/         # entidades de negócio (user, workspace)
+  shared/           # utilitários, hooks e componentes compartilhados
+  widgets/          # blocos compostos de UI
 ```
 
-**Data Flow:**
-1. UI components call React Query hooks
-2. Hooks use API client from `@taskflow/api`
-3. API routes validate with Zod schemas
-4. Supabase RLS enforces permissions
-5. Realtime subscriptions for live updates
+**Fluxo de Dados:**
+1. Componentes de UI chamam hooks do React Query
+2. Os hooks usam o cliente de API de `@taskflow/api`
+3. As rotas de API validam com schemas Zod
+4. O Supabase RLS aplica permissões
+5. Subscriptions Realtime para atualizações ao vivo
 
-**Authentication:**
-- Supabase Auth with SSR (server components + middleware)
-- Row-Level Security (RLS) policies on all tables
-- Session stored in httpOnly cookies
+**Autenticação:**
+- Supabase Auth com SSR (server components + middleware)
+- Políticas Row-Level Security (RLS) em todas as tabelas
+- Sessão armazenada em cookies httpOnly
 
-**State Management:**
-- Server state: TanStack Query (cache + sync)
-- Client state: Zustand (UI toggles, filters)
-- Form state: React Hook Form + Zod
+**Gerenciamento de Estado:**
+- Estado do servidor: TanStack Query (cache + sync)
+- Estado do cliente: Zustand (toggles de UI, filtros)
+- Estado de formulário: React Hook Form + Zod
 
-**Key Design Decisions:**
-- Server Components by default, Client Components only when needed
-- Optimistic updates for all mutations
-- Real-time subscriptions for collaborative features
-- Static generation for marketing pages, ISR for dashboard
+**Principais Decisões de Design:**
+- Server Components por padrão, Client Components só quando necessário
+- Atualizações otimistas para todas as mutations
+- Subscriptions em tempo real para funcionalidades colaborativas
+- Geração estática para páginas de marketing, ISR para dashboard
 
-## Code Standards
+## Padrões de Código
 
-### General Rules
+### Regras Gerais
 
-- **Function size:** Max 50 lines per function
-- **Cyclomatic complexity:** Max 10 per function
-- **Line width:** Max 100 characters
-- **No comments** unless explaining complex business logic or external constraints
-- **Early returns:** Prefer guard clauses over nested conditionals
+- **Tamanho de função:** Máx. 50 linhas por função
+- **Complexidade ciclomática:** Máx. 10 por função
+- **Largura de linha:** Máx. 100 caracteres
+- **Sem comentários** a menos que expliquem lógica de negócio complexa ou restrições externas
+- **Early returns:** prefira guard clauses a condicionais aninhadas
 
 ### TypeScript
 
 ```typescript
-// ✅ DO: Explicit return types for public APIs
+// ✅ FAÇA: Tipos de retorno explícitos para APIs públicas
 export async function fetchTasks(
   workspaceId: string
 ): Promise<Task[]> {
   // ...
 }
 
-// ✅ DO: Use branded types for IDs
+// ✅ FAÇA: Use branded types para IDs
 type TaskId = string & { readonly brand: unique symbol };
 
-// ✅ DO: Prefer unknown over any
+// ✅ FAÇA: Prefira unknown a any
 function parseJson(str: string): unknown {
   return JSON.parse(str);
 }
 
-// ❌ DON'T: Use any
+// ❌ NÃO FAÇA: Use any
 function process(data: any) { }
 
-// ❌ DON'T: Implicit any in function params
+// ❌ NÃO FAÇA: any implícito em parâmetros de função
 function calculate(a, b) { }
 ```
 
 ### React
 
 ```tsx
-// ✅ DO: Functional components with TypeScript
+// ✅ FAÇA: Componentes funcionais com TypeScript
 interface ButtonProps {
   variant: 'primary' | 'secondary';
   onClick: () => void;
@@ -119,36 +119,36 @@ export function Button({ variant, onClick, children }: ButtonProps) {
   );
 }
 
-// ✅ DO: Use React Server Components by default
+// ✅ FAÇA: Use React Server Components por padrão
 // app/tasks/page.tsx
 export default async function TasksPage() {
-  const tasks = await fetchTasks(); // Direct data fetching
+  const tasks = await fetchTasks(); // Busca de dados direta
   return <TaskList tasks={tasks} />;
 }
 
-// ✅ DO: Mark Client Components explicitly
+// ✅ FAÇA: Marque Client Components explicitamente
 'use client';
 export function TaskFilters() {
   const [filter, setFilter] = useState('all');
   // ...
 }
 
-// ❌ DON'T: Use default exports for components
-export default function MyComponent() { } // Avoid
+// ❌ NÃO FAÇA: Use default exports para componentes
+export default function MyComponent() { } // Evite
 
-// ❌ DON'T: Fetch data in Client Components
+// ❌ NÃO FAÇA: Buscar dados em Client Components
 'use client';
 export function Tasks() {
   useEffect(() => {
-    fetch('/api/tasks'); // Use React Query instead
+    fetch('/api/tasks'); // Use React Query em vez disso
   }, []);
 }
 ```
 
-### API Routes
+### Rotas de API
 
 ```typescript
-// ✅ DO: Validate with Zod
+// ✅ FAÇA: Valide com Zod
 import { z } from 'zod';
 
 const createTaskSchema = z.object({
@@ -159,30 +159,30 @@ const createTaskSchema = z.object({
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const data = createTaskSchema.parse(body); // Throws on invalid
+  const data = createTaskSchema.parse(body); // Lança em caso inválido
   // ...
 }
 
-// ✅ DO: Use consistent error responses
+// ✅ FAÇA: Use respostas de erro consistentes
 return NextResponse.json(
   { error: 'Task not found' },
   { status: 404 }
 );
 
-// ✅ DO: Check auth in all protected routes
+// ✅ FAÇA: Verifique auth em todas as rotas protegidas
 const session = await getServerSession();
 if (!session) {
   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 }
 ```
 
-### Database (Supabase)
+### Banco de Dados (Supabase)
 
 ```sql
--- ✅ DO: Enable RLS on all tables
+-- ✅ FAÇA: Habilite RLS em todas as tabelas
 ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 
--- ✅ DO: Create policies for each role
+-- ✅ FAÇA: Crie políticas para cada papel
 CREATE POLICY "Users can view tasks in their workspace"
   ON tasks FOR SELECT
   USING (
@@ -192,18 +192,18 @@ CREATE POLICY "Users can view tasks in their workspace"
     )
   );
 
--- ✅ DO: Use proper indexes
+-- ✅ FAÇA: Use índices adequados
 CREATE INDEX idx_tasks_workspace_id ON tasks(workspace_id);
 CREATE INDEX idx_tasks_assigned_to ON tasks(assigned_to);
 
--- ❌ DON'T: Use SELECT * in application code
--- Use explicit column lists
+-- ❌ NÃO FAÇA: Use SELECT * no código da aplicação
+-- Use listas explícitas de colunas
 ```
 
-### Testing
+### Testes
 
 ```typescript
-// ✅ DO: Test business logic and user interactions
+// ✅ FAÇA: Teste lógica de negócio e interações do usuário
 describe('TaskList', () => {
   it('displays empty state when no tasks', () => {
     render(<TaskList tasks={[]} />);
@@ -222,24 +222,24 @@ describe('TaskList', () => {
   });
 });
 
-// ❌ DON'T: Test implementation details
+// ❌ NÃO FAÇA: Teste detalhes de implementação
 it('updates state correctly', () => {
   const { result } = renderHook(() => useState(0));
-  act(() => result.current[1](1)); // Testing React internals
+  act(() => result.current[1](1)); // Testando internals do React
 });
 ```
 
-## Workflow
+## Fluxo de Trabalho
 
-### Branch Strategy
+### Estratégia de Branches
 
-Trunk-based development with short-lived feature branches:
+Desenvolvimento trunk-based com branches curtas de feature:
 
 ```bash
-# Feature branch (1-3 days max)
+# Branch de feature (máx. 1-3 dias)
 git checkout -b feature/task-filters
 
-# Bug fix
+# Correção de bug
 git checkout -b fix/date-picker-timezone
 
 # Refactor
@@ -249,11 +249,11 @@ git checkout -b refactor/api-client
 git checkout -b chore/update-dependencies
 ```
 
-**Branch naming:** `<type>/<short-kebab-description>`
+**Nome da branch:** `<type>/<short-kebab-description>`
 
-### Commit Messages
+### Mensagens de Commit
 
-Follow Conventional Commits:
+Siga Conventional Commits:
 
 ```
 <type>(<scope>): <subject>
@@ -263,9 +263,9 @@ Follow Conventional Commits:
 <footer>
 ```
 
-**Types:** feat, fix, refactor, chore, docs, style, ci, test, perf
+**Tipos:** feat, fix, refactor, chore, docs, style, ci, test, perf
 
-**Examples:**
+**Exemplos:**
 ```
 feat(tasks): add drag-and-drop reordering
 
@@ -285,141 +285,141 @@ Extracted common error handling into middleware.
 Reduced duplication across 15 API routes.
 ```
 
-### Pull Request Process
+### Processo de Pull Request
 
-1. **Create feature branch** from `main`
-2. **Implement feature** with tests
-3. **Run quality gates:**
+1. **Crie a feature branch** a partir de `main`
+2. **Implemente a funcionalidade** com testes
+3. **Rode os gates de qualidade:**
    ```bash
    pnpm lint && pnpm type-check && pnpm test && pnpm build
    ```
-4. **Commit changes** with conventional format
-5. **Push branch** and create PR
-6. **Wait for CI** (all checks must pass)
-7. **Request review** (min 1 approval required)
-8. **Address feedback** and push updates
-9. **Squash merge** to main
-10. **Delete branch** after merge
+4. **Faça commit das mudanças** no formato convencional
+5. **Envie a branch** e crie o PR
+6. **Espere o CI** (todos os checks precisam passar)
+7. **Peça review** (mínimo de 1 aprovação)
+8. **Trate o feedback** e envie atualizações
+9. **Faça squash merge** para `main`
+10. **Delete a branch** após o merge
 
-**PR Template:**
+**Template de PR:**
 
 ```markdown
-## Summary
-- Bullet point summary of changes
+## Resumo
+- Resumo em tópicos das mudanças
 
-## Changes
-- Technical details
-- Files modified
-- Dependencies added/removed
+## Mudanças
+- Detalhes técnicos
+- Arquivos modificados
+- Dependências adicionadas/removidas
 
-## Test Plan
-- [ ] Unit tests added/updated
-- [ ] E2E tests pass
-- [ ] Manual testing completed
-- [ ] Tested on mobile/desktop
+## Plano de Testes
+- [ ] Testes unitários adicionados/atualizados
+- [ ] Testes E2E passam
+- [ ] Teste manual concluído
+- [ ] Testado em mobile/desktop
 
-## Screenshots
-[If UI changes]
+## Capturas de Tela
+[Se houver mudanças de UI]
 
-## Breaking Changes
-[If any]
+## Mudanças Incompatíveis
+[Se houver]
 
-## Related Issues
+## Issues Relacionadas
 Closes #123
 ```
 
-### Development Workflow
+### Workflow de Desenvolvimento
 
-**Daily workflow:**
+**Workflow diário:**
 ```bash
-# 1. Start of day
+# 1. Início do dia
 git checkout main
 git pull
-pnpm install  # Update dependencies
+pnpm install  # Atualiza dependências
 
-# 2. Create feature branch
+# 2. Cria branch de feature
 git checkout -b feature/my-feature
 
-# 3. Start dev server
+# 3. Inicia servidor dev
 pnpm dev
 
-# 4. Make changes, test locally
-# 5. Run quality checks frequently
+# 4. Faz mudanças, testa localmente
+# 5. Roda checks de qualidade com frequência
 pnpm test
 
-# 6. Commit often (small, focused commits)
+# 6. Commita com frequência (commits pequenos e focados)
 git add .
 git commit -m "feat: add X"
 
-# 7. Before PR
+# 7. Antes do PR
 pnpm lint
 pnpm type-check
 pnpm test
 pnpm test:e2e
 pnpm build
 
-# 8. Create PR
+# 8. Cria PR
 git push -u origin feature/my-feature
 gh pr create
 ```
 
-**When switching tasks:**
+**Ao trocar de tarefa:**
 ```bash
-# Commit work in progress
+# Commita o trabalho em progresso
 git add .
 git commit -m "wip: partial implementation"
 
-# Switch to different task
+# Troca para outra tarefa
 git checkout -b feature/other-task
 
-# Return later
+# Volta depois
 git checkout feature/my-feature
 ```
 
-## Testing Strategy
+## Estratégia de Testes
 
-### Coverage Targets
+### Metas de Cobertura
 
-- **Overall:** >80%
-- **Business logic:** >90%
-- **UI components:** >70%
+- **Geral:** >80%
+- **Lógica de negócio:** >90%
+- **Componentes de UI:** >70%
 - **Utils/helpers:** 100%
 
-### What to Test
+### O Que Testar
 
-**DO test:**
-- User workflows (E2E)
-- Business logic functions
-- API route validation
-- Error conditions
-- Edge cases (empty arrays, null values, boundary conditions)
-- Integration points (API client, Supabase calls)
-- Accessibility (keyboard navigation, screen reader labels)
+**TESTE:**
+- Workflows do usuário (E2E)
+- Funções de lógica de negócio
+- Validação de rotas de API
+- Condições de erro
+- Edge cases (arrays vazios, valores null, condições de borda)
+- Pontos de integração (cliente de API, chamadas ao Supabase)
+- Acessibilidade (navegação por teclado, labels para leitor de tela)
 
-**DON'T test:**
-- Trivial getters/setters
-- Third-party library internals
-- UI styling/layout details
-- Framework features (React, Next.js)
+**NÃO TESTE:**
+- Getters/setters triviais
+- Internals de bibliotecas de terceiros
+- Detalhes de estilo/layout da UI
+- Recursos do framework (React, Next.js)
 
-### Test Organization
+### Organização dos Testes
 
 ```
 src/
   features/
     tasks/
       __tests__/
-        TaskList.test.tsx        # Component tests
-        useTaskMutations.test.ts # Hook tests
-        task-utils.test.ts       # Unit tests
+        TaskList.test.tsx        # Testes de componente
+        useTaskMutations.test.ts # Testes de hook
+        task-utils.test.ts       # Testes unitários
       TaskList.tsx
       useTaskMutations.ts
       task-utils.ts
 ```
 
-### Test Patterns
+### Padrões de Teste
 
-**Component tests:**
+**Testes de componente:**
 ```typescript
 import { render, screen } from '@testing-library/react';
 import { TaskCard } from './TaskCard';
@@ -443,7 +443,7 @@ describe('TaskCard', () => {
 });
 ```
 
-**API tests:**
+**Testes de API:**
 ```typescript
 import { POST } from './route';
 
@@ -476,7 +476,7 @@ describe('POST /api/tasks', () => {
 });
 ```
 
-**E2E tests:**
+**Testes E2E:**
 ```typescript
 import { test, expect } from '@playwright/test';
 
@@ -487,15 +487,15 @@ test('user can create and complete task', async ({ page }) => {
   await page.fill('[name=password]', 'password');
   await page.click('button[type=submit]');
 
-  // Create task
+  // Criar tarefa
   await page.click('text=New Task');
   await page.fill('[name=title]', 'Buy groceries');
   await page.click('button:has-text("Create")');
 
-  // Verify created
+  // Verificar criação
   await expect(page.locator('text=Buy groceries')).toBeVisible();
 
-  // Complete task
+  // Concluir tarefa
   await page.click('text=Buy groceries');
   await page.check('[aria-label="Mark complete"]');
 
@@ -504,32 +504,32 @@ test('user can create and complete task', async ({ page }) => {
 });
 ```
 
-## Gotchas
+## Armadilhas Comuns
 
 ### Supabase
 
-1. **RLS policies must match client filters**
+1. **Políticas RLS precisam bater com os filtros do cliente**
    ```typescript
-   // ❌ Client filter won't work if RLS blocks it
+   // ❌ O filtro do cliente não funciona se o RLS bloquear
    const { data } = await supabase
      .from('tasks')
      .select('*')
-     .eq('workspace_id', 'other-workspace'); // RLS blocks this
+     .eq('workspace_id', 'other-workspace'); // RLS bloqueia isso
 
-   // ✅ Only query data allowed by RLS
+   // ✅ Consulte apenas dados permitidos pelo RLS
    const { data } = await supabase
      .from('tasks')
-     .select('*'); // RLS auto-filters to user's workspaces
+     .select('*'); // RLS filtra automaticamente para os workspaces do usuário
    ```
 
-2. **Session refresh in middleware**
-   - Supabase sessions expire after 1 hour
-   - Middleware must call `supabase.auth.getSession()` to refresh
-   - Redirect to login if refresh fails
+2. **Renovação de sessão no middleware**
+   - Sessões do Supabase expiram após 1 hora
+   - O middleware precisa chamar `supabase.auth.getSession()` para renovar
+   - Redirecione para login se o refresh falhar
 
-3. **Realtime subscriptions require auth**
+3. **Subscriptions Realtime exigem auth**
    ```typescript
-   // ✅ Pass authenticated client to subscription
+   // ✅ Passe o client autenticado para a subscription
    const channel = supabase
      .channel('tasks')
      .on('postgres_changes', {
@@ -539,21 +539,21 @@ test('user can create and complete task', async ({ page }) => {
      }, handler)
      .subscribe();
 
-   // Clean up on unmount
+   // Limpeza no unmount
    return () => { channel.unsubscribe(); };
    ```
 
 ### Next.js
 
-1. **Server Components can't use hooks**
+1. **Server Components não podem usar hooks**
    ```tsx
-   // ❌ Error: Can't use useState in Server Component
+   // ❌ Erro: não pode usar useState em Server Component
    export default function Page() {
      const [count, setCount] = useState(0);
      return <div>{count}</div>;
    }
 
-   // ✅ Mark as Client Component
+   // ✅ Marque como Client Component
    'use client';
    export default function Page() {
      const [count, setCount] = useState(0);
@@ -561,9 +561,9 @@ test('user can create and complete task', async ({ page }) => {
    }
    ```
 
-2. **Cookies in Server Actions**
+2. **Cookies em Server Actions**
    ```typescript
-   // ✅ Use cookies() from next/headers
+   // ✅ Use cookies() de next/headers
    import { cookies } from 'next/headers';
 
    export async function updateUser() {
@@ -573,16 +573,16 @@ test('user can create and complete task', async ({ page }) => {
    }
    ```
 
-3. **Environment variables**
-   - `NEXT_PUBLIC_*` → exposed to browser
-   - Others → server-only
-   - Never put secrets in `NEXT_PUBLIC_*`
+3. **Variáveis de ambiente**
+   - `NEXT_PUBLIC_*` → expostas ao navegador
+   - As demais → apenas no servidor
+   - Nunca coloque secrets em `NEXT_PUBLIC_*`
 
 ### TypeScript
 
-1. **Inferred types from Supabase**
+1. **Tipos inferidos do Supabase**
    ```typescript
-   // ✅ Generate types from database
+   // ✅ Gere tipos a partir do banco
    // pnpm supabase gen types typescript --local > packages/db/types.ts
 
    import type { Database } from '@taskflow/db';
@@ -590,9 +590,9 @@ test('user can create and complete task', async ({ page }) => {
    type Task = Database['public']['Tables']['tasks']['Row'];
    ```
 
-2. **Form data typing**
+2. **Tipagem de form data**
    ```typescript
-   // ✅ Use Zod for runtime validation + type inference
+   // ✅ Use Zod para validação em runtime + inferência de tipos
    const schema = z.object({
      title: z.string(),
      dueDate: z.string().datetime().optional(),
@@ -603,7 +603,7 @@ test('user can create and complete task', async ({ page }) => {
 
 ### Testing
 
-1. **Mock Supabase client**
+1. **Mock do client Supabase**
    ```typescript
    // vitest.setup.ts
    vi.mock('@supabase/supabase-js', () => ({
@@ -615,28 +615,28 @@ test('user can create and complete task', async ({ page }) => {
    }));
    ```
 
-2. **E2E test isolation**
-   - Each test uses a fresh database state
-   - Seed test data in `beforeEach`
-   - Clean up in `afterEach`
+2. **Isolamento de testes E2E**
+   - Cada teste usa um estado de banco limpo
+   - Popule dados em `beforeEach`
+   - Limpe em `afterEach`
    ```typescript
    beforeEach(async () => {
-     await db.seed(); // Seed test workspace + user
+     await db.seed(); // Popula workspace + user de teste
    });
 
    afterEach(async () => {
-     await db.reset(); // Clean all test data
+     await db.reset(); // Limpa todos os dados de teste
    });
    ```
 
-3. **Avoid flaky tests**
-   - Use `waitFor` instead of `sleep`
-   - Mock time-dependent functions
-   - Set explicit timeouts for async operations
+3. **Evite testes flaky**
+   - Use `waitFor` em vez de `sleep`
+   - Faça mock de funções dependentes do tempo
+   - Defina timeouts explícitos para operações assíncronas
 
 ### pnpm Workspace
 
-1. **Cross-package imports**
+1. **Imports entre pacotes**
    ```json
    // apps/web/package.json
    {
@@ -647,63 +647,63 @@ test('user can create and complete task', async ({ page }) => {
    }
    ```
 
-2. **Shared dependencies**
-   - Install shared deps in root: `pnpm add -w <package>`
-   - Install package-specific: `pnpm add --filter web <package>`
+2. **Dependências compartilhadas**
+   - Instale deps compartilhadas na raiz: `pnpm add -w <package>`
+   - Instale deps específicas do pacote: `pnpm add --filter web <package>`
 
-3. **Build order matters**
+3. **A ordem de build importa**
    ```json
    // turbo.json
    {
      "pipeline": {
        "build": {
-         "dependsOn": ["^build"] // Build dependencies first
+         "dependsOn": ["^build"] // Buildar dependências primeiro
        }
      }
    }
    ```
 
-## Security
+## Segurança
 
-### Authentication
+### Autenticação
 
-- **Never trust client-side auth state**
-- Always verify session on server (API routes, Server Components)
-- Use Supabase RLS for authorization
-- Rotate secrets monthly
+- **Nunca confie no estado de auth do client-side**
+- Sempre verifique a sessão no servidor (rotas de API, Server Components)
+- Use RLS do Supabase para autorização
+- Faça rotação de secrets mensalmente
 
-### Input Validation
+### Validação de Entrada
 
 ```typescript
-// ✅ Validate all user input with Zod
-const userInput = createUserSchema.parse(body); // Throws on invalid
+// ✅ Valide toda entrada do usuário com Zod
+const userInput = createUserSchema.parse(body); // Lança em caso inválido
 
-// ✅ Sanitize HTML if rendering user content
+// ✅ Higienize HTML ao renderizar conteúdo do usuário
 import DOMPurify from 'isomorphic-dompurify';
 const clean = DOMPurify.sanitize(userHtml);
 
-// ❌ Never trust user input
+// ❌ Nunca confie em entrada do usuário
 const query = `SELECT * FROM users WHERE id = ${req.body.id}`; // SQL injection!
 ```
 
-### Secrets Management
+### Gestão de Secrets
 
-1. **Never commit secrets**
-   - Add `.env` to `.gitignore`
-   - Use `.env.example` for template
-   - Store secrets in Vercel/environment
+1. **Nunca commite secrets**
+   - Adicione `.env` ao `.gitignore`
+   - Use `.env.example` como template
+   - Armazene secrets na Vercel/ambiente
 
-2. **Secret scanning**
-   - GitGuardian in CI
-   - Pre-commit hooks check for patterns
-   - Rotate immediately if leaked
+2. **Varredura de secrets**
+   - GitGuardian no CI
+   - Hooks de pre-commit verificam padrões
+   - Faça rotação imediatamente se houver vazamento
 
-3. **Least privilege**
-   - Database users have minimal permissions
-   - API keys scoped to specific resources
-   - Service accounts for CI/CD only
+3. **Privilégio mínimo**
+   - Usuários de banco com permissões mínimas
+   - Chaves de API escopadas para recursos específicos
+   - Service accounts apenas para CI/CD
 
-### Content Security
+### Segurança de Conteúdo
 
 ```typescript
 // next.config.js
@@ -732,32 +732,32 @@ module.exports = {
 };
 ```
 
-### Dependency Security
+### Segurança de Dependências
 
 ```bash
-# Run audit on every PR
+# Rode audit em todo PR
 pnpm audit --audit-level=high
 
-# Update vulnerable deps
+# Atualize dependências vulneráveis
 pnpm update
 
-# Check for outdated packages
+# Verifique pacotes desatualizados
 pnpm outdated
 ```
 
 ## Performance
 
-### Database
+### Banco de Dados
 
-- Use indexes on frequently queried columns
-- Limit result sets (pagination)
-- Use `select()` with explicit columns, not `SELECT *`
-- Enable Postgres connection pooling (Supabase does this)
+- Use índices em colunas consultadas com frequência
+- Limite conjuntos de resultado (paginação)
+- Use `select()` com colunas explícitas, não `SELECT *`
+- Habilite connection pooling do Postgres (o Supabase já faz isso)
 
 ### React Query
 
 ```typescript
-// ✅ Stale-while-revalidate pattern
+// ✅ Padrão stale-while-revalidate
 const { data } = useQuery({
   queryKey: ['tasks', workspaceId],
   queryFn: () => fetchTasks(workspaceId),
@@ -765,7 +765,7 @@ const { data } = useQuery({
   gcTime: 5 * 60 * 1000, // 5min
 });
 
-// ✅ Optimistic updates
+// ✅ Atualizações otimistas
 const mutation = useMutation({
   mutationFn: updateTask,
   onMutate: async (newTask) => {
@@ -787,19 +787,19 @@ const mutation = useMutation({
 ### Next.js
 
 ```typescript
-// ✅ Use Static Generation for marketing pages
+// ✅ Use Static Generation para páginas de marketing
 export const dynamic = 'force-static';
 
-// ✅ Use ISR for frequently-changing data
-export const revalidate = 60; // Revalidate every 60s
+// ✅ Use ISR para dados que mudam com frequência
+export const revalidate = 60; // Revalida a cada 60s
 
-// ✅ Lazy load heavy components
+// ✅ Lazy load de componentes pesados
 const Chart = dynamic(() => import('./Chart'), {
   loading: () => <Skeleton />,
   ssr: false,
 });
 
-// ✅ Optimize images
+// ✅ Otimize imagens
 import Image from 'next/image';
 
 <Image
@@ -807,64 +807,64 @@ import Image from 'next/image';
   alt="Hero"
   width={800}
   height={600}
-  priority // Above fold
+  priority // Acima da dobra
 />
 ```
 
-### Bundle Size
+### Tamanho de Bundle
 
-- Monitor bundle with `@next/bundle-analyzer`
-- Lazy load non-critical code
-- Tree-shake unused exports
-- Keep total bundle <300KB (gzipped)
+- Monitore o bundle com `@next/bundle-analyzer`
+- Faça lazy load de código não crítico
+- Faça tree-shake de exports não usados
+- Mantenha o bundle total <300KB (gzipped)
 
-## Deployment
+## Deploy
 
-**Platform:** Vercel
+**Plataforma:** Vercel
 
-**Environments:**
-- Production: `main` branch → `https://your-app.vercel.app`
-- Preview: All PRs → `https://your-app-git-<branch>.vercel.app`
+**Ambientes:**
+- Produção: branch `main` → `https://your-app.vercel.app`
+- Preview: todos os PRs → `https://your-app-git-<branch>.vercel.app`
 
-**Environment Variables:**
-- Set in Vercel dashboard
-- Separate values for production/preview
-- Never commit `.env` to git
+**Variáveis de ambiente:**
+- Definidas no dashboard da Vercel
+- Valores separados para produção/preview
+- Nunca commite `.env` no git
 
-**Deployment Process:**
-1. Merge PR to `main`
-2. Vercel auto-deploys
-3. Runs build + tests
-4. Deploys if all pass
-5. Notifies in Slack
+**Processo de Deploy:**
+1. Faça merge do PR em `main`
+2. A Vercel faz deploy automático
+3. Roda build + testes
+4. Faz deploy se tudo passar
+5. Notifica no Slack
 
 **Rollback:**
 ```bash
 # Via Vercel CLI
 vercel rollback
 
-# Or redeploy previous commit
+# Ou redeploy do commit anterior
 git revert HEAD
 git push
 ```
 
-## Resources
+## Recursos
 
-- **Design System:** `<your-design-system-url>`
+- **Sistema de Design:** `<your-design-system-url>`
 - **API Docs:** `<your-api-docs-url>`
 - **Supabase Dashboard:** `<your-supabase-dashboard-url>`
-- **Monitoring:** `<your-monitoring-url>`
+- **Monitoramento:** `<your-monitoring-url>`
 - **Figma:** `<your-figma-url>`
 
-## Team
+## Equipe
 
-- Ask @alice for design questions
-- Ask @bob for database/backend
-- Ask @charlie for DevOps/deployment
+- Pergunte à @alice sobre design
+- Pergunte ao @bob sobre banco/backend
+- Pergunte ao @charlie sobre DevOps/deploy
 
-## Change Log
+## Histórico de Mudanças
 
-- **2026-03-10:** Migrated to Supabase from Firebase
-- **2026-03-01:** Upgraded to Next.js 15 + React 19
-- **2026-02-15:** Implemented real-time collaboration
-- **2026-02-01:** Launched beta with 100 users
+- **2026-03-10:** Migração de Firebase para Supabase
+- **2026-03-01:** Upgrade para Next.js 15 + React 19
+- **2026-02-15:** Implementação de colaboração em tempo real
+- **2026-02-01:** Lançamento beta com 100 usuários
