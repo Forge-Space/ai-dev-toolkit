@@ -1,47 +1,54 @@
+[English](README.md) | [Português](README.pt-BR.md)
+
 # ai-dev-toolkit-setup
 
-**Idioma:** Português | [English](README.en.md)
+Portable machine setup for the AI Dev Toolkit stack: bootstrap a new macOS, Ubuntu, or Windows workstation without depending on personal dotfiles.
 
-> **Papel do repositório:** `ai-dev-toolkit-setup` é a camada opcional de bootstrap, instalação e distribuição. A fonte canônica de padrões, skills, agentes e lógica reutilizável fica em `ai-dev-toolkit`.
+## Which repository should I use?
 
-Setup portátil do ai-dev-toolkit para máquinas novas, sem depender de dotfiles pessoais.
+- **Use this repository (`ai-dev-toolkit-setup`)** when you want to install the shared environment on a machine.
+- **Use [`ai-dev-toolkit`](https://github.com/Forge-Space/ai-dev-toolkit)** when you want reusable rules, patterns, skills, and reference implementations inside your projects.
 
-Quer a versão compartilhável com padrões, regras e implementações por ferramenta? Veja o
-repositório companheiro
-[ai-dev-toolkit](https://github.com/LucasSantana-Dev/ai-dev-toolkit).
+This repo is the machine bootstrap layer. The companion repo is the reusable toolkit content.
 
-## Qual repositório usar?
+## Who this is for
 
-- Use **ai-dev-toolkit-setup** quando você quiser preparar uma máquina nova com shell, tmux, OpenCode, helpers de release/MCP e ambiente base para agentes.
-- Use **ai-dev-toolkit** quando você quiser padrões reutilizáveis, templates de regras e implementações de referência para aplicar dentro dos seus projetos.
+This setup is for developers and small teams who want a repeatable AI-assisted development environment with the same shell helpers, tmux workflow, OpenCode baseline, and optional MCP/auth helpers on every machine.
 
-O mapa de ownership desta fase está em [OWNERSHIP.md](OWNERSHIP.md).
+Use it when you want to:
 
-Quando online, este repo consome o release pinado de `ai-dev-toolkit` e instala os helpers canônicos `mcp-health.py`, `toggle-mcp.py` e `release.py` em `~/.config/opencode/scripts/`.
+- set up a new machine quickly
+- avoid coupling the environment to private dotfiles
+- keep team onboarding reproducible
+- start from a known-good OpenCode / AI tooling baseline
 
-## Índice
+## What this repository does
 
-- [Qual repositório usar?](#qual-repositório-usar)
-- [O que este repo faz](#o-que-este-repo-faz)
-- [Quick start](#quick-start)
-- [CI / verificação local](#ci--verificação-local)
-- [O que será instalado](#o-que-será-instalado)
-- [Autenticação guiada](#autenticação-guiada)
-- [O que será configurado para AI tools](#o-que-será-configurado-para-ai-tools)
-- [Fluxo diário](#fluxo-diário)
-- [Templates tmux por projeto](#templates-tmux-por-projeto)
-- [Shells suportados](#shells-suportados)
-- [Segredos locais](#segredos-locais)
-- [Observação importante sobre AI Agents, MCP e Skills](#observação-importante-sobre-ai-agents-mcp-e-skills)
+The bootstrap flow can:
 
-## O que este repo faz
+- install base dependencies on macOS, Ubuntu, and Windows
+- configure portable bash/zsh shell helpers
+- install the shared tmux workflow and project onboarding helpers
+- prepare optional iTerm2 setup on macOS
+- generate a portable OpenCode configuration baseline
+- create local environment files for secrets and provider-specific auth
 
-- instala dependências base em macOS, Ubuntu e Windows
-- configura shell helpers portáteis para bash/zsh
-- instala o workflow compartilhado de tmux
-- prepara onboarding por repositório com `.tmux-session.json`
-- oferece suporte opcional ao iTerm2 no macOS
-- prepara um ambiente base de OpenCode/AI tools com regras, config e diretórios de skills
+## Supported platforms
+
+| Platform | Bootstrap entrypoint | Notes                                                                      |
+| -------- | -------------------- | -------------------------------------------------------------------------- |
+| macOS    | `./bootstrap.sh`     | Optional iTerm2 support via `--with-iterm2`                                |
+| Ubuntu   | `./bootstrap.sh`     | Recommended Linux path                                                     |
+| Windows  | `./bootstrap.ps1`    | Best experience is still **WSL2 + Ubuntu** for the full bash/tmux workflow |
+
+## Prerequisites
+
+Before running the bootstrap:
+
+- install **Git**
+- have access to the target GitHub repositories you want to work with
+- be ready to authenticate providers after setup (`gh`, OpenCode, Claude Code, MCP providers)
+- on Windows, prefer **PowerShell as Administrator** for the bootstrap step
 
 ## Quick start
 
@@ -53,37 +60,21 @@ cd ai-dev-toolkit-setup
 ./bootstrap.sh
 ```
 
-Depois, valide o ambiente automaticamente:
+Validate the environment right after bootstrap:
 
 ```bash
 ./scripts/doctor.sh
 ```
 
-Com iTerm2 no macOS:
+macOS with iTerm2 extras:
 
 ```bash
 ./bootstrap.sh --with-iterm2
 ```
 
-## CI / verificação local
-
-O repo agora possui checks compartilhados para:
-
-- shell scripts
-- linting de shell
-- validação Python
-- smoke tests de funcionalidade
-- checks de versões/ferramentas
-
-Para rodar localmente:
-
-```bash
-bash ./scripts/ci-check.sh
-```
-
 ### Windows
 
-Abra PowerShell como administrador:
+Open PowerShell as Administrator:
 
 ```powershell
 git clone git@github.com:LucasSantana-Dev/ai-dev-toolkit-setup.git
@@ -91,51 +82,99 @@ cd ai-dev-toolkit-setup
 ./bootstrap.ps1
 ```
 
-> Para o workflow completo de tmux/bash, o caminho recomendado no Windows é usar **WSL2 + Ubuntu**.
+For the full toolkit workflow, the recommended Windows path is:
 
-## O que será instalado
+1. run the Windows bootstrap
+2. install or enable **WSL2 + Ubuntu**
+3. use the Linux shell workflow inside WSL for tmux/bash-first commands
+
+## What gets installed
+
+Base tools installed across platforms include:
 
 - Git
 - GitHub CLI (`gh`)
 - Node.js
 - Python 3
-- jq
-- ripgrep
-- fd
-- fzf
-- tmux
+- `jq`
+- `ripgrep`
+- `fd`
+- `fzf`
+- `tmux`
 - OpenCode CLI
-- Claude Code CLI / app bridge (quando suportado pela plataforma)
+- Claude Code CLI / bridge when the platform supports it
 
-Em macOS, o bootstrap também instala extras úteis via Homebrew:
-- zoxide
-- atuin
-- eza
-- bat
-- starship
-- direnv
+macOS also installs useful Homebrew extras such as:
 
-## Autenticação guiada
+- `zoxide`
+- `atuin`
+- `eza`
+- `bat`
+- `starship`
+- `direnv`
 
-Depois do bootstrap, você pode usar:
+## What gets configured
+
+The bootstrap prepares a portable baseline for AI tooling, including:
+
+- `~/.config/opencode/opencode.jsonc`
+- `~/.config/opencode/AGENTS.md`
+- `~/.config/opencode/dcp.jsonc`
+- `~/.opencode/skills/agents`
+- `~/.opencode/skills/codex`
+- `~/.config/ai-dev-toolkit/local.env`
+
+It also installs a starter pack of shared skills and leaves your local secrets/auth outside the repository.
+
+### Important boundary
+
+This repository prepares the **structure** and **baseline config**.
+
+It does **not** automatically install:
+
+- private tokens or secrets
+- proprietary third-party skills
+- provider authentication for every service
+
+Those stay manual on purpose.
+
+## First commands after installation
+
+Reload your shell and authenticate the essentials:
+
+```bash
+source ~/.bashrc   # or source ~/.zshrc
+gh auth login
+```
+
+When entering a repository, run:
+
+```bash
+repo-terminal-ready
+```
+
+If you want auto-apply onboarding when detected:
+
+```bash
+repo-terminal-ready-yes
+```
+
+## Guided authentication and MCP helpers
+
+Authenticate common AI tools:
 
 ```bash
 bash ./scripts/auth-ai-tools.sh
 ```
 
-Isso ajuda com:
-
-- `gh auth login`
-- orientação para `opencode auth login`
-- orientação para login do Claude Code
-
-Para MCPs com OAuth/autenticação, use:
+Authenticate MCP providers with OAuth or guided setup:
 
 ```bash
 bash ./scripts/auth-mcp-tools.sh
+bash ./scripts/auth-mcp-tools.sh linear
 ```
 
-Antes de autenticar, você também pode habilitar/desabilitar MCPs opcionais sem editar JSON manualmente:
+Manage optional MCP entries without hand-editing JSON:
 
 ```bash
 mcp-status
@@ -143,20 +182,16 @@ mcp-enable linear
 mcp-disable linear
 ```
 
-Ou diretamente para um provedor configurado, por exemplo:
-
-```bash
-bash ./scripts/auth-mcp-tools.sh linear
-```
-
-Depois, valide o estado live do MCP com:
+Validate live MCP health:
 
 ```bash
 mcp-health
 mcp-health linear
 ```
 
-Para planejar ou executar releases em outros repositórios preparados pelo toolkit:
+## Release helpers included in the setup
+
+If the target repository is prepared for it, the environment also exposes release helpers:
 
 ```bash
 release-plan --repo /path/to/repo --level patch --notes-file RELEASE_NOTES.md --changelog
@@ -167,134 +202,82 @@ release-tag --repo /path/to/repo --tag v1.2.3
 release-tag-github --repo /path/to/repo --tag v1.2.3
 ```
 
-Quando usar `--changelog`, o repositório alvo precisa ter `CHANGELOG.md` com uma seção `## [Unreleased]`.
+When using `--changelog`, the target repository must already have a `CHANGELOG.md` with an `## [Unreleased]` section.
 
-Observação: o pin atual deste repositório ainda é `TOOLKIT_VERSION=0.12.0`. Recursos novos do helper canônico — como release preflight / verify — só chegam aqui depois do próximo release tag do `ai-dev-toolkit` e de um bump explícito desse pin.
+## Repository structure
 
-Você pode verificar drift local do pin com `bash ./scripts/doctor.sh`. Se ele reportar `toolkit pin drift`, rode `bash scripts/setup-ai-tools.sh .` para re-sincronizar o ambiente com o `TOOLKIT_VERSION` deste repositório.
-
-Para verificar se já existe um release novo do toolkit antes de fazer bump do pin:
-
-```bash
-toolkit-version-check
-toolkit-version-prepare
-toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md
-toolkit-version-sync
+```text
+bootstrap.sh / bootstrap.ps1   Platform bootstrap entrypoints
+scripts/                       Install, validation, auth, and setup helpers
+config/                        Portable shell, tmux, OpenCode, and iTerm2 config
+templates/                     Local environment file templates
+.github/                       CI automation and shared checks
 ```
 
-Use `toolkit-version-prepare` para gerar um resumo pronto de PR sem alterar o `TOOLKIT_VERSION`. Só use `toolkit-version-sync` quando quiser aplicar o bump no arquivo local.
+Notable helpers:
 
-Se quiser salvar o corpo do PR em Markdown para reaproveitar no GitHub, use `toolkit-version-pr --pr-body-file TOOLKIT_BUMP_PR.md`.
+- `scripts/doctor.sh` — post-bootstrap validation
+- `scripts/ci-check.sh` — local verification aligned with CI
+- `scripts/auth-ai-tools.sh` — guided AI provider/tool auth
+- `scripts/auth-mcp-tools.sh` — MCP auth and health workflow
 
-## O que será configurado para AI tools
+## Validation and local CI
 
-O bootstrap agora também prepara:
-
-- `~/.config/opencode/opencode.jsonc`
-- `~/.config/opencode/AGENTS.md`
-- `~/.config/opencode/dcp.jsonc`
-- `~/.opencode/skills/agents`
-- `~/.opencode/skills/codex`
-- `~/.config/ai-dev-toolkit/local.env`
-
-E instala um starter pack de skills compartilhadas, incluindo:
-
-- `ai-toolkit-repo-intake`
-- `ai-toolkit-ship-check`
-- `ai-toolkit-release`
-- `ai-toolkit-mcp-health`
-- `ai-toolkit-worktree-flow`
-- `ai-toolkit-mcp-readiness`
-
-E um starter pack de skills `codex`, incluindo:
-
-- `ai-toolkit-plan-change`
-- `ai-toolkit-root-cause-debug`
-- `ai-toolkit-context-hygiene`
-
-Isso cobre a base de:
-
-- regras/guidance do OpenCode
-- configuração inicial de MCPs portáteis
-- estrutura local para skills
-- ambiente inicial para agentes
-- compressão de contexto e token optimization via DCP
-- plugins base para worktrees e memória local
-- comandos compartilhados para contexto, verificação e worktrees
-- entradas opcionais de MCPs hospedados para provedores comuns
-
-Ainda ficam manuais:
-
-- autenticação de provedores de IA
-- instalação de skills específicas de terceiros
-- secrets e tokens locais
-
-Mas o bootstrap agora já cria o arquivo base de ambiente local para você preencher:
+Run the shared verification pipeline locally:
 
 ```bash
-~/.config/ai-dev-toolkit/local.env
+bash ./scripts/ci-check.sh
 ```
 
-## Fluxo diário
+The checks cover:
 
-Depois do bootstrap:
+- shell script validation
+- shell linting
+- Python validation
+- smoke tests
+- version and tool checks
+
+## Troubleshooting
+
+### Bootstrap completed but some tools are missing
+
+Run:
 
 ```bash
-source ~/.bashrc   # ou source ~/.zshrc
-gh auth login
+./scripts/doctor.sh
 ```
 
-Em um repositório:
+Use the output to identify what failed before re-running the bootstrap.
+
+### Windows workflow feels incomplete
+
+That is expected if you stay in native PowerShell only. The advanced daily workflow is optimized for **bash/zsh**, so prefer **WSL2 + Ubuntu** after the initial Windows bootstrap.
+
+### MCP auth looks fine but commands still fail
+
+Re-run the provider-specific auth helper and then confirm live status:
 
 ```bash
-repo-terminal-ready
+bash ./scripts/auth-mcp-tools.sh <provider>
+mcp-health <provider>
 ```
 
-Ou, se quiser auto-aplicar onboarding detectado:
+### Unsure where to store secrets
 
-```bash
-repo-terminal-ready-yes
-```
-
-## Templates tmux por projeto
-
-Sugestão automática:
-
-```bash
-ttemplate-suggest
-ttemplate-preview
-ttemplate-apply
-```
-
-## Shells suportados
-
-- bash
-- zsh
-
-PowerShell pode ser usado para bootstrap no Windows, mas o workflow avançado do toolkit hoje é pensado principalmente para bash/zsh.
-
-## Segredos locais
-
-Use um arquivo local fora do repo, por exemplo:
+Use the local file outside the repo:
 
 ```bash
 ~/.config/ai-dev-toolkit/local.env
 ```
 
-Exemplo em `templates/local.env.example`.
+The bootstrap copies `templates/local.env.example` automatically if the file does not exist yet.
 
-O bootstrap copia esse template automaticamente se o arquivo ainda não existir.
+## Contributing and support
 
-## Observação importante sobre AI Agents, MCP e Skills
+- Open an issue if a platform-specific bootstrap step fails or docs are inaccurate.
+- Open a PR for fixes to scripts, templates, or setup docs.
+- When reporting a problem, include the output from `./scripts/doctor.sh` when possible.
 
-Este setup prepara a base compartilhada e portátil.
+## Related repository
 
-Ele **não depende de dotfiles pessoais**, mas também **não instala automaticamente segredos, tokens privados ou skills proprietárias**.
-
-Ou seja:
-
-- **configura a estrutura**
-- **gera os arquivos base**
-- **deixa o ambiente pronto**
-
-Mas ainda exige autenticação/segredos para uso completo de alguns provedores e ferramentas.
+- [`Forge-Space/ai-dev-toolkit`](https://github.com/Forge-Space/ai-dev-toolkit) — reusable rules, patterns, skills, companies, and reference setups
