@@ -1,6 +1,6 @@
 ---
 name: handoff-system
-description: Preserve session state across tool switches and context resets. Generate handoff at message 22 (auto) or on demand. Anti-false-completion: IMPLEMENT section prevents archiving-without-work.
+description: "Preserve session state across tool switches and context resets. Generate handoff at message 22 (auto) or on demand. Anti-false-completion: IMPLEMENT section prevents archiving-without-work."
 triggers:
   - /handoff
   - session limit approaching
