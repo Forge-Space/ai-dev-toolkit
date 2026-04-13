@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Gemini CLI (`@google/gemini-cli`) added as a first-class AI tool: `install_gemini()` in `scripts/install-ai-clis.sh`, auth guidance in `scripts/auth-ai-tools.sh`, and `GEMINI_API_KEY` in `templates/local.env.example`
+- `--work-mac` bootstrap flag: skips Homebrew-dependent installs for restricted corporate environments
+- `docs/work-mac-setup.md`: step-by-step guide for proxy-aware, sudo-free setup with Gemini CLI as the primary tool
+- macOS CI job (`macos-checks`) in `.github/workflows/ci.yml`
+
 ## [0.1.0] - 2026-04-03
 
 ### Added

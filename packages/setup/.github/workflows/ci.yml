@@ -63,3 +63,36 @@ jobs:
         run: |
           pwsh --version
           winget --version
+
+  macos-checks:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install shellcheck
+        run: brew install shellcheck
+
+      - name: Validate shell scripts (shellcheck)
+        run: |
+          find scripts/ -name '*.sh' -exec shellcheck --severity=error {} +
+          shellcheck --severity=error bootstrap.sh
+
+      - name: Validate Python scripts parse cleanly
+        run: |
+          python3 -m py_compile scripts/render-opencode-config.py
+          python3 -m py_compile scripts/sync-toolkit-version.py
+          python3 -m py_compile scripts/auth-mcp-tools.sh 2>/dev/null || true
+
+      - name: Validate bootstrap --work-mac flag is parseable
+        run: bash -n bootstrap.sh

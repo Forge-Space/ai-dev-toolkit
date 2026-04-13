@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WITH_ITERM2=false
 SHELL_TARGET="auto"
 SKIP_PACKAGES=false
+WORK_MAC=false
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
@@ -14,6 +15,10 @@ while [[ $# -gt 0 ]]; do
 		SHELL_TARGET="${1:-auto}"
 		;;
 	--skip-packages) SKIP_PACKAGES=true ;;
+	--work-mac)
+		SKIP_PACKAGES=true
+		WORK_MAC=true
+		;;
 	*)
 		printf 'Unknown argument: %s\n' "$1" >&2
 		exit 1
@@ -48,6 +53,12 @@ bash "$ROOT/scripts/setup-local-env.sh" "$ROOT"
 
 if [[ "$OS" == "Darwin" && "$WITH_ITERM2" == "true" ]]; then
 	bash "$ROOT/scripts/setup-iterm2.sh" "$ROOT"
+fi
+
+if $WORK_MAC; then
+	echo
+	echo "Work-Mac mode: skipping Homebrew-dependent installs."
+	echo "See docs/work-mac-setup.md for manual steps."
 fi
 
 bash "$ROOT/scripts/doctor.sh"

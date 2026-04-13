@@ -19,3 +19,11 @@ if command -v claude >/dev/null 2>&1; then
 	echo "Run: claude"
 	echo "Then use /login if prompted."
 fi
+
+if command -v gemini >/dev/null 2>&1; then
+	echo
+	echo "Gemini CLI auth:"
+	echo "  Option 1 (recommended for work): Set GEMINI_API_KEY in ~/.config/ai-dev-toolkit/local.env"
+	echo "  Option 2 (personal accounts): Run: gemini auth"
+	echo "  Get an API key at: https://aistudio.google.com/apikey"
+fi

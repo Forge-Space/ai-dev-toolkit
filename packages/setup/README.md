@@ -72,6 +72,14 @@ macOS with iTerm2 extras:
 ./bootstrap.sh --with-iterm2
 ```
 
+For work Macs (corporate proxy, no sudo):
+
+```bash
+./bootstrap.sh --work-mac
+```
+
+See [docs/work-mac-setup.md](docs/work-mac-setup.md) for details.
+
 ### Windows
 
 Open PowerShell as Administrator:
@@ -103,6 +111,7 @@ Base tools installed across platforms include:
 - `tmux`
 - OpenCode CLI
 - Claude Code CLI / bridge when the platform supports it
+- Gemini CLI
 
 macOS also installs useful Homebrew extras such as:
 

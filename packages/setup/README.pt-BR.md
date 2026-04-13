@@ -72,6 +72,14 @@ macOS com extras do iTerm2:
 ./bootstrap.sh --with-iterm2
 ```
 
+Para Macs corporativos (proxy, sem sudo):
+
+```bash
+./bootstrap.sh --work-mac
+```
+
+Veja [docs/work-mac-setup.md](docs/work-mac-setup.md) para mais detalhes.
+
 ### Windows
 
 Abra o PowerShell como administrador:
@@ -103,6 +111,7 @@ Ferramentas base instaladas nas plataformas suportadas:
 - `tmux`
 - OpenCode CLI
 - Claude Code CLI / bridge quando a plataforma suporta
+- Gemini CLI
 
 No macOS, o bootstrap também instala extras úteis via Homebrew, como:
 

@@ -101,8 +101,23 @@ install_openclaw() {
 	return 1
 }
 
+install_gemini() {
+	if command -v gemini >/dev/null 2>&1; then
+		return 0
+	fi
+
+	if command -v npm >/dev/null 2>&1; then
+		npm install -g @google/gemini-cli
+		return 0
+	fi
+
+	echo "Could not auto-install Gemini CLI (npm required). Install manually: npm install -g @google/gemini-cli" >&2
+	return 1
+}
+
 install_opencode || true
 install_claude || true
 install_rtk || true
 install_oh_my_openagents || true
 install_openclaw || true
+install_gemini || true
