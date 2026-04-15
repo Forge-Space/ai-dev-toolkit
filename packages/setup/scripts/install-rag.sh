@@ -9,6 +9,22 @@
 #   bash scripts/install-rag.sh --skip-build   # install only, no index build
 set -euo pipefail
 
+# Source optional .env to inherit RAG_* / HF_* variables consistently
+RAG_ENV_FILE="${RAG_ENV_FILE:-$HOME/.claude/rag-index/.env}"
+if [ -f "$RAG_ENV_FILE" ]; then
+  set -a
+  # shellcheck disable=SC1090
+  . "$RAG_ENV_FILE"
+  set +a
+fi
+
+# Copy .env.example from the toolkit as a starting point if user hasn't made one
+if [ -f "$TOOLKIT_REF/kit/rag/.env.example" ] && [ ! -f "$RAG_ENV_FILE" ]; then
+  mkdir -p "$(dirname "$RAG_ENV_FILE")"
+  cp "$TOOLKIT_REF/kit/rag/.env.example" "$RAG_ENV_FILE"
+  echo "seeded $RAG_ENV_FILE (edit before rerunning if you want work-mode / custom repos)"
+fi
+
 FORCE=0
 SKIP_BUILD=0
 for arg in "$@"; do

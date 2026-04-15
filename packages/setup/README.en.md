@@ -306,3 +306,12 @@ bash scripts/install-rag.sh
 ```
 
 Sets up a Python venv with `sentence-transformers` + `rank-bm25`, copies scripts to `~/.claude/rag-index/`, skills to `~/.claude/skills/`, and runs the first full index build. Idempotent; rerun with `--force` to refresh.
+
+### Work-mode install
+
+```bash
+export RAG_WORK_MODE=1 RAG_REPOS="$HOME/work/repo-a:$HOME/work/repo-b"
+bash scripts/install-rag.sh
+```
+
+Skips personal memory/plans/handoffs entirely; indexes only the listed repos. See `kit/rag/.env.example` in the companion `ai-dev-toolkit` repo for the full list of overrides.
