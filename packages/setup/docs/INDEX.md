@@ -7,7 +7,6 @@ This document lists all documentation files for `ai-dev-toolkit-setup`, with bri
 | File | Purpose | For Whom |
 |------|---------|----------|
 | [README.md](../README.md) | Quick start and overview | Everyone |
-| [ORG_SPLIT.md](ORG_SPLIT.md) | Why two repos? Org vs personal scope | Maintainers, contributors |
 | [OWNERSHIP.md](../OWNERSHIP.md) | File ownership: setup-owned vs toolkit-sourced | Developers, maintainers |
 | [TOOLKIT_COMPARISON.md](../TOOLKIT_COMPARISON.md) | Detailed responsibility split with examples | Developers, architects |
 | [TOOLKIT_VERSION.md](TOOLKIT_VERSION.md) | How to check and bump the toolkit version pin | Release engineers, contributors |
@@ -31,7 +30,6 @@ This document lists all documentation files for `ai-dev-toolkit-setup`, with bri
 **Understanding the codebase?** Read in this order:
 
 1. [OWNERSHIP.md](../OWNERSHIP.md) — which files live here vs upstream
-2. [ORG_SPLIT.md](ORG_SPLIT.md) — why the organization is split across two repos
 3. [TOOLKIT_COMPARISON.md](../TOOLKIT_COMPARISON.md) — what each repo is responsible for
 4. [TOOLKIT_VERSION.md](TOOLKIT_VERSION.md) — how to manage version bumps
 
@@ -55,7 +53,6 @@ This document lists all documentation files for `ai-dev-toolkit-setup`, with bri
 
 1. [CONTRIBUTING.md](../CONTRIBUTING.md) — contribution guidelines
 2. [OWNERSHIP.md](../OWNERSHIP.md) — understand which files to edit
-3. [ORG_SPLIT.md](ORG_SPLIT.md) — know when to contribute here vs upstream
 
 ---
 
@@ -72,7 +69,6 @@ This document lists all documentation files for `ai-dev-toolkit-setup`, with bri
 
 **Read if**: You're adding new files, modifying existing ones, or trying to understand the file structure.
 
-### ORG_SPLIT.md
 
 **Purpose**: Explain the organizational split between two repos.
 
