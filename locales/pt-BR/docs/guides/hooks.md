@@ -1,25 +1,25 @@
 ---
-status: draft
+status: published
 audience: technical
 primitive: hook
 ---
 
-# Hooks: Edit-Moment Gates
+# Hooks: Portais de Momento de Edição
 
-Three portable, optional hooks that run at edit moments. **Signature feature** — no public repo ships them.
+Três hooks portáveis e opcionais que executam em momentos de edição. **Recurso assinatura** — nenhum repositório público os oferece.
 
 ---
 
-## The Three Hooks
+## Os Três Hooks
 
 ### 1. post-edit-format.sh
-**When**: Immediately after you Write or Edit a file  
-**What**: Runs your repo's formatter (`npm run format`, `make format`, `black`, etc.)  
-**Output**: File formatted; advisory if formatting changes were made  
-**Default**: OFF (opt-in)
+**Quando**: Imediatamente após você Write ou Edit um arquivo  
+**O Que**: Executa o formatador do seu repo (`npm run format`, `make format`, `black`, etc.)  
+**Saída**: Arquivo formatado; aviso se mudanças foram feitas  
+**Padrão**: OFF (opt-in)
 
 ```bash
-# In your repo, runs automatically after edit:
+# No seu repo, executa automaticamente após editar:
 $ claude "refactor this function"
 [Claude writes code]
 [Hook runs: npm run format]
@@ -27,10 +27,10 @@ $ claude "refactor this function"
 ```
 
 ### 2. post-edit-typecheck.sh
-**When**: After Write / Edit  
-**What**: Runs type checker (`tsc --noEmit`, `mypy`, `go vet`)  
-**Output**: Type errors listed; blocks if strict mode  
-**Default**: OFF (opt-in, advisory mode)
+**Quando**: Depois de Write / Edit  
+**O Que**: Executa verificador de tipo (`tsc --noEmit`, `mypy`, `go vet`)  
+**Saída**: Erros de tipo listados; bloqueia se em modo strict  
+**Padrão**: OFF (opt-in, modo advisory)
 
 ```bash
 $ claude "add async timeout"
@@ -40,10 +40,10 @@ $ claude "add async timeout"
 ```
 
 ### 3. evaluate-response.sh
-**When**: After Claude finishes a response (PostToolUse)  
-**What**: Scans output for lazy patterns (`// TODO implement`, `pass`, empty functions)  
-**Output**: Warnings logged; never blocks  
-**Default**: OFF, env-gated (`RAG_HOOKS_EVALUATE=1`)
+**Quando**: Depois que Claude termina uma resposta (PostToolUse)  
+**O Que**: Escaneia saída por padrões lazy (`// TODO implement`, `pass`, funções vazias)  
+**Saída**: Avisos registrados; nunca bloqueia  
+**Padrão**: OFF, gated por env (`RAG_HOOKS_EVALUATE=1`)
 
 ```bash
 $ RAG_HOOKS_EVALUATE=1 claude "write the service"
@@ -54,66 +54,66 @@ $ RAG_HOOKS_EVALUATE=1 claude "write the service"
 
 ---
 
-## Installation
+## Instalação
 
-### Option A: Per-Project Setup
+### Opção A: Setup Por Projeto
 
 ```bash
 cd your-project
 bash /path/to/ai-dev-toolkit/ai-dev-toolkit-setup/scripts/install-rag.sh --with-hooks
 ```
 
-This:
-- Copies hooks to `~/.claude/hooks/`
-- Wires them in `settings.json`
-- Creates `.claude.local/hooks.json` with per-project toggles
+Isso:
+- Copia hooks para `~/.claude/hooks/`
+- Conecta em `settings.json`
+- Cria `.claude.local/hooks.json` com toggles por projeto
 
-### Option B: Global Setup
+### Opção B: Setup Global
 
 ```bash
 bash install-rag.sh --with-hooks --global
 ```
 
-Hooks apply to all projects. Per-project overrides via `.claude.local/`.
+Hooks se aplicam a todos os projetos. Overrides por projeto via `.claude.local/`.
 
 ---
 
-## Opt-In by Environment
+## Opt-In por Ambiente
 
-Each hook respects an environment variable:
+Cada hook respeita uma variável de ambiente:
 
 ```bash
-# Enable specific hooks for a session:
+# Abilitar hooks específicos para uma sessão:
 export RAG_HOOKS_FORMAT=1        # post-edit-format
 export RAG_HOOKS_TYPECHECK=1     # post-edit-typecheck
 export RAG_HOOKS_EVALUATE=1      # evaluate-response
 
-# Or disable:
+# Ou desabilitar:
 export RAG_HOOKS_FORMAT=0
 ```
 
-**Default**: All OFF unless explicitly enabled.
+**Padrão**: Todos OFF a menos que explicitamente habilitados.
 
 ---
 
-## Why "Signature Feature"?
+## Por Que "Recurso Assinatura"?
 
-**No other public AI dev toolkit ships edit-moment hooks.** Most solutions rely on:
-- Manual "did you run lint?" prompting
-- Post-session CI checks (late feedback)
-- No automated feedback at all
+**Nenhum outro toolkit de IA dev público oferece hooks de momento de edição.** A maioria das soluções confiam em:
+- Prompting manual "você rodou o lint?"
+- Verificações de CI pós-sessão (feedback tardio)
+- Nenhum feedback automatizado
 
-Our hooks run **immediately**, **optionally**, **without blocking**. They're:
-- ✓ Governance-safe (no execution, no secrets)
-- ✓ Portable (work with any formatter / type checker)
-- ✓ Silent by default (zero surprise on first install)
-- ✓ Composable (stack multiple hooks without conflict)
+Nossos hooks executam **imediatamente**, **opcionalmente**, **sem bloquear**. Eles são:
+- ✓ Seguros em governança (sem execução, sem segredos)
+- ✓ Portáveis (funcionam com qualquer formatador / verificador de tipo)
+- ✓ Silenciosos por padrão (zero surpresa na primeira instalação)
+- ✓ Compostos (empilhe múltiplos hooks sem conflito)
 
 ---
 
-## Implementation
+## Implementação
 
-Hooks are shell scripts in `kit/hooks/`:
+Hooks são scripts shell em `kit/hooks/`:
 
 ```bash
 kit/hooks/
@@ -122,29 +122,29 @@ kit/hooks/
 └── evaluate-response.sh
 ```
 
-Each script:
-1. **Checks prerequisites** (`command -v npm >/dev/null || exit 0`)
-2. **Runs the tool** (formatter, type-checker, or analyzer)
-3. **Logs output** (always to console, never silent)
-4. **Returns 0** (never blocks, even on failure in advisory mode)
+Cada script:
+1. **Verifica pré-requisitos** (`command -v npm >/dev/null || exit 0`)
+2. **Executa a ferramenta** (formatador, verificador de tipo, ou analisador)
+3. **Registra saída** (sempre para console, nunca silencioso)
+4. **Retorna 0** (nunca bloqueia, mesmo em falha em modo advisory)
 
 ---
 
 ## Troubleshooting
 
-**Q: Hook didn't run after I edited a file.**  
-A: Check if the hook is enabled in `settings.json`. Also verify the tool exists (`npm run format` should work manually first).
+**P: Hook não executou depois que editei um arquivo.**  
+R: Verifique se o hook está habilitado em `settings.json`. Também verifique se a ferramenta existe (`npm run format` deve funcionar manualmente primeiro).
 
-**Q: I'm getting false positives from evaluate-response.**  
-A: `evaluate-response` flags common placeholders (`// TODO`, `pass`, `...`). If your project legitimately uses these, set `RAG_HOOKS_EVALUATE=0`.
+**P: Estou recebendo falsos positivos do evaluate-response.**  
+R: `evaluate-response` marca placeholders comuns (`// TODO`, `pass`, `...`). Se seu projeto usa legitimamente estes, configure `RAG_HOOKS_EVALUATE=0`.
 
-**Q: Can I write my own hook?**  
-A: Yes. Copy the template from `kit/hooks/TEMPLATE.sh` and drop it in `~/.claude/hooks/`. It will be auto-discovered.
+**P: Posso escrever meu próprio hook?**  
+R: Sim. Copie o template de `kit/hooks/TEMPLATE.sh` e solte em `~/.claude/hooks/`. Ele será auto-descoberto.
 
 ---
 
-## Related
+## Relacionado
 
-- **Hooks in the primitive taxonomy**: [Primitives](./primitives.md)
-- **Full hook architecture**: `kit/hooks/README.md`
-- **Safety & governance**: [Governance](./governance.md)
+- **Hooks na taxonomia de primitivas**: [Primitivas](./primitives.md)
+- **Arquitetura completa de hooks**: `kit/hooks/README.md`
+- **Segurança e governança**: [Governança](./governance.md)

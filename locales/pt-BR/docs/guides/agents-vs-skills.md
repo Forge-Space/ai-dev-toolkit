@@ -1,116 +1,116 @@
 ---
-status: draft
+status: published
 audience: technical
 primitive: agent
 ---
 
-# Agents vs Skills: When to Pick Which
+# Agentes vs Skills: Quando Usar Cada Um
 
-**Skills** are verbs. **Agents** are nouns. How to tell them apart and which to use.
+**Skills** são verbos. **Agents** são nomes. Como diferenciá-los e qual usar.
 
 ---
 
-## Quick Comparison
+## Comparação Rápida
 
-| Aspect | Skill | Agent |
+| Aspecto | Skill | Agent |
 |--------|-------|-------|
-| **Name** | Verb (`plan`, `recall`, `review`, `dispatch`) | Noun (`code-reviewer`, `security-auditor`, `debugger`) |
-| **Activation** | Explicit (`/plan`, `/recall`) | Routed or auto-invoked |
-| **Scope** | Single task, reusable everywhere | Persona-driven, opinionated |
-| **Reasoning** | Procedural (step-by-step) | Argumentative (with opinions) |
-| **Sub-skills** | Independent | Picks its own skills; coordinated reasoning |
-| **Example** | "Outline a 5-step refactor" | "Review this code as a pragmatic reviewer" |
+| **Nome** | Verbo (`plan`, `recall`, `review`, `dispatch`) | Sustantivo (`code-reviewer`, `security-auditor`, `debugger`) |
+| **Ativação** | Explícita (`/plan`, `/recall`) | Roteada ou auto-invocada |
+| **Escopo** | Tarefa única, reutilizável em qualquer lugar | Dirigida por persona, opinada |
+| **Raciocínio** | Procedural (passo a passo) | Argumentativo (com opiniões) |
+| **Sub-skills** | Independentes | Escolhe suas próprias skills; raciocínio coordenado |
+| **Exemplo** | "Delinear um refactor de 5 passos" | "Revisar este código como um revisor pragmático" |
 
 ---
 
-## Decision Tree
+## Árvore de Decisão
 
-**You're designing a new tool. Should it be a skill or an agent?**
+**Você está projetando uma nova ferramenta. Deve ser uma skill ou um agent?**
 
 ```
-Does it have a strong persona or opinion?
-├─ YES → AGENT
-│        (e.g., "code-reviewer", "security-auditor")
-│        Reasoning is argumentative; persona matters.
+Possui uma persona ou opinião forte?
+├─ SIM → AGENT
+│        (ex: "code-reviewer", "security-auditor")
+│        Raciocínio é argumentativo; persona importa.
 │
-└─ NO → Is it a single, reusable task?
-         ├─ YES → SKILL
-         │        (e.g., "plan", "recall", "route")
-         │        Pure utility; works anywhere.
+└─ NÃO → É uma tarefa única e reutilizável?
+         ├─ SIM → SKILL
+         │        (ex: "plan", "recall", "route")
+         │        Utilidade pura; funciona em qualquer lugar.
          │
-         └─ NO → Maybe it's a pattern, not a tool.
-                  Write it in `patterns/` or link from a skill.
+         └─ NÃO → Talvez seja um padrão, não uma ferramenta.
+                  Escreva em `patterns/` ou faça link de uma skill.
 ```
 
 ---
 
-## Examples
+## Exemplos
 
 ### Skill: `/plan`
 ```
-User: "Plan a database refactor"
-Skill: Outline 5 steps, identify risks, suggest review points
-Output: Structured plan (text)
+Usuário: "Plan a database refactor"
+Skill: Delinea 5 passos, identifica riscos, sugere pontos de revisão
+Saída: Plano estruturado (texto)
 ```
 
-No persona. Just a useful procedure. Reusable for any task type.
+Sem persona. Apenas um procedimento útil. Reutilizável para qualquer tipo de tarefa.
 
 ### Agent: `code-reviewer`
 ```
-User: "Review this PR"
-Agent: Loads "code-reviewer" persona
-Agent: Thinks like a pragmatic reviewer
-Agent: Picks `/review` skill + `/recall` for patterns
-Agent: Reasons: "This style is OK, but performance issue here..."
-Output: Opinionated feedback
+Usuário: "Review this PR"
+Agent: Carrega a persona "code-reviewer"
+Agent: Pensa como um revisor pragmático
+Agent: Escolhe a skill `/review` + `/recall` para padrões
+Agent: Raciocina: "Este estilo é OK, mas há problema de performance aqui..."
+Saída: Feedback opinado
 ```
 
-Strong persona. Coordinated reasoning across multiple skills. Reusable across projects.
+Persona forte. Raciocínio coordenado entre múltiplas skills. Reutilizável em projetos.
 
 ---
 
-## Naming Discipline
+## Disciplina de Nomes
 
-**Skills**: Action verbs
+**Skills**: Verbos de ação
 - `plan.md`, `recall.md`, `review.md`, `dispatch.md`, `route.md`, `schedule.md`, `eval.md`, `learn.md`
 
-**Agents**: Role nouns
+**Agents**: Sustantivos de papel
 - `code-reviewer`, `security-auditor`, `systematic-debugger`, `database-reviewer`, `ultrathink-debugger`
 
-**Why?** When you see `/plan` in a prompt, you know it's a task. When you see `code-reviewer`, you know it's a persona. Naming = intent.
+**Por quê?** Quando você vê `/plan` em um prompt, você sabe que é uma tarefa. Quando você vê `code-reviewer`, você sabe que é uma persona. Nomes = intenção.
 
 ---
 
-## Mixing & Matching
+## Misturando e Combinando
 
-You **can** have a skill-agent hybrid (rare):
+Você **pode** ter um híbrido skill-agent (raro):
 
-- Skill: `kit/core/skills/review.md` (generic review procedure)
-- Agent: `kit/core/agents/code-reviewer` (pragmatic persona + calls review skill)
+- Skill: `kit/core/skills/review.md` (procedimento de revisão genérico)
+- Agent: `kit/core/agents/code-reviewer` (persona pragmática + chama skill review)
 
-The agent loads the skill + adds opinionated reasoning.
+O agent carrega a skill + adiciona raciocínio opinado.
 
 ---
 
-## Creating Your Own
+## Criando o Seu
 
-### Add a Skill
-1. File: `kit/core/skills/your-task.md`
+### Adicionar uma Skill
+1. Arquivo: `kit/core/skills/your-task.md`
 2. Frontmatter: `primitive: skill`, `trigger: /your-task`
-3. Body: Steps, examples, output format
-4. Test: Can it work in any project? If yes, it's a skill.
+3. Corpo: Passos, exemplos, formato de saída
+4. Teste: Pode funcionar em qualquer projeto? Se sim, é uma skill.
 
-### Add an Agent
-1. Directory: `kit/core/agents/your-persona/`
-2. Files: `agent.md` (persona), `SKILL.md` (activation)
+### Adicionar um Agent
+1. Diretório: `kit/core/agents/your-persona/`
+2. Arquivos: `agent.md` (persona), `SKILL.md` (ativação)
 3. Frontmatter: `primitive: agent`, `persona: "..."`
-4. Test: Does it have opinions? Does it coordinate multiple skills? If yes, it's an agent.
+4. Teste: Possui opiniões? Coordena múltiplas skills? Se sim, é um agent.
 
 ---
 
-## Related
+## Relacionado
 
-- **Primitives** in full: [Primitives](./primitives.md)
-- **Agent-driven development** (ADD): [Agent-Driven Development](./agent-driven-development.md)
-- **Skill examples**: `kit/core/skills/`
-- **Agent examples**: `kit/core/agents/`
+- **Primitivas** em cheio: [Primitivas](./primitives.md)
+- **Desenvolvimento orientado a agents** (ADD): [Desenvolvimento Orientado a Agents](./agent-driven-development.md)
+- **Exemplos de skills**: `kit/core/skills/`
+- **Exemplos de agents**: `kit/core/agents/`

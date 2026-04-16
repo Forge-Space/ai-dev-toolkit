@@ -1,73 +1,73 @@
 ---
-status: draft
+status: published
 audience: all
 primitive: mixed
 ---
 
-# Primitives: Rules, Skills, Agents, Hooks
+# Primitivos: Rules, Skills, Agents, Hooks
 
-Four core concepts. One decision flowchart. ≤1 minute to answer "what should this be?"
-
----
-
-## The Four Primitives
-
-| Primitive | Example | When | Lifecycle | Input | Output |
-|-----------|---------|------|-----------|-------|--------|
-| **Rule** | `rules/CLAUDE.md` | Define default behavior, coding standards, security gates | Load once at session start, never reload | Text file in Git | Loaded into AI tool config |
-| **Skill** | `kit/core/skills/plan.md` | Single, reusable task (recall, plan, dispatch, review) | Invoked by user or agent on demand | Activation phrase (`/plan`) | Structured output (analysis, code, advice) |
-| **Agent** | `kit/core/agents/code-reviewer` | Persona with opinions (auditor, debugger, reviewer) | Session-level; routed to by command or auto-invoke | Problem statement | Deep analysis, persona-driven reasoning |
-| **Hook** | `kit/hooks/post-edit-typecheck.sh` | Auto-run at edit moments (after Write, before Submit) | Triggered by editor/harness lifecycle event | File changes, response body | Advisory messages, optional blocking |
+Quatro conceitos principais. Um fluxograma de decisão. ≤1 minuto para responder "o que isso deveria ser?"
 
 ---
 
-## Decision Flowchart
+## Os Quatro Primitivos
 
-**Question: I want to add something. Should it be a Rule, Skill, Agent, or Hook?**
+| Primitivo | Exemplo | Quando | Ciclo de Vida | Entrada | Saída |
+|-----------|---------|--------|---------------|---------|-------|
+| **Rule** | `rules/CLAUDE.md` | Defina comportamento padrão, padrões de codificação, gates de segurança | Carregue uma vez no início da sessão, nunca recarregue | Arquivo de texto em Git | Carregado em config de ferramenta de IA |
+| **Skill** | `kit/core/skills/plan.md` | Tarefa única e reutilizável (recall, plan, dispatch, review) | Invocado por usuário ou agente sob demanda | Frase de ativação (`/plan`) | Saída estruturada (análise, código, conselho) |
+| **Agent** | `kit/core/agents/code-reviewer` | Persona com opiniões (auditor, debugger, revisor) | Nível de sessão; encaminhado por comando ou auto-invoke | Declaração de problema | Análise profunda, raciocínio orientado por persona |
+| **Hook** | `kit/hooks/post-edit-typecheck.sh` | Auto-executar em momentos de edição (após Write, antes de Submit) | Acionado por evento de ciclo de vida do editor/harness | Mudanças de arquivo, corpo de resposta | Mensagens de aviso, bloqueio opcional |
 
-Start here:
+---
+
+## Fluxograma de Decisão
+
+**Pergunta: Quero adicionar algo. Deveria ser uma Rule, Skill, Agent ou Hook?**
+
+Comece aqui:
 
 ```
-Is it always-on behavior that shapes every response?
-├─ YES → RULE
-│        (coding standard, security policy, workflow gate)
+É um comportamento sempre ativo que molda cada resposta?
+├─ SIM → RULE
+│        (padrão de codificação, política de segurança, gate de workflow)
 │
-└─ NO → Is it a single, reusable task invoked on demand?
-         ├─ YES → SKILL
+└─ NÃO → É uma tarefa única e reutilizável invocada sob demanda?
+         ├─ SIM → SKILL
          │        (plan, recall, review, dispatch, route)
          │
-         └─ NO → Does it have a persona or deep reasoning?
-                  ├─ YES → AGENT
+         └─ NÃO → Tem uma persona ou raciocínio profundo?
+                  ├─ SIM → AGENT
                   │        (code-reviewer, auditor, debugger)
                   │
-                  └─ NO → Does it run at an edit moment (post-Write, post-Submit)?
-                           ├─ YES → HOOK
+                  └─ NÃO → Executa em um momento de edição (post-Write, post-Submit)?
+                           ├─ SIM → HOOK
                            │        (format, typecheck, evaluate-response)
                            │
-                           └─ NO → Needs design; reach out to maintainers
+                           └─ NÃO → Precisa de design; entre em contato com maintainers
 ```
 
 ---
 
-## Examples
+## Exemplos
 
-**"I want the AI to always follow PEP-8"** → Rule (`rules/GEMINI.md`)  
-**"I want to analyze code coverage gaps"** → Skill (`kit/core/skills/coverage.md`)  
-**"I want a persona that catches security flaws"** → Agent (`kit/core/agents/security-auditor`)  
-**"I want to auto-format after every edit"** → Hook (`kit/hooks/post-edit-format.sh`)
-
----
-
-## Cross-Reference
-
-- **Naming discipline**: Skills are **verb-named** (`plan.md`, `recall.md`). Agents are **noun-named** (`code-reviewer`, `security-auditor`).
-- **Vendor coverage**: Rules are vendor-specific (CLAUDE.md, COPILOT.md, GEMINI.md). Skills and agents are vendor-neutral (called from any tool).
-- **Scope**: Rules are repo-wide. Skills and agents are tool-wide (reused across repos). Hooks are repo-scoped (optional per-project setup).
-
-See [Agents vs Skills](./agents-vs-skills.md) for detailed comparison.
+**"Quero que a IA sempre siga PEP-8"** → Rule (`rules/GEMINI.md`)  
+**"Quero analisar gaps de cobertura de código"** → Skill (`kit/core/skills/coverage.md`)  
+**"Quero uma persona que pegue falhas de segurança"** → Agent (`kit/core/agents/security-auditor`)  
+**"Quero auto-format após cada edição"** → Hook (`kit/hooks/post-edit-format.sh`)
 
 ---
 
-## If You're Still Unsure
+## Referência Cruzada
 
-Use `/recall "primitives rules skills agents hooks"` to search for similar decisions, or open an issue on GitHub.
+- **Disciplina de nomeação**: Skills são **nomeadas com verbos** (`plan.md`, `recall.md`). Agentes são **nomeados com substantivos** (`code-reviewer`, `security-auditor`).
+- **Cobertura de vendor**: Rules são específicas do vendor (CLAUDE.md, COPILOT.md, GEMINI.md). Skills e agentes são agnósticos de vendor (chamados de qualquer ferramenta).
+- **Escopo**: Rules são repo-wide. Skills e agentes são tool-wide (reutilizados entre repos). Hooks são repo-scoped (setup opcional por projeto).
+
+Veja [Agentes vs Skills](./agents-vs-skills.md) para comparação detalhada.
+
+---
+
+## Se Você Ainda Tiver Dúvida
+
+Use `/recall "primitives rules skills agents hooks"` para buscar decisões similares, ou abra uma issue no GitHub.

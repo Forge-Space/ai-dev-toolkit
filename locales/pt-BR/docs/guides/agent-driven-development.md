@@ -1,64 +1,64 @@
 ---
-status: draft
+status: published
 audience: all
 primitive: agent
 ---
 
-# Agent-Driven Development (ADD)
+# Desenvolvimento Orientado a Agentes (ADD)
 
-**Command → Agent → Skill Orchestration**
+**Comando → Agent → Orquestração de Skills**
 
-Route complex tasks to the right persona. Agents pick their own tools.
+Rotear tarefas complexas para a persona correta. Agents escolhem suas próprias ferramentas.
 
 ---
 
-## The Model
+## O Modelo
 
 ```
 User Command
     ↓
-[agents.json] ← routing table
+[agents.json] ← tabela de roteamento
     ↓
-Persona Agent (e.g., code-reviewer, auditor)
+Persona Agent (ex: code-reviewer, auditor)
     ↓
-Agent picks best skill(s) (plan, dispatch, recall, route)
+Agent escolhe melhor(es) skill(s) (plan, dispatch, recall, route)
     ↓
-Skill executes; agent reasons on result
+Skill executa; agent raciocina sobre o resultado
     ↓
-Insight or artifact back to user
+Insight ou artefato de volta para o usuário
 ```
 
-No prompt engineering. No "call skill X then skill Y". **Declare the goal; agent handles routing.**
+Sem engenharia de prompts. Sem "chame skill X depois skill Y". **Declare o objetivo; agent cuida do roteamento.**
 
 ---
 
-## Example
+## Exemplo
 
-**You say**: "Review this PR for security flaws"
+**Você diz**: "Revise este PR em busca de falhas de segurança"
 
-**Without ADD**: You craft a 500-word prompt about what to check, run `/review` manually.
+**Sem ADD**: Você elabora um prompt de 500 palavras sobre o que verificar, executa `/review` manualmente.
 
-**With ADD**: You say `/security-review` → Agent reads `agents.json` → Persona is "security-auditor" → Agent auto-picks `kit/core/skills/review.md` + threat-model reasoning → Returns vulnerability list.
+**Com ADD**: Você diz `/security-review` → Agent lê `agents.json` → Persona é "security-auditor" → Agent escolhe automaticamente `kit/core/skills/review.md` + raciocínio de modelo de ameaça → Retorna lista de vulnerabilidades.
 
 ---
 
-## How It Works
+## Como Funciona
 
-### 1. Define Agents
-Each agent is a **persona + trigger** in `kit/core/agents/`.
+### 1. Defina Agents
+Cada agent é uma **persona + trigger** em `kit/core/agents/`.
 
-Example: `code-reviewer/`
+Exemplo: `code-reviewer/`
 ```
 name: Code Reviewer
 trigger: /review
-persona: "You are a pragmatic code reviewer..."
+persona: "Você é um code reviewer pragmático..."
 skills: [plan, dispatch, recall, review]
-do_this: "Catch correctness, performance, style issues"
-dont_do_this: "Suggest perfect-code refactors; ask for specs"
-handoff_back: "Return focused, actionable feedback"
+do_this: "Capture problemas de correção, performance e estilo"
+dont_do_this: "Sugira refatorações de código perfeito; peça specs"
+handoff_back: "Retorne feedback focado e acionável"
 ```
 
-### 2. Register in `agents.json`
+### 2. Registre em `agents.json`
 ```json
 {
   "agents": [
@@ -71,34 +71,34 @@ handoff_back: "Return focused, actionable feedback"
 }
 ```
 
-### 3. Auto-Invoke (Optional)
-When enabled, the harness auto-picks an agent based on your command type:
-- "Review this code" → routes to code-reviewer agent
-- "Find security issues" → routes to security-auditor agent
-- "Debug this error" → routes to systematic-debugger agent
+### 3. Auto-Invoke (Opcional)
+Quando habilitado, o harness escolhe automaticamente um agent baseado no tipo de comando:
+- "Revise este código" → roteia para agent code-reviewer
+- "Encontre problemas de segurança" → roteia para agent security-auditor
+- "Debugue este erro" → roteia para agent systematic-debugger
 
-See `kit/core/skills/auto-invoke.md`.
+Veja `kit/core/skills/auto-invoke.md`.
 
 ---
 
-## Agents in This Kit
+## Agents Neste Kit
 
-| Agent | Persona | When to Use |
+| Agent | Persona | Quando Usar |
 |-------|---------|-------------|
-| `code-reviewer` | Pragmatic, feedback-focused | Code reviews, quality gates |
-| `security-auditor` | Threat-model thinking | Security reviews, compliance checks |
-| `systematic-debugger` | Root-cause detective | Bug diagnosis, error traces |
-| `database-reviewer` | Data-design specialist | Schema reviews, migration checks |
-| `ultrathink-debugger` | Deep reasoning | Complex, multi-system bugs |
+| `code-reviewer` | Pragmático, focado em feedback | Code reviews, quality gates |
+| `security-auditor` | Pensamento de modelo de ameaça | Revisões de segurança, checks de conformidade |
+| `systematic-debugger` | Detetive de causa raiz | Diagnóstico de bugs, rastreamento de erros |
+| `database-reviewer` | Especialista em design de dados | Revisões de schema, checks de migration |
+| `ultrathink-debugger` | Raciocínio profundo | Bugs complexos multi-sistema |
 
 ---
 
-## Related
+## Relacionado
 
 - **Skills vs Agents**: [Agents vs Skills](./agents-vs-skills.md)
-- **Auto-invoke mechanics**: `kit/core/skills/auto-invoke.md`
-- **Routing patterns**: `kit/core/skills/route.md`
+- **Mecânica auto-invoke**: `kit/core/skills/auto-invoke.md`
+- **Padrões de roteamento**: `kit/core/skills/route.md`
 
 ---
 
-See [Primitives](./primitives.md) for decision flowchart.
+Veja [Primitives](./primitives.md) para flowchart de decisão.

@@ -1,65 +1,65 @@
 ---
-status: draft
+status: published
 audience: all
 primitive: mixed
 ---
 
-# AI-Assisted Development (AAD)
+# Desenvolvimento Assistido por IA (AAD)
 
-**Context + Standards + Gates = Repeatable Quality**
+**Contexto + Padrões + Gates = Qualidade Repetível**
 
-The AAD pillar ensures every AI response respects your project's norms before the first word is written.
-
----
-
-## Three Layers
-
-### 1. Context Layer
-What the AI tool *knows* before you ask.
-
-- **Rules file** (`rules/CLAUDE.md`): Load-time config. Coding standards, testing expectations, security boundaries.
-- **Best practices** (`best-practices/`): Checklists. Branching, commits, code review gates.
-- **Patterns** (`patterns/`): Handbook. Multi-model routing, session management, memory systems, git workflows.
-
-**Benefit**: No "remind me of the standard every session" overhead.
-
-### 2. Standards Layer
-What gets enforced *during* development.
-
-- **Linting**: Pre-commit hooks catch style issues.
-- **Testing**: Every PR requires test coverage.
-- **Type checking**: TypeScript / mypy / go vet before merge.
-- **Security scanning**: Sliced standards keep secrets out of the index.
-
-**Benefit**: Fewer review cycles; gating is declarative, not tribal knowledge.
-
-### 3. Gates Layer
-What must pass *before* merge.
-
-- **CI checks**: Lint ✓ type ✓ test ✓
-- **Code review**: Human or AI-assisted (via agent).
-- **Spec attachment**: Every feature has a decision record.
-
-**Benefit**: Audit trail; no "I thought it was done" surprises.
+O pilar AAD garante que cada resposta da IA respeite as normas do seu projeto antes da primeira palavra ser escrita.
 
 ---
 
-## Workflow
+## Três Camadas
 
-1. **Setup** (5 min): Copy `rules/` file. Customize coding standards.
-2. **Enable skills** (10 min): `/recall`, `/plan`, `/dispatch` on sprints.
-3. **Iterate**: AI respects your standards in every response.
-4. **Gate**: CI catches issues before human review.
-5. **Record**: Spec `docs/specs/` folder feeds the roadmap.
+### 1. Camada de Contexto
+O que a ferramenta de IA *sabe* antes de você perguntar.
+
+- **Arquivo de regras** (`rules/CLAUDE.md`): Configuração no carregamento. Padrões de codificação, expectativas de testes, limites de segurança.
+- **Melhores práticas** (`best-practices/`): Checklists. Branching, commits, gates de code review.
+- **Padrões** (`patterns/`): Manual. Roteamento multi-modelo, gerenciamento de sessão, sistemas de memória, fluxos Git.
+
+**Benefício**: Zero "me lembrança do padrão a cada sessão".
+
+### 2. Camada de Padrões
+O que é executado *durante* o desenvolvimento.
+
+- **Linting**: Hooks pré-commit capturam problemas de estilo.
+- **Testes**: Cada PR requer cobertura de testes.
+- **Type checking**: TypeScript / mypy / go vet antes de merge.
+- **Scanning de segurança**: Padrões fatiados mantêm segredos fora do índice.
+
+**Benefício**: Menos ciclos de review; gating é declarativo, não conhecimento tribal.
+
+### 3. Camada de Gates
+O que deve passar *antes* de merge.
+
+- **Checks CI**: Lint ✓ type ✓ test ✓
+- **Code review**: Humano ou assistido por IA (via agent).
+- **Anexação de spec**: Cada feature tem um registro de decisão.
+
+**Benefício**: Trilha de auditoria; sem surpresas "achei que estava feito".
 
 ---
 
-## Related
+## Fluxo de Trabalho
 
-- **Rules** in detail: [Conventions as Code](./conventions-as-code.md)
-- **Skills** that support AAD: See `kit/core/skills/plan.md`, `kit/core/skills/review.md`
-- **Governance** for teams: [Governance](./governance.md)
+1. **Setup** (5 min): Copie arquivo `rules/`. Customize os padrões de codificação.
+2. **Ativar skills** (10 min): `/recall`, `/plan`, `/dispatch` nos sprints.
+3. **Iterar**: IA respeita seus padrões em cada resposta.
+4. **Gate**: CI captura problemas antes de review humano.
+5. **Registrar**: Pasta spec `docs/specs/` alimenta o roadmap.
 
 ---
 
-For full context, see [AI_ASSISTED_DEVELOPMENT_SUMMARY.md](../AI_ASSISTED_DEVELOPMENT_SUMMARY.md).
+## Relacionado
+
+- **Regras** em detalhes: [Convenções como Código](./conventions-as-code.md)
+- **Skills** que suportam AAD: Veja `kit/core/skills/plan.md`, `kit/core/skills/review.md`
+- **Governança** para times: [Governança](./governance.md)
+
+---
+
+Para contexto completo, veja [AI_ASSISTED_DEVELOPMENT_SUMMARY.md](../AI_ASSISTED_DEVELOPMENT_SUMMARY.md).

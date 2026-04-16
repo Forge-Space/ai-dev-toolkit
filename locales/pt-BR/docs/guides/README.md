@@ -1,34 +1,34 @@
 ---
-status: draft
+status: published
 audience: all
 ---
 
-# AI Dev Toolkit Guides
+# Guias do AI Dev Toolkit
 
-Batteries-included, opt-in-per-skill reference layer for AI-assisted development. Thin pointers into existing skills, rules, and patterns — not re-documentation.
+Camada de referência com baterias incluídas, opt-in por skill. Ponteiros diretos para skills, regras e padrões existentes — não é re-documentação.
 
-Pick your entry point:
+Escolha seu ponto de entrada:
 
-## First Time Here?
-- **[Getting Started](./getting-started.md)** — 10-minute clone → install → first query (5 min read)
+## Primeira Vez Aqui?
+- **[Primeiros Passos](./getting-started.md)** — clone → instale → primeira query em 10 minutos (5 min de leitura)
 
-## By Role
-- **[For Individual Devs](./for-individual-devs.md)** — personal workflows, skill map, plan → ship → spec loop (8 min)
-- **[For Teams](./for-teams.md)** — adoption, governance, compliance Q&A at work (12 min)
+## Por Papel
+- **[Para Desenvolvedores Individuais](./for-individual-devs.md)** — workflows pessoais, mapa de skills, ciclo planejar → entregar → especificar (8 min)
+- **[Para Times](./for-teams.md)** — adoção, governança, perguntas de conformidade no trabalho (12 min)
 
-## Core Concepts
-- **[Primitives](./primitives.md)** — 4-primitive model: Rules, Skills, Agents, Hooks. Decision flowchart: "What should this be?" (7 min)
-- **[AI-Assisted Development](./ai-assisted-development.md)** — AAD pillar: context, standards, gates, memory (6 min)
-- **[Agent-Driven Development](./agent-driven-development.md)** — ADD pillar: agents.json, auto-invoke, Command → Agent → Skill (8 min)
-- **[Agents vs Skills](./agents-vs-skills.md)** — when to pick noun-named agents over verb-named skills (3 min)
-- **[Conventions as Code](./conventions-as-code.md)** — rules/ rendering, tool-overlay model, sliced standards (5 min)
+## Conceitos Principais
+- **[Primitivos](./primitives.md)** — modelo de 4 primitivos: Rules, Skills, Agents, Hooks. Fluxograma de decisão: "O que isso deveria ser?" (7 min)
+- **[Desenvolvimento Assistido por IA](./ai-assisted-development.md)** — pilar AAD: contexto, padrões, gates, memória (6 min)
+- **[Desenvolvimento Dirigido por Agentes](./agent-driven-development.md)** — pilar ADD: agents.json, auto-invoke, Comando → Agente → Skill (8 min)
+- **[Agentes vs Skills](./agents-vs-skills.md)** — quando escolher agentes nomeados com substantivos em vez de skills nomeadas com verbos (3 min)
+- **[Convenções como Código](./conventions-as-code.md)** — renderização de rules/, modelo de sobreposição de ferramentas, padrões fatiados (5 min)
 
-## Operations
-- **[Hooks](./hooks.md)** — edit-moment hooks pack: format, typecheck, evaluate-response. Signature feature (6 min)
-- **[Governance](./governance.md)** — compliance Q&A: data, secrets, deps, audit, chezmoi vs dual-branch (10 min)
-- **[Tool Matrix](./tool-matrix.md)** — skill × tool (Claude Code / Codex / Cursor / Copilot / Gemini) × primitive (4 min)
-- **[Benchmarks](./benchmarks.md)** — eval numbers, methodology, reproduction (3 min)
+## Operações
+- **[Hooks](./hooks.md)** — pacote de hooks no momento da edição: format, typecheck, evaluate-response. Recurso de assinatura (6 min)
+- **[Governança](./governance.md)** — Q&A de conformidade: dados, segredos, dependências, auditoria, chezmoi vs dual-branch (10 min)
+- **[Matriz de Ferramentas](./tool-matrix.md)** — skill × ferramenta (Claude Code / Codex / Cursor / Copilot / Gemini) × primitivo (4 min)
+- **[Benchmarks](./benchmarks.md)** — números de avaliação, metodologia, reprodução (3 min)
 
 ---
 
-Internal links assume `docs/guides/` as root. See [AI_ASSISTED_DEVELOPMENT_SUMMARY.md](../AI_ASSISTED_DEVELOPMENT_SUMMARY.md) for repository overview.
+Links internos assumem `docs/guides/` como raiz. Veja [AI_ASSISTED_DEVELOPMENT_SUMMARY.md](../AI_ASSISTED_DEVELOPMENT_SUMMARY.md) para visão geral do repositório.
