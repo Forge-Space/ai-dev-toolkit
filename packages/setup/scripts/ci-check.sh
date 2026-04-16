@@ -92,31 +92,31 @@ printf '%s\n' "$repo_toolkit_version" >"$HOME/.config/ai-dev-toolkit/.toolkit-ve
 
 cat >"$tmpdir/toolkit-releases.json" <<'EOF'
 [
-  {"tag_name":"v0.12.1","draft":false,"prerelease":false},
-  {"tag_name":"v0.12.0","draft":false,"prerelease":false}
+  {"tag_name":"v0.14.1","draft":false,"prerelease":false},
+  {"tag_name":"v0.14.0","draft":false,"prerelease":false}
 ]
 EOF
-printf '0.12.0\n' >"$tmpdir/TOOLKIT_VERSION"
+printf '0.14.0\n' >"$tmpdir/TOOLKIT_VERSION"
 python3 "$ROOT/scripts/sync-toolkit-version.py" --version-file "$tmpdir/TOOLKIT_VERSION" --releases-file "$tmpdir/toolkit-releases.json" >"$tmpdir/toolkit-version-check.txt"
-grep -q '^current: v0.12.0$' "$tmpdir/toolkit-version-check.txt"
-grep -q '^latest: v0.12.1$' "$tmpdir/toolkit-version-check.txt"
+grep -q '^current: v0.14.0$' "$tmpdir/toolkit-version-check.txt"
+grep -q '^latest: v0.14.1$' "$tmpdir/toolkit-version-check.txt"
 grep -q '^action: update available$' "$tmpdir/toolkit-version-check.txt"
 python3 "$ROOT/scripts/sync-toolkit-version.py" --version-file "$tmpdir/TOOLKIT_VERSION" --releases-file "$tmpdir/toolkit-releases.json" --prepare-pr >"$tmpdir/toolkit-version-prepare.txt"
 grep -q '^action: prepare toolkit bump$' "$tmpdir/toolkit-version-prepare.txt"
-grep -q '^commit-message: chore: bump toolkit version to v0.12.1$' "$tmpdir/toolkit-version-prepare.txt"
-grep -q '^pr-title: chore: bump toolkit version to v0.12.1$' "$tmpdir/toolkit-version-prepare.txt"
+grep -q '^commit-message: chore: bump toolkit version to v0.14.1$' "$tmpdir/toolkit-version-prepare.txt"
+grep -q '^pr-title: chore: bump toolkit version to v0.14.1$' "$tmpdir/toolkit-version-prepare.txt"
 grep -q '^## Summary$' "$tmpdir/toolkit-version-prepare.txt"
-grep -qx '0.12.0' "$tmpdir/TOOLKIT_VERSION"
+grep -qx '0.14.0' "$tmpdir/TOOLKIT_VERSION"
 python3 "$ROOT/scripts/sync-toolkit-version.py" --version-file "$tmpdir/TOOLKIT_VERSION" --releases-file "$tmpdir/toolkit-releases.json" --prepare-pr --pr-body-file "$tmpdir/toolkit-version-pr.md" >"$tmpdir/toolkit-version-pr.txt"
 grep -q '^action: prepare toolkit bump$' "$tmpdir/toolkit-version-pr.txt"
-grep -q '^commit-message: chore: bump toolkit version to v0.12.1$' "$tmpdir/toolkit-version-pr.txt"
+grep -q '^commit-message: chore: bump toolkit version to v0.14.1$' "$tmpdir/toolkit-version-pr.txt"
 grep -q '^pr-body-file: ' "$tmpdir/toolkit-version-pr.txt"
 grep -q '^## Summary$' "$tmpdir/toolkit-version-pr.md"
-grep -q 'Bump TOOLKIT_VERSION from v0.12.0 to v0.12.1.' "$tmpdir/toolkit-version-pr.md"
-grep -qx '0.12.0' "$tmpdir/TOOLKIT_VERSION"
+grep -q 'Bump TOOLKIT_VERSION from v0.14.0 to v0.14.1.' "$tmpdir/toolkit-version-pr.md"
+grep -qx '0.14.0' "$tmpdir/TOOLKIT_VERSION"
 python3 "$ROOT/scripts/sync-toolkit-version.py" --version-file "$tmpdir/TOOLKIT_VERSION" --releases-file "$tmpdir/toolkit-releases.json" --apply >"$tmpdir/toolkit-version-sync.txt"
-grep -q '^action: updated to v0.12.1$' "$tmpdir/toolkit-version-sync.txt"
-grep -qx '0.12.1' "$tmpdir/TOOLKIT_VERSION"
+grep -q '^action: updated to v0.14.1$' "$tmpdir/toolkit-version-sync.txt"
+grep -qx '0.14.1' "$tmpdir/TOOLKIT_VERSION"
 
 override_toolkit="$tmpdir/toolkit-override"
 mkdir -p "$override_toolkit/kit" "$override_toolkit/tools"

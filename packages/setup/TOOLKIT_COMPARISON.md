@@ -221,7 +221,7 @@ bash ./scripts/auth-mcp-tools.sh
 
 ### Version pin note
 
-This repo currently consumes `ai-dev-toolkit` via `TOOLKIT_VERSION=0.12.0`. Features merged upstream after that release — for example release preflight / verify support in the canonical `tools/release.py` helper — do not become available here until a new toolkit tag is published and this pin is bumped.
+This repo currently consumes `ai-dev-toolkit` via `TOOLKIT_VERSION=0.14.0`. Features merged upstream become available after a new toolkit tag is published and this pin is bumped.
 
 ### Step 3: Enter a Project (ai-dev-toolkit)
 ```bash

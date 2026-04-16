@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Shell configuration and helpers** (aliases for git, tmux, MCP, release workflows)
 - **Tmux workflow** with session templates, smart-new, bootstrapping, and onboarding
 - **OpenCode bootstrap** with shared AGENTS.md, config templates, and starter skills
-- **Toolkit integration** via pinned `TOOLKIT_VERSION` (0.12.0) to ai-dev-toolkit
+- **Toolkit integration** via pinned `TOOLKIT_VERSION` (0.14.0) to ai-dev-toolkit
 - **Authentication guidance** scripts for AI tools and MCP providers
 - **Doctor and CI check scripts** for environment validation
 - **Content ownership documentation** (OWNERSHIP.md) defining setup-owned vs toolkit-sourced files
