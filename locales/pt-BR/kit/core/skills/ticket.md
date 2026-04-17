@@ -9,10 +9,6 @@ triggers:
   - ticket summary
 ---
 
-> **Tradução pendente** — conteúdo em inglês, aguardando tradução para pt-BR. Ver `bilingual-readme-sync` skill.
-
-
-
 # Ticket
 
 Generate an audit-friendly issue description from branch context, recent commits, and staged changes.
@@ -49,10 +45,11 @@ Outputs markdown suitable for pasting into Jira, Linear, or GitHub Issues. Usefu
 
 ## Examples
 
+<!-- Replace with your actual author email. -->
 ```
 ## Summary
 Branch: feat/auth-provider-refresh
-Author: lucas.diassantana@gmail.com
+Author: your.email@example.com
 CWD: ai-dev-toolkit/
 
 ## Changes
