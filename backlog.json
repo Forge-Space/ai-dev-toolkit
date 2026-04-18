@@ -23,25 +23,27 @@
       "title": "Per-agent tool access control in agents.json",
       "description": "Define which tools each agent tier can use. Prevents expensive opus agents from doing cheap grep work. Adds a 'tools' allowlist per agent in agents.json.\n\nScope: kit/core/agents.json (update)\nTest: Validate tool references exist in a tool registry.",
       "priority": "high",
-      "status": "ready",
+      "status": "done",
       "tags": [
         "governance",
         "routing",
         "cost-control"
       ],
-      "dependsOn": null
+      "dependsOn": null,
+      "completedAt": 1776672000000
     },
     {
       "id": "cost-tracking",
       "title": "Cost tracking config and session budget limits",
       "description": "Add cost awareness to token-optimization.json: per-session budget caps, per-agent cost limits, cost report format. Inspired by claw-code's cost_tracker.py and costHook.py.\n\nScope: kit/core/token-optimization.json (update), kit/core/skills/cost.md (new skill)\nTest: Validate cost config structure.",
       "priority": "high",
-      "status": "ready",
+      "status": "done",
       "tags": [
         "cost-control",
         "token-optimization"
       ],
-      "dependsOn": null
+      "dependsOn": null,
+      "completedAt": 1776672000000
     },
     {
       "id": "dispatch-skill",

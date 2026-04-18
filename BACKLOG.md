@@ -33,63 +33,35 @@ _Last updated: 2026-04-18_
 
 ### Confirmed remaining gaps
 
-- `kit/core/skills/resume.md` missing — listed as a key autonomy skill in README but no dedicated file exists.
-- `kit/core/agents.json` has no `tools` allowlist per agent tier.
-- `kit/core/token-optimization.json` has no `budgets` block for per-session / per-tier caps.
 - `implementations/antigravity/` missing.
 - `implementations/windsurf/README.md` missing.
 - `kit/plugins/` missing (design phase only — not queued for near-term).
+- Additional company templates beyond `fullstack-forge` (deferred until core parity stabilizes).
 
 ---
 
 ## Now
 
-### 1. Ship `resume` skill (close README gap)
+### 1. Cut `v0.17.0`
 
 **Why now**
 
-- `README.md` promotes `resume` as a first-class autonomy skill but the file does not exist.
-- Functionality is split across `self-heal.md` (recovery) and `checkpoint.md` (WIP stash).
+- `resume` skill, agent tier-governance test, and state reconciliation are ready to ship.
+- PRs #80 (SKILL.md adoption pattern) and #81 (dev-assets-sync) have been unreleased since v0.16.0.
 
 **First action**
 
-- Create `kit/core/skills/resume.md` consolidating the two flows; update `loop.md` to delegate.
-
-### 2. Agent tool-access allowlist
-
-**Why now**
-
-- `backlog.json → agent-tool-access` is the only open `high+ready` governance item.
-- Prevents expensive opus agents from doing cheap grep work.
-
-**First action**
-
-- Add `tools: []` field per agent in `kit/core/agents.json`, update schema + governance tests.
-
-### 3. Cost budgets
-
-**Why now**
-
-- `backlog.json → cost-tracking` is `high+ready`.
-- Session + per-agent caps are needed to land autonomous loops safely.
-
-**First action**
-
-- Extend `kit/core/token-optimization.json` with `budgets` block; refresh schema; extend `cost.md` docs.
+- Promote `CHANGELOG.md [Unreleased]` → `[0.17.0]`; bump `package.json`; tag and release.
 
 ---
 
 ## Next
 
-### 4. Release v0.17.0
-
-Bundles `resume` skill, agent tool allowlist, cost budgets, and the state reconciliation in this PR.
-
-### 5. Antigravity implementation doc
+### 2. Antigravity implementation doc
 
 Create `implementations/antigravity/README.md` mirroring Cursor/Codex structure.
 
-### 6. Windsurf implementation doc + Cursor/Windsurf skill-format parity
+### 3. Windsurf implementation doc + Cursor/Windsurf skill-format parity
 
 Create `implementations/windsurf/README.md`; document `.mdc` vs `.windsurfrules` mapping from `kit/core/skills/*.md`.
 
@@ -97,7 +69,7 @@ Create `implementations/windsurf/README.md`; document `.mdc` vs `.windsurfrules`
 
 ## Later
 
-### 7. Plugin system design
+### 4. Plugin system design
 
 **Why later**
 
@@ -108,7 +80,7 @@ Create `implementations/windsurf/README.md`; document `.mdc` vs `.windsurfrules`
 
 - Write a short architecture note clarifying plugin boundaries: skills, hooks, MCP config, providers.
 
-### 8. Company template breadth
+### 5. Company template breadth
 
 Expand beyond `companies/fullstack-forge` to cover `solopreneur` and `startup-mvp` adoption paths once core surface is stable.
 
@@ -136,16 +108,13 @@ Keep planning and backlog work in a clean worktree to avoid `node_modules/` nois
 
 ## Recommended execution order
 
-1. Land `resume` skill
-2. Agent tool allowlist
-3. Cost budgets
-4. Cut `v0.17.0`
-5. Antigravity + Windsurf implementation docs
-6. Plugin system design note
-7. Additional company templates
+1. Cut `v0.17.0`
+2. Antigravity + Windsurf implementation docs
+3. Plugin system design note
+4. Additional company templates
 
 ---
 
 ## Immediate recommended next task
 
-Create `kit/core/skills/resume.md` and update `loop.md` delegation — this closes the advertised-but-missing autonomy skill in the README.
+Promote `CHANGELOG.md [Unreleased]` to `[0.17.0]` and cut the release — queued work is green and tests pass at 25/25.
