@@ -1,0 +1,20 @@
+id: redis
+name: Redis
+description: Get / set / list / delete keys in a Redis instance. Useful for inspecting queue state, caches, and ad-hoc debugging.
+transport: stdio
+command: npx
+args:
+  - -y
+  - "@modelcontextprotocol/server-redis"
+env:
+  - name: REDIS_URL
+    description: Full Redis URL, e.g. redis://localhost:6379.
+    required: true
+    default: redis://localhost:6379
+tags:
+  - database
+  - cache
+  - queue
+  - debugging
+homepage: https://github.com/modelcontextprotocol/servers/tree/main/src/redis
+license: MIT

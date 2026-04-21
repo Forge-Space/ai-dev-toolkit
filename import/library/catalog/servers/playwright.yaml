@@ -1,0 +1,15 @@
+id: playwright
+name: Playwright
+description: Browser automation via Playwright — navigate, click, fill forms, take screenshots, inspect console/network. Use for UI testing and scraping.
+transport: stdio
+command: npx
+args:
+  - -y
+  - "@playwright/mcp@latest"
+tags:
+  - browser
+  - automation
+  - testing
+  - scraping
+homepage: https://github.com/microsoft/playwright-mcp
+license: Apache-2.0

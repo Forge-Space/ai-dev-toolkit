@@ -1,0 +1,14 @@
+id: docker
+name: Docker
+description: Inspect containers, fetch logs, run one-off containers, deploy compose stacks. Useful for homelab / local-stack debugging from the editor.
+transport: stdio
+command: uvx
+args:
+  - docker-mcp
+tags:
+  - docker
+  - infra
+  - containers
+  - homelab
+homepage: https://github.com/QuantGeekDev/docker-mcp
+license: MIT

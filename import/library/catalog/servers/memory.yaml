@@ -1,0 +1,14 @@
+id: memory
+name: Memory (Knowledge Graph)
+description: Official reference knowledge-graph memory server — entities, relations, observations persisted across sessions. Good default for project memory.
+transport: stdio
+command: npx
+args:
+  - -y
+  - "@modelcontextprotocol/server-memory"
+tags:
+  - memory
+  - knowledge-graph
+  - persistence
+homepage: https://github.com/modelcontextprotocol/servers/tree/main/src/memory
+license: MIT

@@ -1,10 +1,20 @@
 {
   "id": "git-worktrees",
-  "name": "Git Worktrees for AI Sessions",
-  "description": "When to use `git worktree` instead of branch switching for AI-assisted work: parallel sessions, risky changes, release isolation. Includes cleanup recipes.",
+  "name": "Git Worktrees for Concurrent AI Agent Work",
+  "description": "Multiple AI agent sessions working on the same repository cause chaos. Session A is on branch feature/auth. Session B switches to main to check something. Session A's next tool call fails because the branch disappeared. Or worse: Session B force-pushes over Session A's work.",
   "version": "0.1.0",
-  "tags": ["git", "workflow", "worktree", "skill-md"],
-  "editors": ["claude-code", "codex", "cursor"],
+  "tags": [
+    "skill-md",
+    "claude",
+    "prompting",
+    "testing",
+    "git",
+    "agents"
+  ],
+  "editors": [
+    "claude-code",
+    "codex"
+  ],
   "source": {
     "type": "local",
     "path": "ai-dev-toolkit/patterns/git-worktrees.md"

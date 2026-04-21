@@ -1,10 +1,21 @@
 {
   "id": "agent-gotchas",
-  "name": "Agent Gotchas",
-  "description": "Catalog of non-obvious failure modes in AI coding agents and how to avoid them: stale tools, context compaction surprises, parallel-session branch churn, hook pitfalls.",
+  "name": "AI Agent Gotchas",
+  "description": "AI coding agents fail in consistent, predictable ways. They fabricate npm packages that don't exist. They catch errors and continue silently. They add features you never asked for. They lose context mid-session and forget what they were doing.",
   "version": "0.1.0",
-  "tags": ["claude", "workflow", "reliability", "skill-md"],
-  "editors": ["claude-code", "codex"],
+  "tags": [
+    "skill-md",
+    "claude",
+    "prompting",
+    "testing",
+    "security",
+    "git",
+    "agents"
+  ],
+  "editors": [
+    "claude-code",
+    "codex"
+  ],
   "source": {
     "type": "local",
     "path": "ai-dev-toolkit/patterns/agent-gotchas.md"

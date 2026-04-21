@@ -12,7 +12,15 @@ items:
     id: agent-gotchas
   - kind: skill
     id: git-worktrees
+  - kind: skill
+    id: context-building
+  - kind: skill
+    id: task-orchestration
   - kind: server
     id: context7
   - kind: server
     id: github
+  - kind: server
+    id: serena
+  - kind: server
+    id: memory

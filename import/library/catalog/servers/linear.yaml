@@ -1,0 +1,11 @@
+id: linear
+name: Linear
+description: Read + write Linear issues, projects, cycles, comments, and documents. Useful for triaging backlogs and drafting tickets from code context.
+transport: sse
+url: https://mcp.linear.app/sse
+tags:
+  - project-mgmt
+  - issues
+  - linear
+homepage: https://linear.app/
+license: Proprietary
