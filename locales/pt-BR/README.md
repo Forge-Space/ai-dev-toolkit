@@ -1,9 +1,9 @@
-[English](https://github.com/Forge-Space/ai-dev-toolkit) | [Português](README.md)
+[English](https://github.com/LucasSantana-Dev/ai-dev-toolkit) | [Português](README.md)
 
 # AI Dev Toolkit
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Latest Release](https://img.shields.io/github/v/release/Forge-Space/ai-dev-toolkit)](https://github.com/Forge-Space/ai-dev-toolkit/releases)
+[![Latest Release](https://img.shields.io/github/v/release/LucasSantana-Dev/ai-dev-toolkit)](https://github.com/LucasSantana-Dev/ai-dev-toolkit/releases)
 
 Patterns reutilizáveis, regras prontas para usar, skills portáveis e automação de setup multiplataforma para que agentes AI de codificação produzam código alinhado com seu projeto desde a primeira sessão.
 
@@ -17,7 +17,7 @@ Copie um arquivo de rule para seu projeto. Esse arquivo único oferece a seu age
 
 ```bash
 # Clone the toolkit
-git clone https://github.com/Forge-Space/ai-dev-toolkit.git
+git clone https://github.com/LucasSantana-Dev/ai-dev-toolkit.git
 cd ai-dev-toolkit
 
 # Copy the rule file that matches your tool

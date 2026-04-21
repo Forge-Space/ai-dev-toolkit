@@ -2,7 +2,7 @@
 
 ## Como Reportar uma Vulnerabilidade
 
-Reporte problemas de segurança para [security@forgespace.co](mailto:security@forgespace.co). Não abra uma issue pública.
+Reporte problemas de segurança via security advisory privado do GitHub. Não abra uma issue pública.
 
 ## Escopo
 

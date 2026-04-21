@@ -15,7 +15,7 @@
     "patterns",
     "rules",
     "companies",
-    "forge-space"
+    "ai-dev-toolkit"
   ],
   "engines": {
     "node": ">=22"
