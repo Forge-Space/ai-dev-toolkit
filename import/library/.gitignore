@@ -1,0 +1,27 @@
+node_modules/
+dist/
+build/
+.turbo/
+.next/
+.astro/
+
+# env
+.env
+.env.local
+.env.*.local
+gateway/.env
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# editor
+.vscode/
+.idea/
+.DS_Store
+
+# generated
+catalog/index.json
+coverage/
