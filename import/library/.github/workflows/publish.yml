@@ -40,4 +40,6 @@ jobs:
         working-directory: cli
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
+        # --provenance requires the source repo to be public (npm policy).
+        # Flip it back on once the repo visibility is public.
+        run: npm publish --access public
