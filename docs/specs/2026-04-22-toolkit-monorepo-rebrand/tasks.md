@@ -7,7 +7,10 @@
 - [ ] Resolve or explicitly carry forward local `ai-dev-toolkit-library` changes
 - [ ] Create monorepo workspace skeleton
 - [ ] Import `ai-dev-toolkit-setup` under `packages/setup/` with history
-- [ ] Import `ai-dev-toolkit-library` under catalog/CLI/web/gateway prefixes with history
+- [ ] Import `ai-dev-toolkit-library/catalog` and `schemas` into `packages/catalog/` with history
+- [ ] Import `ai-dev-toolkit-library/cli` into `packages/cli/` with history
+- [ ] Import `ai-dev-toolkit-library/web` into `apps/library-web/` with history
+- [ ] Import `ai-dev-toolkit-library/gateway` into `infra/gateway/` with history
 - [ ] Import `ai-dev-toolkit-pt-br` under `locales/pt-BR/` with history
 - [ ] Move current toolkit root into `packages/core/`
 - [ ] Add root workspace scripts and path-filtered CI

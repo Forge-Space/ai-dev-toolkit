@@ -143,7 +143,7 @@ The migration is done only when all of these are true:
 
 - root workspace install succeeds on a clean checkout
 - core checks pass: shell validation, schema validation, lint, tests, plugin
-  typecheck, markdown link check, and secret scan
+  typecheck, Markdown link check, and secret scan
 - setup checks pass: bootstrap script syntax, shellcheck, PowerShell parse, and
   doctor/CI smoke checks
 - catalog checks pass: schema validation, index generation, CLI typecheck/build,
