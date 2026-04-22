@@ -1,5 +1,3 @@
-> **Tradução pendente** — conteúdo em inglês, aguardando tradução para pt-BR. Contribute to [ai-dev-toolkit-pt-br](https://github.com/LucasSantana-Dev/ai-dev-toolkit-pt-br/issues).
-
 ---
 name: mcp-doctor
 description: Diagnose and repair failing MCP servers. Captures real launch tracebacks, identifies stale tool/config references, prunes the bad entries, and reconnects. Use when `claude mcp list` shows `Failed to connect`, after upgrading an MCP server (Serena, @modelcontextprotocol/server-*, or vendor MCPs), or when an MCP that worked yesterday silently stopped responding.
@@ -12,6 +10,8 @@ triggers:
   - "MCP not connecting"
   - "Invalid tool name"
 ---
+
+> **Tradução pendente** — conteúdo em inglês, aguardando tradução para pt-BR. Contribute to [Forge Kit](https://github.com/LucasSantana-Dev/ai-dev-toolkit/issues).
 
 # MCP Doctor
 
