@@ -1,41 +1,75 @@
 /**
- * Import curated Claude sub-agents from dev-assets/global/claude/agents/.
+ * Import curated Claude sub-agents from multiple local sources.
  *
- * Agents are single files that install to ~/.claude/agents/<id>.md. Source
- * frontmatter is Claude Code's sub-agent format (name, description, model,
- * level, disallowedTools). We rewrite it into catalog/agents/<id>.md with a
- * library-standard frontmatter shape that passes agent.schema.json.
+ * Agents are single files that install to ~/.claude/agents/<id>.md. Each
+ * source's frontmatter is Claude's sub-agent format (name, description,
+ * model, level, disallowedTools). We rewrite into catalog/agents/<id>.md
+ * with library-standard frontmatter that passes agent.schema.json.
  *
- * Blocks on secrets scan. Idempotent.
+ * Idempotent (refuses to overwrite existing catalog/agents/<id>.md).
+ * Blocking secrets scan on every file.
  */
-import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { CATALOG_ROOT } from "./lib/catalog.ts";
 import { scanText, formatFindings } from "./lib/secrets.ts";
 
-const SOURCE = process.env.ADT_AGENTS_DIR
-  ?? "/Volumes/External HD/Desenvolvimento/dev-assets/global/claude/agents";
+interface AgentSource {
+  label: string;
+  /** Absolute dir containing agent `.md` files (flat) or `<slug>/` dirs. */
+  baseDir: string;
+  layout: "flat" | "dir";
+  /** If set, only import these slugs. Undefined = import all. */
+  include?: string[];
+  /** Prefix added to library id (avoid collisions). */
+  slugPrefix?: string;
+  /** Source metadata for manifest.source. */
+  sourcePath: string;
+  repo?: string;
+  extraTags?: string[];
+  author: string;
+  license: string;
+}
 
-// Curate ~10 broadly-useful agents. Keep the domain spread: architecture,
-// debugging, review, testing, execution, git, verification, critique,
-// planning, documentation.
-const AGENTS = new Set([
-  "architect",
-  "debugger",
-  "code-reviewer",
-  "test-engineer",
-  "executor",
-  "git-master",
-  "verifier",
-  "critic",
-  "planner",
-  "document-specialist",
-]);
+const SOURCES: AgentSource[] = [
+  {
+    label: "dev-assets/global/claude/agents",
+    baseDir: "/Volumes/External HD/Desenvolvimento/dev-assets/global/claude/agents",
+    layout: "flat",
+    include: [
+      "architect",
+      "debugger",
+      "code-reviewer",
+      "test-engineer",
+      "executor",
+      "git-master",
+      "verifier",
+      "critic",
+      "planner",
+      "document-specialist",
+    ],
+    sourcePath: "dev-assets/global/claude/agents",
+    author: "Lucas Santana",
+    license: "MIT",
+    extraTags: ["agent", "claude-code"],
+  },
+  {
+    label: "ai-dev-toolkit/kit/core/agents",
+    baseDir: "/Volumes/External HD/Desenvolvimento/ai-dev-toolkit/kit/core/agents",
+    layout: "dir",
+    sourcePath: "ai-dev-toolkit/kit/core/agents",
+    repo: "https://github.com/LucasSantana-Dev/ai-dev-toolkit",
+    author: "Lucas Santana",
+    license: "MIT",
+    extraTags: ["agent", "claude-code", "ai-dev-toolkit"],
+    slugPrefix: "adt-",
+  },
+];
 
-function slugOf(filename: string): string {
-  return filename.replace(/\.md$/i, "");
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 function titleCase(slug: string): string {
@@ -45,8 +79,8 @@ function titleCase(slug: string): string {
     .join(" ");
 }
 
-function tagsFor(slug: string, description: string): string[] {
-  const base = new Set<string>(["agent", "claude-code"]);
+function tagsFor(slug: string, description: string, extra: string[] = []): string[] {
+  const base = new Set<string>(extra);
   const d = description.toLowerCase();
   if (/review|lint|quality/.test(d)) base.add("review");
   if (/test|qa/.test(d)) base.add("testing");
@@ -58,86 +92,140 @@ function tagsFor(slug: string, description: string): string[] {
   if (/verif|validation|check/.test(d)) base.add("verification");
   if (/critic|critique/.test(d)) base.add("critique");
   if (/execut/.test(d)) base.add("execution");
+  if (/database|sql|migration|schema/.test(d)) base.add("database");
+  if (/security|audit|vuln/.test(d)) base.add("security");
+  if (/systematic|ultrathink|reason/.test(d)) base.add("reasoning");
   return Array.from(base).slice(0, 8);
 }
 
-async function main() {
-  if (!existsSync(SOURCE)) {
-    console.error(`❌ source not found: ${SOURCE}`);
-    process.exit(1);
+async function listSlugs(src: AgentSource): Promise<string[]> {
+  if (!existsSync(src.baseDir)) return [];
+  const entries = await readdir(src.baseDir);
+  if (src.layout === "flat") {
+    return entries.filter((f) => f.endsWith(".md") && f !== "README.md").map((f) => f.replace(/\.md$/, "")).sort();
+  }
+  const dirs: string[] = [];
+  for (const e of entries) {
+    const full = path.join(src.baseDir, e);
+    if ((await stat(full)).isDirectory()) dirs.push(e);
+  }
+  return dirs.sort();
+}
+
+async function readAgentMd(src: AgentSource, slug: string): Promise<string | null> {
+  const p =
+    src.layout === "flat"
+      ? path.join(src.baseDir, `${slug}.md`)
+      : path.join(src.baseDir, slug, "AGENT.md");
+  if (!existsSync(p)) {
+    // Fallback for dir-layout sources that don't use AGENT.md — try
+    // common alternates.
+    if (src.layout === "dir") {
+      for (const alt of ["agent.md", "README.md", "index.md"]) {
+        const p2 = path.join(src.baseDir, slug, alt);
+        if (existsSync(p2)) return readFile(p2, "utf8");
+      }
+    }
+    return null;
+  }
+  return readFile(p, "utf8");
+}
+
+async function importOne(src: AgentSource, slug: string, destDir: string): Promise<{ imported: boolean; reason?: string }> {
+  const id = src.slugPrefix ? `${src.slugPrefix}${slugify(slug)}` : slugify(slug);
+  const outPath = path.join(destDir, `${id}.md`);
+  if (existsSync(outPath)) return { imported: false, reason: `catalog/agents/${id}.md exists` };
+
+  const raw = await readAgentMd(src, slug);
+  if (!raw) return { imported: false, reason: "no AGENT.md / agent.md / README.md" };
+
+  const scanLabel = src.layout === "flat" ? path.join(src.baseDir, `${slug}.md`) : path.join(src.baseDir, slug);
+  const hits = scanText(scanLabel, raw);
+  if (hits.length) {
+    console.error(formatFindings(hits));
+    return { imported: false, reason: `secrets scan hit (${hits.length} findings)` };
   }
 
-  const files = (await readdir(SOURCE)).filter((f) => f.endsWith(".md")).sort();
-  const findings: Awaited<ReturnType<typeof scanText>> = [];
-  const written: string[] = [];
-  const skipped: string[] = [];
+  let srcFront: Record<string, unknown> = {};
+  let body = raw;
+  try {
+    const parsed = matter(raw);
+    srcFront = parsed.data;
+    body = parsed.content;
+  } catch (err) {
+    return { imported: false, reason: `unparseable frontmatter: ${(err as Error).message.slice(0, 120)}` };
+  }
+  // Accept description under several common field names used across
+  // Claude / Codex / ai-dev-toolkit agent formats.
+  const description =
+    (srcFront.description as string) ||
+    (srcFront.role as string) ||
+    (srcFront.purpose as string) ||
+    "";
+  if (!description) return { imported: false, reason: "missing description/role/purpose in source frontmatter" };
+  const name = (srcFront.name as string) || titleCase(id);
+
+  const front: Record<string, unknown> = {
+    id,
+    name,
+    description: description.slice(0, 500),
+    version: "0.1.0",
+    tags: tagsFor(id, description, src.extraTags),
+  };
+  if (srcFront.model) front.model = String(srcFront.model);
+  if (srcFront.level !== undefined) front.level = Number(srcFront.level);
+  if (srcFront.disallowedTools) {
+    const dt = srcFront.disallowedTools;
+    const arr = Array.isArray(dt)
+      ? dt.map(String)
+      : String(dt)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+    front.disallowed_tools = arr;
+  }
+  const sourceMeta: Record<string, unknown> = {
+    type: src.repo ? "git" : "local",
+    path: `${src.sourcePath}/${slug}${src.layout === "flat" ? ".md" : ""}`,
+  };
+  if (src.repo) sourceMeta.repo = src.repo;
+  front.source = sourceMeta;
+  front.license = src.license;
+  front.author = src.author;
+
+  const rebuilt = matter.stringify(body.trimStart(), front);
+  await writeFile(outPath, rebuilt);
+  return { imported: true };
+}
+
+async function main() {
   const destDir = path.join(CATALOG_ROOT, "agents");
   await mkdir(destDir, { recursive: true });
 
-  for (const file of files) {
-    const slug = slugOf(file);
-    if (!AGENTS.has(slug)) {
-      skipped.push(slug);
-      continue;
+  let totalImported = 0;
+  for (const src of SOURCES) {
+    console.log(`\n▸ ${src.label}`);
+    let slugs = await listSlugs(src);
+    if (src.include) {
+      const wanted = new Set(src.include);
+      slugs = slugs.filter((s) => wanted.has(s));
     }
 
-    const src = path.join(SOURCE, file);
-    const raw = await readFile(src, "utf8");
-    const hits = scanText(src, raw);
-    if (hits.length) {
-      findings.push(...hits);
-      continue;
+    const imported: string[] = [];
+    const skipped: Array<[string, string]> = [];
+    for (const slug of slugs) {
+      const res = await importOne(src, slug, destDir);
+      if (res.imported) imported.push(slug);
+      else skipped.push([slug, res.reason ?? "?"]);
     }
-
-    const { data: srcFront, content: body } = matter(raw);
-    const name = titleCase(slug);
-    const description = (srcFront.description as string) ?? "";
-    if (!description) {
-      console.error(`❌ ${slug}: missing description in source frontmatter`);
-      process.exit(1);
-    }
-
-    // Library-standard frontmatter — schema-validated.
-    const front: Record<string, unknown> = {
-      id: slug,
-      name,
-      description: description.slice(0, 500),
-      version: "0.1.0",
-      tags: tagsFor(slug, description),
-    };
-    if (srcFront.model) front.model = String(srcFront.model);
-    if (srcFront.level !== undefined) front.level = Number(srcFront.level);
-    if (srcFront.disallowedTools) {
-      const dt = srcFront.disallowedTools;
-      const arr = Array.isArray(dt)
-        ? dt.map(String)
-        : String(dt)
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean);
-      front.disallowed_tools = arr;
-    }
-    front.source = { type: "local", path: `dev-assets/global/claude/agents/${file}` };
-    front.license = "MIT";
-    front.author = "Lucas Santana";
-
-    const rebuilt = matter.stringify(body.trimStart(), front);
-    await writeFile(path.join(destDir, `${slug}.md`), rebuilt);
-    written.push(slug);
+    totalImported += imported.length;
+    console.log(`  ✓ ${imported.length} imported, ${skipped.length} skipped`);
+    for (const s of imported) console.log(`    agent  ${s}`);
+    for (const [s, r] of skipped.slice(0, 6)) console.log(`    - ${s}: ${r}`);
+    if (skipped.length > 6) console.log(`    … ${skipped.length - 6} more`);
   }
 
-  if (findings.length) {
-    console.error("❌ secrets scan BLOCKED import. Fix these before re-running:\n");
-    console.error(formatFindings(findings));
-    process.exit(1);
-  }
-
-  console.log(`✅ imported ${written.length} agents`);
-  for (const w of written) console.log(`  agent  ${w}`);
-  if (skipped.length) {
-    console.log(`\nskipped (not in allowlist): ${skipped.length}`);
-    for (const s of skipped) console.log(`  - ${s}`);
-  }
+  console.log(`\n✅ total imported: ${totalImported}`);
 }
 
 main().catch((err) => {

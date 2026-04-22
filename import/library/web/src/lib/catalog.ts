@@ -9,7 +9,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, "../../..");
 const CATALOG = path.join(REPO_ROOT, "catalog");
 
-export type Kind = "skill" | "server" | "collection" | "doc" | "agent";
+export type Kind = "skill" | "server" | "collection" | "doc" | "agent" | "hook" | "command" | "tool";
 
 export interface Skill {
   id: string;
@@ -141,3 +141,97 @@ export async function getAgents(): Promise<Agent[]> {
   }
   return out;
 }
+
+export interface Hook {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  tags: string[];
+  event: string;
+  matcher?: string;
+  runtime: string;
+  install?: { copy_to?: string; chmod_exec?: boolean };
+  source?: { type?: string; path?: string; repo?: string };
+  license?: string;
+  author?: string;
+  script: string;
+}
+
+export async function getHooks(): Promise<Hook[]> {
+  const base = path.join(CATALOG, "hooks");
+  const out: Hook[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    // Find the script next to manifest.json.
+    const { readdir } = await import("node:fs/promises");
+    const files = await readdir(path.join(base, slug));
+    const scriptFile = files.find((f) => /^script\./.test(f)) ?? files.find((f) => /\.(sh|py|bash|zsh)$/.test(f));
+    const script = scriptFile ? await readFile(path.join(base, slug, scriptFile), "utf8") : "";
+    out.push({ ...(data as Omit<Hook, "script">), script });
+  }
+  return out;
+}
+
+export interface Command {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  tags: string[];
+  category?: string;
+  argument_hint?: string;
+  source?: { type?: string; path?: string; repo?: string };
+  license?: string;
+  author?: string;
+  body: string;
+}
+
+export async function getCommands(): Promise<Command[]> {
+  const base = path.join(CATALOG, "commands");
+  const out: Command[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    const cmdPath = path.join(base, slug, "command.md");
+    const body = existsSync(cmdPath) ? await readFile(cmdPath, "utf8") : "";
+    out.push({ ...(data as Omit<Command, "body">), body });
+  }
+  return out;
+}
+
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  tags: string[];
+  runtime: string;
+  category: string;
+  install?: { copy_to?: string; chmod_exec?: boolean; dependencies?: string[] };
+  usage?: string;
+  source?: { type?: string; path?: string; repo?: string };
+  license?: string;
+  author?: string;
+  script: string;
+}
+
+export async function getTools(): Promise<Tool[]> {
+  const base = path.join(CATALOG, "tools");
+  const out: Tool[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    const { readdir } = await import("node:fs/promises");
+    const files = await readdir(path.join(base, slug));
+    const scriptFile = files.find((f) => f !== "manifest.json");
+    const script = scriptFile ? await readFile(path.join(base, slug, scriptFile), "utf8") : "";
+    out.push({ ...(data as Omit<Tool, "script">), script });
+  }
+  return out;
+}
+

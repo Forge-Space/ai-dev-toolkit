@@ -1,6 +1,6 @@
 {
   "name": "@lucassantana/adtl",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "CLI for ai-dev-toolkit-library: browse, install skills, register MCP servers with your local gateway.",
   "keywords": ["mcp", "claude", "skills", "ai", "cli"],
   "license": "MIT",

@@ -9,7 +9,15 @@ export const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url
 export const CATALOG_ROOT = path.join(REPO_ROOT, "catalog");
 export const SCHEMAS_ROOT = path.join(REPO_ROOT, "schemas");
 
-export type CatalogKind = "skill" | "server" | "collection" | "doc" | "agent";
+export type CatalogKind =
+  | "skill"
+  | "server"
+  | "collection"
+  | "doc"
+  | "agent"
+  | "hook"
+  | "command"
+  | "tool";
 
 export interface CatalogEntry {
   kind: CatalogKind;
@@ -91,13 +99,65 @@ export async function loadAgents(): Promise<CatalogEntry[]> {
   return out;
 }
 
+/**
+ * Hooks live as `<id>/manifest.json` + `<id>/script.sh` so the shell
+ * script can be byte-preserved without being parsed as markdown.
+ */
+export async function loadHooks(): Promise<CatalogEntry[]> {
+  const base = path.join(CATALOG_ROOT, "hooks");
+  const out: CatalogEntry[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    out.push({ kind: "hook", id: data.id ?? slug, path: manifestPath, data });
+  }
+  return out;
+}
+
+/**
+ * Commands use the same `<id>/` layout as skills: manifest.json +
+ * command.md. That keeps auxiliary files (e.g. prompt examples) colocated.
+ */
+export async function loadCommands(): Promise<CatalogEntry[]> {
+  const base = path.join(CATALOG_ROOT, "commands");
+  const out: CatalogEntry[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    out.push({ kind: "command", id: data.id ?? slug, path: manifestPath, data });
+  }
+  return out;
+}
+
+/**
+ * Tools are `<id>/` directories with manifest.json + a runnable script
+ * (varies by runtime — e.g. tool.sh, tool.py). The manifest points at
+ * the entry script via its `install.copy_to` or source.path hint.
+ */
+export async function loadTools(): Promise<CatalogEntry[]> {
+  const base = path.join(CATALOG_ROOT, "tools");
+  const out: CatalogEntry[] = [];
+  for (const slug of await listDirs(base)) {
+    const manifestPath = path.join(base, slug, "manifest.json");
+    if (!existsSync(manifestPath)) continue;
+    const data = JSON.parse(await readFile(manifestPath, "utf8"));
+    out.push({ kind: "tool", id: data.id ?? slug, path: manifestPath, data });
+  }
+  return out;
+}
+
 export async function loadAll(): Promise<CatalogEntry[]> {
-  const [s, sv, c, d, a] = await Promise.all([
+  const [s, sv, c, d, a, h, cm, t] = await Promise.all([
     loadSkills(),
     loadServers(),
     loadCollections(),
     loadDocs(),
     loadAgents(),
+    loadHooks(),
+    loadCommands(),
+    loadTools(),
   ]);
-  return [...s, ...sv, ...c, ...d, ...a];
+  return [...s, ...sv, ...c, ...d, ...a, ...h, ...cm, ...t];
 }

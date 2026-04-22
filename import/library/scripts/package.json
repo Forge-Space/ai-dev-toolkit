@@ -8,7 +8,11 @@
     "index": "tsx generate-index.ts",
     "import:patterns": "tsx import-patterns.ts",
     "import:agents": "tsx import-agents.ts",
-    "import:upstream-skills": "tsx import-upstream-skills.ts"
+    "import:upstream-skills": "tsx import-upstream-skills.ts",
+    "import:adt-docs": "tsx import-adt-docs.ts",
+    "import:tools": "tsx import-tools.ts",
+    "import:hooks": "tsx import-hooks.ts",
+    "import:all": "tsx import-upstream-skills.ts && tsx import-agents.ts && tsx import-adt-docs.ts && tsx import-tools.ts && tsx import-hooks.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

@@ -6,6 +6,9 @@ import os from "node:os";
 export const CLAUDE_HOME = process.env.CLAUDE_HOME ?? path.join(os.homedir(), ".claude");
 export const SKILLS_DIR = path.join(CLAUDE_HOME, "skills");
 export const AGENTS_DIR = path.join(CLAUDE_HOME, "agents");
+export const HOOKS_DIR = path.join(CLAUDE_HOME, "hooks");
+export const COMMANDS_DIR = path.join(CLAUDE_HOME, "commands");
+export const BIN_DIR = path.join(os.homedir(), ".local", "bin");
 export const SETTINGS_PATH = path.join(CLAUDE_HOME, "settings.json");
 
 export interface McpServerEntry {
@@ -50,10 +53,34 @@ export async function ensureAgentsDir(): Promise<void> {
   await mkdir(AGENTS_DIR, { recursive: true });
 }
 
+export async function ensureHooksDir(): Promise<void> {
+  await mkdir(HOOKS_DIR, { recursive: true });
+}
+
+export async function ensureCommandsDir(): Promise<void> {
+  await mkdir(COMMANDS_DIR, { recursive: true });
+}
+
+export async function ensureBinDir(): Promise<void> {
+  await mkdir(BIN_DIR, { recursive: true });
+}
+
 export function skillInstallPath(id: string): string {
   return path.join(SKILLS_DIR, id);
 }
 
 export function agentInstallPath(id: string): string {
   return path.join(AGENTS_DIR, `${id}.md`);
+}
+
+export function hookInstallPath(id: string): string {
+  return path.join(HOOKS_DIR, `${id}.sh`);
+}
+
+export function commandInstallPath(id: string): string {
+  return path.join(COMMANDS_DIR, `${id}.md`);
+}
+
+export function toolInstallPath(id: string): string {
+  return path.join(BIN_DIR, id);
 }

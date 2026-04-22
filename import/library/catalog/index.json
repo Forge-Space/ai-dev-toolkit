@@ -3,6 +3,85 @@
   "entries": [
     {
       "kind": "agent",
+      "id": "adt-code-reviewer",
+      "name": "code-reviewer",
+      "description": "Code Reviewer — systematically identifies bugs, security issues, test coverage gaps, and style violations",
+      "tags": [
+        "agent",
+        "claude-code",
+        "ai-dev-toolkit",
+        "review",
+        "testing",
+        "security",
+        "reasoning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "adt-database-reviewer",
+      "name": "database-reviewer",
+      "description": "Database Reviewer — schema design, migrations, indexes, constraints, transaction boundaries",
+      "tags": [
+        "agent",
+        "claude-code",
+        "ai-dev-toolkit",
+        "review",
+        "architecture",
+        "database"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "adt-security-auditor",
+      "name": "security-auditor",
+      "description": "Security Auditor — OWASP checks, dependency scanning, secrets detection, threat paths",
+      "tags": [
+        "agent",
+        "claude-code",
+        "ai-dev-toolkit",
+        "verification",
+        "security"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "adt-systematic-debugger",
+      "name": "systematic-debugger",
+      "description": "Systematic Debugger — evidence-driven root cause analysis, hypothesis testing",
+      "tags": [
+        "agent",
+        "claude-code",
+        "ai-dev-toolkit",
+        "testing",
+        "debugging",
+        "reasoning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "adt-ultrathink-debugger",
+      "name": "ultrathink-debugger",
+      "description": "Ultrathink Debugger — deep reasoning for gnarly bugs, 3+ level traces",
+      "tags": [
+        "agent",
+        "claude-code",
+        "ai-dev-toolkit",
+        "debugging",
+        "reasoning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
       "id": "architect",
       "name": "Architect",
       "description": "Strategic Architecture & Debugging Advisor (Opus, READ-ONLY)",
@@ -207,6 +286,59 @@
     },
     {
       "kind": "doc",
+      "id": "best-ai-skill-stewardship",
+      "name": "AI Skill Stewardship",
+      "description": "Coding agents amplify what you already are. They don't substitute for what you aren't.",
+      "tags": [
+        "best-practice",
+        "ai-dev-toolkit",
+        "security",
+        "skill-md"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "best-context-management",
+      "name": "Context Management for AI Coding",
+      "description": "### Progressive Loading Don't read entire files upfront. Build context incrementally: 1. Start with project structure (glob, ls) 2. Read specific functions (grep for signatures, then read targeted lines) 3. Load full files only when editing them",
+      "tags": [
+        "best-practice",
+        "ai-dev-toolkit",
+        "security",
+        "token-optimization",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "best-security",
+      "name": "Security Practices for AI-Assisted Development",
+      "description": "### Never in shell config Move API keys from ~/.bashrc/config.fish to a separate file: ``bash # ~/.config/fish/conf.d/secrets.fish (chmod 600) set -gx API_KEY \"your-key\" ``",
+      "tags": [
+        "best-practice",
+        "ai-dev-toolkit",
+        "security",
+        "token-optimization"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "best-workflow",
+      "name": "AI-Assisted Development Workflow",
+      "description": "`` feature/my-feature → PR to main → automated deploy ``",
+      "tags": [
+        "best-practice",
+        "ai-dev-toolkit",
+        "security",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
       "id": "cost-aware-routing",
       "name": "Cost-Aware Routing",
       "description": "Model choice is now a cost/quality tradeoff, not a binary \"do I need reasoning\" decision. This pattern extends patterns/multi-model-routing.md with explicit economics: token pricing, caching strategy, and output-format optimization that recovers 40-60% of spend.",
@@ -274,6 +406,71 @@
     },
     {
       "kind": "doc",
+      "id": "persona-agency",
+      "name": "Agency persona",
+      "description": "--- name: Delivery Agency description: A client-services company template optimized for discovery, delivery, QA, and stakeholder communication. slug: agency schema: agentcompanies/v1 version: 1.0.0 license: MIT authors: - name: Forge Space goals: - Deliver scoped client work reliably and repeatedly - Separate discovery, delivery, and quality ownership clearly ---",
+      "tags": [
+        "persona",
+        "persona-agency",
+        "ai-dev-toolkit",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "persona-fullstack-forge",
+      "name": "Fullstack Forge persona",
+      "description": "--- name: Fullstack Forge description: A full-service software development consultancy with 66 specialized skills covering 12 programming languages, 7 backend frameworks, frontend/mobile, infrastructure, security, data science, and DevOps slug: fullstack-forge schema: agentcompanies/v1 version: 1.0.0 license: MIT authors: - name: Jeffallan goals: - Deliver expert-level software development across the full technology stack - Match every project to the right specialist with dee",
+      "tags": [
+        "persona",
+        "persona-fullstack-forge",
+        "ai-dev-toolkit",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "persona-open-source-maintainer",
+      "name": "Open Source Maintainer persona",
+      "description": "--- name: Open Source Maintainer Collective description: A company template for maintainers who balance triage, docs, releases, and contributor support. slug: open-source-maintainer schema: agentcompanies/v1 version: 1.0.0 license: MIT authors: - name: Forge Space goals: - Keep open-source maintenance sustainable and predictable - Separate community, release, docs, and issue triage responsibilities ---",
+      "tags": [
+        "persona",
+        "persona-open-source-maintainer",
+        "ai-dev-toolkit",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "persona-solopreneur",
+      "name": "Solopreneur persona",
+      "description": "--- name: Solopreneur Studio description: A lean one-founder company template for shipping product, growth, and support work without a large team. slug: solopreneur schema: agentcompanies/v1 version: 1.0.0 license: MIT authors: - name: Forge Space goals: - Ship product quickly with one decision-maker - Balance product, engineering, and growth without role confusion ---",
+      "tags": [
+        "persona",
+        "persona-solopreneur",
+        "ai-dev-toolkit",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
+      "id": "persona-startup-mvp",
+      "name": "Startup Mvp persona",
+      "description": "--- name: Startup MVP Lab description: A startup-focused company template optimized for rapid MVP shipping, customer discovery, and launch iteration. slug: startup-mvp schema: agentcompanies/v1 version: 1.0.0 license: MIT authors: - name: Forge Space goals: - Ship an MVP fast without losing product clarity - Balance customer discovery, product execution, and launch readiness ---",
+      "tags": [
+        "persona",
+        "persona-startup-mvp",
+        "ai-dev-toolkit",
+        "workflow"
+      ],
+      "deprecated": false
+    },
+    {
+      "kind": "doc",
       "id": "rag-architecture",
       "name": "RAG Architecture Patterns",
       "description": "Retrieval-Augmented Generation (RAG) connects LLMs to external knowledge. This guide covers production-ready patterns for building, debugging, and scaling RAG pipelines.",
@@ -312,6 +509,335 @@
         "testing",
         "agents"
       ],
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "auto-context-pack",
+      "name": "Auto Context Pack",
+      "description": "Claude Code hook: auto-context-pack",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "auto-format",
+      "name": "Auto Format",
+      "description": "Auto-format code after Claude edits Ensures consistent formatting across all file types",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "automation-orchestrator",
+      "name": "Automation Orchestrator",
+      "description": "Claude Code Hook: Automation Orchestrator Intelligent automation orchestration for development workflows",
+      "tags": [
+        "hook",
+        "claude-code",
+        "orchestration"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "block-destructive",
+      "name": "Block Destructive",
+      "description": "Block destructive commands hook for Claude Code Prevents dangerous operations that could cause data loss",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "context-backup",
+      "name": "Context Backup",
+      "description": "Context backup hook for Claude Code Backs up important context before compaction",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "context-injector",
+      "name": "Context Injector",
+      "description": "Context injection hook for Claude Code Injects relevant context based on user prompt analysis",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "context-optimizer",
+      "name": "Context Optimizer",
+      "description": "Claude Code Hook: Context Optimizer Intelligent context optimization for token efficiency and performance",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "message-counter",
+      "name": "Message Counter",
+      "description": "message-counter.sh — UserPromptSubmit hook Tracks message count per session. Auto-generates per-project handoff at limit threshold. Cost: 0 tokens on normal messages. Only prints at thresholds 15, 20, 25, 30+.",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "post-compact",
+      "name": "Post Compact",
+      "description": "Claude Code hook: post-compact",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "post-edit-optimization",
+      "name": "Post Edit Optimization",
+      "description": "Post-Edit Token Optimization Hook Optimizes context and token usage after file edits",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "pre-commit-validation",
+      "name": "Pre Commit Validation",
+      "description": "Pre-commit validation hook for UIForge MCP Runs essential checks before allowing commits",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "pre-compact",
+      "name": "Pre Compact",
+      "description": "Pre-Compact Snapshot",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "protect-files",
+      "name": "Protect Files",
+      "description": "Claude Code hook: protect-files",
+      "tags": [
+        "hook",
+        "claude-code",
+        "security"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "rtk-rewrite",
+      "name": "Rtk Rewrite",
+      "description": "rtk-hook-version: 3 RTK Claude Code hook — rewrites commands to use rtk for token savings. Requires: rtk >= 0.23.0, jq This is a thin delegating hook: all rewrite logic lives in `rtk rewrite`, which is the single source of truth (src/discover/registry.rs). To add or change rewrite rules, edit the Rust registry — not this file. Exit code protocol for `rtk rewrite`: 0 + stdout Rewrite found, no deny/ask rule matched → auto-allow 1 No RTK equivalent → pass through unchanged 2 De",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "secret-detection",
+      "name": "Secret Detection",
+      "description": "Secret detection hook for UIForge MCP Scans for hardcoded secrets and sensitive data",
+      "tags": [
+        "hook",
+        "claude-code",
+        "security"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "security-scan",
+      "name": "Security Scan",
+      "description": "Security scanning hook for UIForge MCP Runs comprehensive security checks on code changes",
+      "tags": [
+        "hook",
+        "claude-code",
+        "security"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "session-setup",
+      "name": "Session Setup",
+      "description": "Claude Code session setup hook (Fish version) Optimizes session for productivity and token efficiency",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "session-start-optimization",
+      "name": "Session Start Optimization",
+      "description": "Session Start Context Optimization Hook Optimizes context when starting a new session",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "test-auto-context-pack",
+      "name": "Test Auto Context Pack",
+      "description": "Test suite for auto-context-pack hook",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "token-usage-monitor",
+      "name": "Token Usage Monitor",
+      "description": "Token Usage Monitoring Hook Monitors and reports on token usage patterns",
+      "tags": [
+        "hook",
+        "claude-code",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "validate-command",
+      "name": "Validate Command",
+      "description": "Claude Code hook: validate-command",
+      "tags": [
+        "hook",
+        "claude-code",
+        "validation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "validate-handoff",
+      "name": "Validate Handoff",
+      "description": "Claude Code hook: validate-handoff",
+      "tags": [
+        "hook",
+        "claude-code",
+        "validation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "validate-secrets",
+      "name": "Validate Secrets",
+      "description": "Validate secrets and enforce zero-secrets policy Ensures no secrets are committed or processed",
+      "tags": [
+        "hook",
+        "claude-code",
+        "security",
+        "validation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "validate-tests",
+      "name": "Validate Tests",
+      "description": "Validate tests after code changes Ensures test coverage and quality standards",
+      "tags": [
+        "hook",
+        "claude-code",
+        "validation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "workflow-logger",
+      "name": "Workflow Logger",
+      "description": "Workflow logging hook for Claude Code Tracks workflow events and productivity metrics",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "hook",
+      "id": "workflow-validator",
+      "name": "Workflow Validator",
+      "description": "Workflow validation hook for Claude Code Validates workflows and ensures compliance with Forge Space standards",
+      "tags": [
+        "hook",
+        "claude-code"
+      ],
+      "version": "0.1.0",
       "deprecated": false
     },
     {
@@ -440,6 +966,713 @@
         "refactor",
         "ide"
       ],
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-add",
+      "name": "Adt Add",
+      "description": "Meta-adder for toolkit artifacts. Single entry point to add a skill, pattern, best-practice, hook, agent, or guide with correct frontmatter + sync to 4 publish targets.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "design",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-auto-invoke",
+      "name": "Adt Auto Invoke",
+      "description": "Meta-skill — defines when to apply other skills automatically without being asked",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-bilingual-readme-sync",
+      "name": "Adt Bilingual Readme Sync",
+      "description": "Keep EN/PT README.md pairs in parity across a repo (and across twin repos like ai-dev-toolkit + ai-dev-toolkit-pt-br).",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-build-fix",
+      "name": "Adt Build Fix",
+      "description": "Local build-error triage. Detects common compile errors and suggests fixes",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "debugging"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-checkpoint",
+      "name": "Adt Checkpoint",
+      "description": "Git-level WIP safety net. Stashes uncommitted work, tags, and pushes to remote",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-compress-assets",
+      "name": "Adt Compress Assets",
+      "description": "Losslessly compress PNG and SVG assets in place and generate .webp siblings for every raster image. Use when the user asks to \"compress assets\", \"optimize images\", \"shrink the assets folder\", or \"convert to webp\". Runs a deterministic pipeline via oxipng + svgo + cwebp + ImageMagick.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "design",
+        "git",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-context",
+      "name": "Adt Context",
+      "description": "Optimize context window usage — compact stale data, compress via summarization, preserve active state",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-context-hygiene",
+      "name": "Adt Context Hygiene",
+      "description": "Keep sessions focused and efficient — prune stale outputs, preserve active state, recommend compaction",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "git",
+        "deploy",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-cost",
+      "name": "Adt Cost",
+      "description": "Track and report token usage and estimated cost per session, agent, and phase",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-dispatch",
+      "name": "Adt Dispatch",
+      "description": "Spawn parallel subtasks, assign to worker agents, collect results",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "orchestration"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-eval",
+      "name": "Adt Eval",
+      "description": "Evaluate LLM outputs systematically — benchmarks, automated metrics, human preference, and regression tracking",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "observability",
+        "evaluation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-fallback",
+      "name": "Adt Fallback",
+      "description": "Graceful degradation when primary approach fails. Try alternates in priority order; record which path succeeded for future routing.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-learn",
+      "name": "Adt Learn",
+      "description": "Auto-extract reusable patterns from the current session into skills or memory",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "memory"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-loop",
+      "name": "Adt Loop",
+      "description": "Autonomous development cycle — plan, implement, test, review, fix, commit, and PR without stopping",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "testing",
+        "comms",
+        "git",
+        "planning",
+        "orchestration"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-mcp-doctor",
+      "name": "Adt Mcp Doctor",
+      "description": "Diagnose and repair failing MCP servers. Captures real launch tracebacks, identifies stale tool/config references, prunes the bad entries, and reconnects. Use when `claude mcp list` shows `Failed to connect`, after upgrading an MCP server (Serena, @modelcontextprotocol/server-*, or vendor MCPs), or when an MCP that worked yesterday silently stopped responding.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "mcp",
+        "debugging",
+        "git",
+        "token-optimization",
+        "observability"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-mcp-health",
+      "name": "Adt Mcp Health",
+      "description": "Validate live MCP provider health — separate config issues from auth and connectivity failures",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "mcp",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-mcp-patterns",
+      "name": "Adt Mcp Patterns",
+      "description": "Build robust, secure MCP servers — tool schemas, stateful interactions, async patterns, error handling, and testing",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "mcp",
+        "testing",
+        "debugging",
+        "database"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-mcp-readiness",
+      "name": "Adt Mcp Readiness",
+      "description": "Check whether MCP-backed workflows are usable on this machine",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "mcp"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-memory",
+      "name": "Adt Memory",
+      "description": "Persist decisions, preferences, and project state across sessions using structured memory types",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "deploy",
+        "memory"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-model-serving",
+      "name": "Adt Model Serving",
+      "description": "Choose and configure inference servers (vLLM, TGI, Ollama) — quantization, batching, scaling, and serving patterns",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-multi-agent",
+      "name": "Adt Multi Agent",
+      "description": "Orchestrate teams of specialized agents — DAG execution, task distribution, state sharing, failure recovery",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "deploy",
+        "orchestration"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-orchestrate",
+      "name": "Adt Orchestrate",
+      "description": "Coordinate multiple subagents/worktrees for parallel workstreams. Decomposes larger tasks into independent sub-tasks, dispatches each to a dedicated agent.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "orchestration"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-plan",
+      "name": "Adt Plan",
+      "description": "Analyze the codebase and create a structured implementation plan before writing any code",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-plan-change",
+      "name": "Adt Plan Change",
+      "description": "Plan a code change before editing — identify files, sequence steps, set verification criteria",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-plugin-audit",
+      "name": "Adt Plugin Audit",
+      "description": "Diff the Anthropic `claude-plugins-official` marketplace against installed plugins and surface the delta, filtering known-unwanted entries (language LSPs you don't use, SaaS integrations you don't use, sample/demo plugins).",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "security",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-rag",
+      "name": "Adt Rag",
+      "description": "Build and debug Retrieval-Augmented Generation pipelines — chunking, embedding, retrieval, reranking",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "debugging",
+        "rag",
+        "evaluation"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-rag-context-pack",
+      "name": "Adt Rag Context Pack",
+      "description": "Build a task-aware context bundle (relevant code + applicable standards + related past decisions) via the local RAG index, capped at a token budget. Use at the start of any implementation/refactor/debug task instead of reading files blindly. Replaces \"read whole file\" with \"retrieve the function + callers + rules + prior ADR.\"",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "rag",
+        "design",
+        "debugging",
+        "git",
+        "deploy",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-rag-recall",
+      "name": "Adt Rag Recall",
+      "description": "Semantic-search personal knowledge (memory, plans, handoffs, skills, Codex rules) via the local RAG index at ~/.claude/rag-index/. Use when a query is fuzzy or cross-file (\"how did we fix X\", \"what did we decide about Y\", \"which skill handles Z\"). Complements grep (exact) and Serena (code symbols). If the user asks a recall question that doesn't map to a specific known file, reach here first.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "rag",
+        "planning",
+        "deploy",
+        "memory"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-release-flow",
+      "name": "Adt Release Flow",
+      "description": "Ship validated changes with repeatable release evidence — version bump, changelog, tag, and optional GitHub release",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-repo-intake",
+      "name": "Adt Repo Intake",
+      "description": "Onboard into an unfamiliar repository fast before making any changes",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-research",
+      "name": "Adt Research",
+      "description": "Deep research on a topic using web search, docs, and codebase analysis",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-resume",
+      "name": "Adt Resume",
+      "description": "Recover session state from git, plans, and open PRs, then continue from the last completed phase without repeating work",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-route",
+      "name": "Adt Route",
+      "description": "Route a task to the most fitting skill or agent. Parses user intent, checks installed-skill inventory, and picks the best match (single skill or chain).",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-schedule",
+      "name": "Adt Schedule",
+      "description": "Define and manage recurring automated agent runs — CI monitoring, dep updates, security scans",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "security",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-secure",
+      "name": "Adt Secure",
+      "description": "Shortcut for security review on current change set. Runs layered checks (secret-scan, dep-audit, semgrep, OWASP patterns, prompt-injection review).",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "security"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-self-heal",
+      "name": "Adt Self Heal",
+      "description": "Autonomous error recovery — detect failures, diagnose root cause, apply fixes, and resume without stopping",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "debugging"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-ship",
+      "name": "Adt Ship",
+      "description": "Commit, push, and open a pull request with a conventional commit message",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-ship-check",
+      "name": "Adt Ship Check",
+      "description": "Verify work before committing, pushing, or requesting review",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-specs-aggregate-roadmap",
+      "name": "Adt Specs Aggregate Roadmap",
+      "description": "Regenerate the cross-repo roadmap aggregate in your Claude memory directory by walking every curated repo's `docs/specs/**` frontmatter. Run at session start for cross-repo orientation or after any `spec-new`/`spec-ship` in any repo.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "specs",
+        "spec-driven",
+        "design",
+        "deploy",
+        "memory"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-specs-roadmap-refresh",
+      "name": "Adt Specs Roadmap Refresh",
+      "description": "Regenerate `docs/roadmap.md` for a repo from all specs under `docs/specs/` + their frontmatter (status, tags, pr). Produces Now/Next/Recently-shipped sections. Run after creating / shipping a spec, or at the start of a new session for orientation.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "specs",
+        "spec-driven",
+        "design",
+        "git",
+        "deploy"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-specs-spec-new",
+      "name": "Adt Specs Spec New",
+      "description": "Create a committed per-feature spec under `docs/specs/YYYY-MM-DD-<slug>/{spec,tasks}.md` with frontmatter (status, created, owner, pr, tags). Promotes an ephemeral `.claude/plans/<name>.md` into a persistent, searchable artifact. Use when starting a feature that's larger than a one-shot PR.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "specs",
+        "spec-driven",
+        "design",
+        "comms",
+        "git",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-sync-pt-parity",
+      "name": "Adt Sync PT Parity",
+      "description": "Sync files (skills/patterns/agents/specs) from EN canonical repo to PT mirror, inserting \"Tradução pendente\" blockquote after YAML frontmatter, then open PR.",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-tdd",
+      "name": "Adt Tdd",
+      "description": "Test-driven development — write tests first, implement second, refactor third",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "testing"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-ticket",
+      "name": "Adt Ticket",
+      "description": "Assemble a Jira/Linear/GitHub-Issue body from recent commits, diff, and branch context",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "git",
+        "token-optimization"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-toolkit-sync",
+      "name": "Adt Toolkit Sync",
+      "description": "Bump the ai-dev-toolkit version pin in a downstream consumer repo and verify the sync path",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-verify",
+      "name": "Adt Verify",
+      "description": "Run full quality gate suite before committing or creating a PR",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "comms",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "skill",
+      "id": "adt-worktree-flow",
+      "name": "Adt Worktree Flow",
+      "description": "Decide when and how to use git worktrees for isolated parallel work",
+      "tags": [
+        "skill-md",
+        "ai-dev-toolkit",
+        "core",
+        "git",
+        "deploy"
+      ],
+      "version": "0.1.0",
       "deprecated": false
     },
     {
@@ -1210,6 +2443,136 @@
         "documents",
         "design",
         "api"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "capture-training",
+      "name": "Capture Training",
+      "description": "Script: capture-training.py",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "training"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "install-macos",
+      "name": "Install Macos",
+      "description": "Check if brew is installed Core CLI tools",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "setup"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "install-ubuntu",
+      "name": "Install Ubuntu",
+      "description": "Update apt cache APT packages",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "setup"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "install-windows",
+      "name": "Install Windows",
+      "description": "Requires -RunAsAdministrator > Check for winget",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "setup"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "mcp-health",
+      "name": "Mcp Health",
+      "description": "Script: mcp-health.py",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "mcp-ops"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "release",
+      "name": "Release",
+      "description": "Script: release.py",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "release"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "setup-ai-workflow-macos",
+      "name": "Setup AI Workflow Macos",
+      "description": "Script: setup-ai-workflow-macos.sh",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "setup"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "setup-claude-code",
+      "name": "Setup Claude Code",
+      "description": "--------------------------------------------------------------------------- 1. MCP servers — write ~/.claude/.mcp.json with recommended global servers ---------------------------------------------------------------------------",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "setup"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "toggle-mcp",
+      "name": "Toggle Mcp",
+      "description": "Script: toggle-mcp.py",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "mcp-ops"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "tool",
+      "id": "validate-companies",
+      "name": "Validate Companies",
+      "description": "Script: validate-companies.sh",
+      "tags": [
+        "tool",
+        "ai-dev-toolkit",
+        "diagnostics"
       ],
       "version": "0.1.0",
       "deprecated": false

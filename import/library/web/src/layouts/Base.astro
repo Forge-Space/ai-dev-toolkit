@@ -364,6 +364,9 @@ const site = Astro.site?.toString().replace(/\/$/, "") ?? "";
       .kind-agent      { background: rgba(255,140,200,0.12); color: var(--kind-agent); }
       .kind-collection { background: rgba(240,193,105,0.12); color: var(--kind-collection); }
       .kind-doc        { background: rgba(117,216,168,0.12); color: var(--kind-doc); }
+      .kind-hook       { background: rgba(255,138,115,0.12); color: #ff8a73; }
+      .kind-command    { background: rgba(252,211,77,0.12); color: #fcd34d; }
+      .kind-tool       { background: rgba(169,198,230,0.12); color: #a9c6e6; }
 
       /* Code blocks */
       pre, code {
@@ -471,9 +474,11 @@ const site = Astro.site?.toString().replace(/\/$/, "") ?? "";
         </a>
         <nav class="primary">
           <a href={`${base}skills/`}>Skills</a>
-          <a href={`${base}servers/`}>Servers</a>
           <a href={`${base}agents/`}>Agents</a>
-          <a href={`${base}collections/`}>Collections</a>
+          <a href={`${base}servers/`}>Servers</a>
+          <a href={`${base}tools/`}>Tools</a>
+          <a href={`${base}hooks/`}>Hooks</a>
+          <a href={`${base}commands/`}>Commands</a>
           <a href={`${base}docs/`}>Docs</a>
           <a class="github" href="https://github.com/LucasSantana-Dev/ai-dev-toolkit-library" aria-label="GitHub">
             GitHub ↗

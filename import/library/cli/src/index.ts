@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import kleur from "kleur";
 
-const VERSION = "0.2.0";
+const VERSION = "0.3.0";
 
 const USAGE = `${kleur.bold("adtl")} — ai-dev-toolkit-library CLI  v${VERSION}
 

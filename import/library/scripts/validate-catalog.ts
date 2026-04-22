@@ -2,7 +2,19 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Ajv2020, { type ErrorObject } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { SCHEMAS_ROOT, loadSkills, loadServers, loadCollections, loadDocs, loadAgents, type CatalogEntry, type CatalogKind } from "./lib/catalog.ts";
+import {
+  SCHEMAS_ROOT,
+  loadSkills,
+  loadServers,
+  loadCollections,
+  loadDocs,
+  loadAgents,
+  loadHooks,
+  loadCommands,
+  loadTools,
+  type CatalogEntry,
+  type CatalogKind,
+} from "./lib/catalog.ts";
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -23,6 +35,9 @@ async function main() {
     collection: await loadSchema("collection.schema.json"),
     doc: await loadSchema("doc.schema.json"),
     agent: await loadSchema("agent.schema.json"),
+    hook: await loadSchema("hook.schema.json"),
+    command: await loadSchema("command.schema.json"),
+    tool: await loadSchema("tool.schema.json"),
   };
 
   const validators = {
@@ -31,6 +46,9 @@ async function main() {
     collection: ajv.compile(schemas.collection),
     doc: ajv.compile(schemas.doc),
     agent: ajv.compile(schemas.agent),
+    hook: ajv.compile(schemas.hook),
+    command: ajv.compile(schemas.command),
+    tool: ajv.compile(schemas.tool),
   };
 
   const allEntries: CatalogEntry[] = [
@@ -39,6 +57,9 @@ async function main() {
     ...(await loadCollections()),
     ...(await loadDocs()),
     ...(await loadAgents()),
+    ...(await loadHooks()),
+    ...(await loadCommands()),
+    ...(await loadTools()),
   ];
 
   let failures = 0;
@@ -68,6 +89,9 @@ async function main() {
     collections: allEntries.filter((e) => e.kind === "collection").length,
     docs: allEntries.filter((e) => e.kind === "doc").length,
     agents: allEntries.filter((e) => e.kind === "agent").length,
+    hooks: allEntries.filter((e) => e.kind === "hook").length,
+    commands: allEntries.filter((e) => e.kind === "command").length,
+    tools: allEntries.filter((e) => e.kind === "tool").length,
   };
 
   // Collection items must reference existing catalog entries.

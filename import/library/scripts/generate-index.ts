@@ -1,9 +1,19 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { CATALOG_ROOT, loadSkills, loadServers, loadCollections, loadDocs, loadAgents } from "./lib/catalog.ts";
+import {
+  CATALOG_ROOT,
+  loadSkills,
+  loadServers,
+  loadCollections,
+  loadDocs,
+  loadAgents,
+  loadHooks,
+  loadCommands,
+  loadTools,
+} from "./lib/catalog.ts";
 
 interface IndexEntry {
-  kind: "skill" | "server" | "collection" | "doc" | "agent";
+  kind: "skill" | "server" | "collection" | "doc" | "agent" | "hook" | "command" | "tool";
   id: string;
   name: string;
   description: string;
@@ -25,12 +35,15 @@ function toIndex(kind: IndexEntry["kind"], data: Record<string, unknown>): Index
 }
 
 async function main() {
-  const [skills, servers, collections, docs, agents] = await Promise.all([
+  const [skills, servers, collections, docs, agents, hooks, commands, tools] = await Promise.all([
     loadSkills(),
     loadServers(),
     loadCollections(),
     loadDocs(),
     loadAgents(),
+    loadHooks(),
+    loadCommands(),
+    loadTools(),
   ]);
   const index: IndexEntry[] = [
     ...skills.map((e) => toIndex("skill", e.data)),
@@ -38,6 +51,9 @@ async function main() {
     ...collections.map((e) => toIndex("collection", e.data)),
     ...docs.map((e) => toIndex("doc", e.data)),
     ...agents.map((e) => toIndex("agent", e.data)),
+    ...hooks.map((e) => toIndex("hook", e.data)),
+    ...commands.map((e) => toIndex("command", e.data)),
+    ...tools.map((e) => toIndex("tool", e.data)),
   ].sort((a, b) => a.kind.localeCompare(b.kind) || a.id.localeCompare(b.id));
 
   const outPath = path.join(CATALOG_ROOT, "index.json");
