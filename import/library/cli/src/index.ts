@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import kleur from "kleur";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 
 const USAGE = `${kleur.bold("adtl")} — ai-dev-toolkit-library CLI  v${VERSION}
 
@@ -17,7 +17,17 @@ Commands:
 
   ${kleur.cyan("add-server")} <server-id>   Register a catalog MCP server with your local gateway.
 
-  ${kleur.cyan("setup-claude")}             Wire Claude Code to the local gateway (writes ~/.claude/settings.json).
+  ${kleur.cyan("setup")} <editor> [...]     Wire an editor's MCP config to the local gateway.
+  ${kleur.cyan("setup")} --all              Wire every detected editor.
+  ${kleur.cyan("setup")} --list             List supported editor ids.
+
+  Convenience aliases (one command per editor):
+    ${kleur.cyan("setup-claude")}             Claude Code     ${kleur.dim("(~/.claude/settings.json)")}
+    ${kleur.cyan("setup-claude-desktop")}     Claude Desktop  ${kleur.dim("(Claude app config)")}
+    ${kleur.cyan("setup-codex")}              Codex CLI       ${kleur.dim("(~/.codex/config.toml)")}
+    ${kleur.cyan("setup-cursor")}             Cursor          ${kleur.dim("(~/.cursor/mcp.json)")}
+    ${kleur.cyan("setup-gemini")}             Gemini CLI      ${kleur.dim("(~/.gemini/settings.json)")}
+    ${kleur.cyan("setup-windsurf")}           Windsurf        ${kleur.dim("(~/.codeium/windsurf/mcp_config.json)")}
 
   ${kleur.cyan("doctor")}                   Verify catalog, gateway, and Claude home are healthy.
 
@@ -26,6 +36,15 @@ Commands:
 Docs: https://library.lucassantana.tech
 Repo: https://github.com/LucasSantana-Dev/ai-dev-toolkit-library
 `;
+
+const SETUP_ALIASES: Record<string, string> = {
+  "setup-claude": "claude-code",
+  "setup-claude-desktop": "claude-desktop",
+  "setup-codex": "codex",
+  "setup-cursor": "cursor",
+  "setup-gemini": "gemini",
+  "setup-windsurf": "windsurf",
+};
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
@@ -39,10 +58,7 @@ async function main() {
   }
 
   switch (cmd) {
-    case "list": {
-      const { runList } = await import("./commands/list.js");
-      return runList(rest);
-    }
+    case "list":
     case "search": {
       const { runList } = await import("./commands/list.js");
       return runList(rest);
@@ -55,15 +71,19 @@ async function main() {
       const { runAddServer } = await import("./commands/add-server.js");
       return runAddServer(rest);
     }
-    case "setup-claude": {
-      const { runSetupClaude } = await import("./commands/setup-claude.js");
-      return runSetupClaude(rest);
+    case "setup": {
+      const { runSetup } = await import("./commands/setup.js");
+      return runSetup(rest);
     }
     case "doctor": {
       const { runDoctor } = await import("./commands/doctor.js");
       return runDoctor();
     }
     default:
+      if (cmd in SETUP_ALIASES) {
+        const { runSetup } = await import("./commands/setup.js");
+        return runSetup([SETUP_ALIASES[cmd], ...rest]);
+      }
       console.error(kleur.red(`unknown command: ${cmd}`));
       console.error(USAGE);
       process.exit(2);

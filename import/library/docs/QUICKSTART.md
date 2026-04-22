@@ -42,17 +42,30 @@ python seeds/seed.py
 
 You should see `＋ registered context7`, `＋ registered github`, … and a line for the `library` virtual server.
 
-## 3. Wire Claude Code
+## 3. Wire your editor(s)
 
-From the repo root:
+From anywhere on disk:
 
 ```bash
-cd ..
-npx @lucassantana/adtl setup-claude
-npx @lucassantana/adtl doctor
+# Install into every installed editor (recommended)
+npx @lucassantana/adtl setup --all
+
+# Or pick one:
+npx @lucassantana/adtl setup-claude          # Claude Code
+npx @lucassantana/adtl setup-claude-desktop  # Claude Desktop app
+npx @lucassantana/adtl setup-codex           # Codex CLI
+npx @lucassantana/adtl setup-cursor          # Cursor
+npx @lucassantana/adtl setup-gemini          # Gemini CLI
+npx @lucassantana/adtl setup-windsurf        # Windsurf
+
+npx @lucassantana/adtl doctor                # verify everything
 ```
 
-`doctor` should report all ✓. Restart Claude Code — you'll see tools from every registered server under the single `library` MCP entry.
+Each setup command merges a `library` MCP server into the editor's config
+using `npx -y mcp-remote` inline — no wrapper script on disk, no repo
+clone required. Existing MCP entries you already have in the config are
+preserved; the previous config is backed up to `<file>.bak`. Restart the
+editor to pick up the new server.
 
 ## 4. Install a skill
 
