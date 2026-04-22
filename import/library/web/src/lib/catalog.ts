@@ -9,7 +9,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, "../../..");
 const CATALOG = path.join(REPO_ROOT, "catalog");
 
-export type Kind = "skill" | "server" | "collection" | "doc";
+export type Kind = "skill" | "server" | "collection" | "doc" | "agent";
 
 export interface Skill {
   id: string;
@@ -112,6 +112,32 @@ export async function getDocs(): Promise<Doc[]> {
     const raw = await readFile(path.join(dir, file), "utf8");
     const { data, content } = matter(raw);
     out.push({ ...(data as Omit<Doc, "body">), body: content });
+  }
+  return out;
+}
+
+export interface Agent {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  tags: string[];
+  model?: string;
+  level?: number;
+  disallowed_tools?: string[];
+  source?: { path?: string; repo?: string };
+  homepage?: string;
+  license?: string;
+  body: string;
+}
+
+export async function getAgents(): Promise<Agent[]> {
+  const dir = path.join(CATALOG, "agents");
+  const out: Agent[] = [];
+  for (const file of await listFiles(dir, ".md")) {
+    const raw = await readFile(path.join(dir, file), "utf8");
+    const { data, content } = matter(raw);
+    out.push({ ...(data as Omit<Agent, "body">), body: content });
   }
   return out;
 }

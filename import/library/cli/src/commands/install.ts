@@ -3,43 +3,65 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import kleur from "kleur";
 import { loadIndex, fetchRawFile } from "../lib/catalog.js";
-import { ensureSkillsDir, skillInstallPath } from "../lib/claude-config.js";
+import {
+  ensureSkillsDir,
+  ensureAgentsDir,
+  skillInstallPath,
+  agentInstallPath,
+} from "../lib/claude-config.js";
 
 export async function runInstall(args: string[]): Promise<void> {
   const id = args[0];
   if (!id) {
-    console.error("Usage: adtl install <skill-id>");
+    console.error("Usage: adtl install <skill-or-agent-id>");
     process.exit(2);
   }
   const index = await loadIndex();
-  const entry = index.entries.find((e) => e.kind === "skill" && e.id === id);
+  const entry = index.entries.find(
+    (e) => (e.kind === "skill" || e.kind === "agent") && e.id === id,
+  );
   if (!entry) {
-    console.error(kleur.red(`✗ no skill with id '${id}'`));
-    console.error(kleur.dim("  run `adtl list --kind skill` to see available skills"));
+    console.error(kleur.red(`✗ no skill or agent with id '${id}'`));
+    console.error(kleur.dim("  run `adtl list --kind skill` or `adtl list --kind agent`"));
     process.exit(1);
   }
 
+  const force = args.includes("--force") || args.includes("-f");
+
+  if (entry.kind === "skill") {
+    await installSkill(id, force);
+  } else {
+    await installAgent(id, force);
+  }
+}
+
+async function installSkill(id: string, force: boolean) {
   await ensureSkillsDir();
   const target = skillInstallPath(id);
-
-  if (existsSync(target)) {
-    const force = args.includes("--force") || args.includes("-f");
-    if (!force) {
-      console.error(kleur.yellow(`✗ ${target} already exists. Pass --force to overwrite.`));
-      process.exit(1);
-    }
+  if (existsSync(target) && !force) {
+    console.error(kleur.yellow(`✗ ${target} already exists. Pass --force to overwrite.`));
+    process.exit(1);
   }
-
   await mkdir(target, { recursive: true });
-
-  // Fetch manifest.json + SKILL.md from remote (or local, if running inside repo).
-  const files = ["manifest.json", "SKILL.md"];
-  for (const name of files) {
+  for (const name of ["manifest.json", "SKILL.md"]) {
     const content = await loadFile(`catalog/skills/${id}/${name}`);
     await writeFile(path.join(target, name), content);
   }
-
   console.log(kleur.green(`✓ installed skill '${id}'`));
+  console.log(kleur.dim(`  → ${target}`));
+  console.log(kleur.dim("  Claude Code picks this up on next session start."));
+}
+
+async function installAgent(id: string, force: boolean) {
+  await ensureAgentsDir();
+  const target = agentInstallPath(id);
+  if (existsSync(target) && !force) {
+    console.error(kleur.yellow(`✗ ${target} already exists. Pass --force to overwrite.`));
+    process.exit(1);
+  }
+  const content = await loadFile(`catalog/agents/${id}.md`);
+  await writeFile(target, content);
+  console.log(kleur.green(`✓ installed agent '${id}'`));
   console.log(kleur.dim(`  → ${target}`));
   console.log(kleur.dim("  Claude Code picks this up on next session start."));
 }

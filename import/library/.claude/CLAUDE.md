@@ -4,12 +4,22 @@ Curated catalog of Skills + MCP servers fronted by a single local `mcp-context-f
 
 ## Layout at a glance
 
-- `catalog/{skills,servers,collections,docs}/` — the curated library
+- `catalog/{skills,servers,agents,collections,docs}/` — the curated library
 - `gateway/` — docker-compose stack; gateway bound to `127.0.0.1:4444`
 - `cli/` — `@lucassantana/adtl` (pnpm workspace package)
 - `web/` — Astro static site → GH Pages
-- `schemas/` — JSON schemas for all 4 kinds
+- `schemas/` — JSON schemas for all 5 kinds
 - `scripts/` — validators + importers
+
+## 5 catalog kinds
+
+| Kind | Installs to | Install verb | Use when |
+|---|---|---|---|
+| `skill` | `~/.claude/skills/<id>/` | `adtl install <id>` | Actionable procedure (multi-file) |
+| `agent` | `~/.claude/agents/<id>.md` | `adtl install <id>` | Claude sub-agent (single file) |
+| `server` | Gateway admin API | `adtl add-server <id>` | MCP upstream |
+| `collection` | — | browse only | Opinionated bundle |
+| `doc` | — | read only | Reference material |
 
 ## Contribution rules
 

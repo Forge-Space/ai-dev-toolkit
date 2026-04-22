@@ -4,7 +4,7 @@ import path from "node:path";
 import os from "node:os";
 
 export interface IndexEntry {
-  kind: "skill" | "server" | "collection" | "doc";
+  kind: "skill" | "server" | "collection" | "doc" | "agent";
   id: string;
   name: string;
   description: string;

@@ -7,7 +7,7 @@
     "validate": "tsx validate-catalog.ts",
     "index": "tsx generate-index.ts",
     "import:patterns": "tsx import-patterns.ts",
-    "import:dev-assets": "tsx import-dev-assets.ts"
+    "import:agents": "tsx import-agents.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

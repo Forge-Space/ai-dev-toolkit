@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Ajv2020, { type ErrorObject } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { SCHEMAS_ROOT, loadSkills, loadServers, loadCollections, loadDocs, type CatalogEntry, type CatalogKind } from "./lib/catalog.ts";
+import { SCHEMAS_ROOT, loadSkills, loadServers, loadCollections, loadDocs, loadAgents, type CatalogEntry, type CatalogKind } from "./lib/catalog.ts";
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -22,6 +22,7 @@ async function main() {
     server: await loadSchema("server.schema.json"),
     collection: await loadSchema("collection.schema.json"),
     doc: await loadSchema("doc.schema.json"),
+    agent: await loadSchema("agent.schema.json"),
   };
 
   const validators = {
@@ -29,6 +30,7 @@ async function main() {
     server: ajv.compile(schemas.server),
     collection: ajv.compile(schemas.collection),
     doc: ajv.compile(schemas.doc),
+    agent: ajv.compile(schemas.agent),
   };
 
   const allEntries: CatalogEntry[] = [
@@ -36,6 +38,7 @@ async function main() {
     ...(await loadServers()),
     ...(await loadCollections()),
     ...(await loadDocs()),
+    ...(await loadAgents()),
   ];
 
   let failures = 0;
@@ -64,6 +67,7 @@ async function main() {
     servers: allEntries.filter((e) => e.kind === "server").length,
     collections: allEntries.filter((e) => e.kind === "collection").length,
     docs: allEntries.filter((e) => e.kind === "doc").length,
+    agents: allEntries.filter((e) => e.kind === "agent").length,
   };
 
   // Collection items must reference existing catalog entries.

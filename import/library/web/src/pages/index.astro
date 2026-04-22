@@ -1,12 +1,13 @@
 ---
 import Base from "../layouts/Base.astro";
-import { getSkills, getServers, getCollections, getDocs } from "../lib/catalog.ts";
+import { getSkills, getServers, getCollections, getDocs, getAgents } from "../lib/catalog.ts";
 
-const [skills, servers, collections, docs] = await Promise.all([
+const [skills, servers, collections, docs, agents] = await Promise.all([
   getSkills(),
   getServers(),
   getCollections(),
   getDocs(),
+  getAgents(),
 ]);
 const base = import.meta.env.BASE_URL;
 ---
@@ -37,6 +38,10 @@ npx @lucassantana/adtl install &lt;skill-id&gt;</code></pre>
     <a class="card" href={`${base}servers/`}>
       <h3>{servers.length} Servers</h3>
       <p>MCP servers you can register with your local gateway in one command.</p>
+    </a>
+    <a class="card" href={`${base}agents/`}>
+      <h3>{agents.length} Agents</h3>
+      <p>Claude Code sub-agents — architects, reviewers, debuggers, planners. Install to <code>~/.claude/agents/</code>.</p>
     </a>
     <a class="card" href={`${base}collections/`}>
       <h3>{collections.length} Collections</h3>

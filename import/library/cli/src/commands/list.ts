@@ -19,7 +19,7 @@ export async function runList(args: string[]): Promise<void> {
   console.log(
     kleur.bold(`${entries.length} entries`) +
       kleur.dim(
-        ` — skills: ${counts.skill}, servers: ${counts.server}, collections: ${counts.collection}, docs: ${counts.doc}`,
+        ` — skills: ${counts.skill}, servers: ${counts.server}, agents: ${counts.agent}, collections: ${counts.collection}, docs: ${counts.doc}`,
       ),
   );
   console.log("");
@@ -42,11 +42,13 @@ function kindBadge(kind: IndexEntry["kind"]): string {
       return kleur.yellow("  coll    ");
     case "doc":
       return kleur.blue("  doc     ");
+    case "agent":
+      return kleur.green("  agent   ");
   }
 }
 
 function countByKind(entries: IndexEntry[]) {
-  const out = { skill: 0, server: 0, collection: 0, doc: 0 };
+  const out = { skill: 0, server: 0, collection: 0, doc: 0, agent: 0 };
   for (const e of entries) out[e.kind]++;
   return out;
 }

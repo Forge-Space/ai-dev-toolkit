@@ -3,7 +3,7 @@ import { access, constants } from "node:fs/promises";
 import kleur from "kleur";
 import { loadIndex } from "../lib/catalog.js";
 import { loadGatewayConfig, pingGateway } from "../lib/gateway.js";
-import { CLAUDE_HOME, SKILLS_DIR } from "../lib/claude-config.js";
+import { CLAUDE_HOME, SKILLS_DIR, AGENTS_DIR } from "../lib/claude-config.js";
 
 type Check = { name: string; ok: boolean; detail?: string };
 
@@ -23,6 +23,13 @@ export async function runDoctor(): Promise<void> {
     checks.push({ name: `skills dir exists`, ok: true, detail: SKILLS_DIR });
   } else {
     checks.push({ name: `skills dir exists`, ok: false, detail: `will be created on first install: ${SKILLS_DIR}` });
+  }
+
+  // 2b. Agents dir
+  if (existsSync(AGENTS_DIR)) {
+    checks.push({ name: `agents dir exists`, ok: true, detail: AGENTS_DIR });
+  } else {
+    checks.push({ name: `agents dir exists`, ok: false, detail: `will be created on first install: ${AGENTS_DIR}` });
   }
 
   // 3. Catalog reachable

@@ -6,13 +6,14 @@ const VERSION = "0.1.0";
 const USAGE = `${kleur.bold("adtl")} — ai-dev-toolkit-library CLI  v${VERSION}
 
 Commands:
-  ${kleur.cyan("list")} [--kind skill|server|collection|doc] [--tag <t>] [<query>]
+  ${kleur.cyan("list")} [--kind skill|server|agent|collection|doc] [--tag <t>] [<query>]
                           Browse the catalog (falls back to cache if offline).
 
   ${kleur.cyan("search")} <query>           Shorthand for list <query>.
 
-  ${kleur.cyan("install")} <skill-id> [--force]
-                          Copy a skill to ~/.claude/skills/<id>/.
+  ${kleur.cyan("install")} <skill-or-agent-id> [--force]
+                          Copy a skill to ~/.claude/skills/<id>/, or an
+                          agent to ~/.claude/agents/<id>.md.
 
   ${kleur.cyan("add-server")} <server-id>   Register a catalog MCP server with your local gateway.
 

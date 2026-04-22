@@ -1,0 +1,43 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getAgents } from "../../lib/catalog.ts";
+
+export async function getStaticPaths() {
+  const agents = await getAgents();
+  return agents.map((a) => ({ params: { id: a.id }, props: { agent: a } }));
+}
+const { agent } = Astro.props;
+---
+<Base title={agent.name} description={agent.description}>
+  <p><a href="../">← all agents</a></p>
+  <span class="kind kind-agent">agent</span>
+  <h1 style="display: inline;">{agent.name}</h1>
+  <p style="color: var(--muted);">{agent.description}</p>
+  <div class="tags" style="margin: 0.75rem 0 1.25rem;">
+    {agent.model && <span class="tag">model: {agent.model}</span>}
+    {agent.level !== undefined && <span class="tag">level: {agent.level}</span>}
+    {agent.tags.map((t) => <span class="tag">{t}</span>)}
+  </div>
+
+  <code class="install">npx @lucassantana/adtl install {agent.id}</code>
+
+  {agent.disallowed_tools && agent.disallowed_tools.length > 0 && (
+    <>
+      <h2>Disallowed tools</h2>
+      <p style="color: var(--muted);">This agent cannot call:</p>
+      <ul>
+        {agent.disallowed_tools.map((t) => <li><code>{t}</code></li>)}
+      </ul>
+    </>
+  )}
+
+  <h2>System prompt</h2>
+  <pre><code>{agent.body}</code></pre>
+
+  {agent.source?.path && (
+    <p style="color: var(--muted); font-size: 0.85rem; margin-top: 1.5rem;">
+      Source: <code>{agent.source.path}</code>
+      {agent.license && <> · {agent.license}</>}
+    </p>
+  )}
+</Base>

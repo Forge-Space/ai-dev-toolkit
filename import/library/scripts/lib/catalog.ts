@@ -9,7 +9,7 @@ export const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url
 export const CATALOG_ROOT = path.join(REPO_ROOT, "catalog");
 export const SCHEMAS_ROOT = path.join(REPO_ROOT, "schemas");
 
-export type CatalogKind = "skill" | "server" | "collection" | "doc";
+export type CatalogKind = "skill" | "server" | "collection" | "doc" | "agent";
 
 export interface CatalogEntry {
   kind: CatalogKind;
@@ -79,7 +79,25 @@ export async function loadDocs(): Promise<CatalogEntry[]> {
   return out;
 }
 
+export async function loadAgents(): Promise<CatalogEntry[]> {
+  const dir = path.join(CATALOG_ROOT, "agents");
+  const out: CatalogEntry[] = [];
+  for (const file of await listFiles(dir, ".md")) {
+    const raw = await readFile(path.join(dir, file), "utf8");
+    const { data, content } = matter(raw);
+    const id = (data.id as string) ?? file.replace(/\.md$/, "");
+    out.push({ kind: "agent", id, path: path.join(dir, file), data: { ...data, id, body: content } });
+  }
+  return out;
+}
+
 export async function loadAll(): Promise<CatalogEntry[]> {
-  const [s, sv, c, d] = await Promise.all([loadSkills(), loadServers(), loadCollections(), loadDocs()]);
-  return [...s, ...sv, ...c, ...d];
+  const [s, sv, c, d, a] = await Promise.all([
+    loadSkills(),
+    loadServers(),
+    loadCollections(),
+    loadDocs(),
+    loadAgents(),
+  ]);
+  return [...s, ...sv, ...c, ...d, ...a];
 }

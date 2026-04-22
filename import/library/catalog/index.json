@@ -2,6 +2,143 @@
   "version": 1,
   "entries": [
     {
+      "kind": "agent",
+      "id": "architect",
+      "name": "Architect",
+      "description": "Strategic Architecture & Debugging Advisor (Opus, READ-ONLY)",
+      "tags": [
+        "agent",
+        "claude-code",
+        "debugging",
+        "architecture"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "code-reviewer",
+      "name": "Code Reviewer",
+      "description": "Expert code review specialist with severity-rated feedback, logic defect detection, SOLID principle checks, style, performance, and quality strategy",
+      "tags": [
+        "agent",
+        "claude-code",
+        "review",
+        "planning",
+        "verification"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "critic",
+      "name": "Critic",
+      "description": "Work plan and code review expert — thorough, structured, multi-perspective (Opus)",
+      "tags": [
+        "agent",
+        "claude-code",
+        "review",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "debugger",
+      "name": "Debugger",
+      "description": "Root-cause analysis, regression isolation, stack trace analysis, build/compilation error resolution",
+      "tags": [
+        "agent",
+        "claude-code",
+        "debugging"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "document-specialist",
+      "name": "Document Specialist",
+      "description": "External Documentation & Reference Specialist",
+      "tags": [
+        "agent",
+        "claude-code",
+        "docs"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "executor",
+      "name": "Executor",
+      "description": "Focused task executor for implementation work (Sonnet)",
+      "tags": [
+        "agent",
+        "claude-code",
+        "execution"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "git-master",
+      "name": "Git Master",
+      "description": "Git expert for atomic commits, rebasing, and history management with style detection",
+      "tags": [
+        "agent",
+        "claude-code",
+        "git"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "planner",
+      "name": "Planner",
+      "description": "Strategic planning consultant with interview workflow (Opus)",
+      "tags": [
+        "agent",
+        "claude-code",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "test-engineer",
+      "name": "Test Engineer",
+      "description": "Test strategy, integration/e2e coverage, flaky test hardening, TDD workflows",
+      "tags": [
+        "agent",
+        "claude-code",
+        "testing",
+        "planning"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
+      "kind": "agent",
+      "id": "verifier",
+      "name": "Verifier",
+      "description": "Verification strategy, evidence-based completion checks, test adequacy",
+      "tags": [
+        "agent",
+        "claude-code",
+        "testing",
+        "planning",
+        "verification"
+      ],
+      "version": "0.1.0",
+      "deprecated": false
+    },
+    {
       "kind": "collection",
       "id": "claude-code-power-user",
       "name": "Claude Code Power User",
@@ -234,7 +371,7 @@
       "kind": "server",
       "id": "linear",
       "name": "Linear",
-      "description": "Read + write Linear issues, projects, cycles, comments, and documents. Useful for triaging backlogs and drafting tickets from code context.",
+      "description": "Read + write Linear issues, projects, cycles, comments, and documents. Uses a local stdio wrapper against Linear's GraphQL API — your API key never leaves your machine.",
       "tags": [
         "project-mgmt",
         "issues",

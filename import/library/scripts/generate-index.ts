@@ -1,9 +1,9 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { CATALOG_ROOT, loadSkills, loadServers, loadCollections, loadDocs } from "./lib/catalog.ts";
+import { CATALOG_ROOT, loadSkills, loadServers, loadCollections, loadDocs, loadAgents } from "./lib/catalog.ts";
 
 interface IndexEntry {
-  kind: "skill" | "server" | "collection" | "doc";
+  kind: "skill" | "server" | "collection" | "doc" | "agent";
   id: string;
   name: string;
   description: string;
@@ -25,17 +25,19 @@ function toIndex(kind: IndexEntry["kind"], data: Record<string, unknown>): Index
 }
 
 async function main() {
-  const [skills, servers, collections, docs] = await Promise.all([
+  const [skills, servers, collections, docs, agents] = await Promise.all([
     loadSkills(),
     loadServers(),
     loadCollections(),
     loadDocs(),
+    loadAgents(),
   ]);
   const index: IndexEntry[] = [
     ...skills.map((e) => toIndex("skill", e.data)),
     ...servers.map((e) => toIndex("server", e.data)),
     ...collections.map((e) => toIndex("collection", e.data)),
     ...docs.map((e) => toIndex("doc", e.data)),
+    ...agents.map((e) => toIndex("agent", e.data)),
   ].sort((a, b) => a.kind.localeCompare(b.kind) || a.id.localeCompare(b.id));
 
   const outPath = path.join(CATALOG_ROOT, "index.json");
