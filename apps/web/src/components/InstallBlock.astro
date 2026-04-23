@@ -6,6 +6,9 @@ interface Props {
 const { command, label = "copy" } = Astro.props;
 ---
 <div class="install">
-  <code class="cmd">{command}</code>
+  <div class="install-copy">
+    <span class="install-label">install</span>
+    <code class="cmd">{command}</code>
+  </div>
   <button class="copy" data-copy={command} type="button">{label}</button>
 </div>

@@ -2,24 +2,60 @@ import { marked } from "marked";
 
 export type Kind = "skill" | "server" | "agent" | "collection" | "doc" | "hook" | "command" | "tool";
 
-export function kindIcon(kind: Kind): string {
+export function displayEntryName(name: string): string {
+  return name
+    .replace(/^Adt\s+/i, "")
+    .replace(/\bAi\b/g, "AI")
+    .replace(/\bApi\b/g, "API")
+    .replace(/\bCi Cd\b/g, "CI/CD")
+    .replace(/\bMcp\b/g, "MCP")
+    .replace(/\bRag\b/g, "RAG")
+    .replace(/\bRtk\b/g, "RTK");
+}
+
+export function kindGlyph(kind: Kind): string {
   switch (kind) {
     case "skill":
-      return "🎯";
+      return "SK";
     case "server":
-      return "🔌";
+      return "MCP";
     case "agent":
-      return "🤖";
+      return "AG";
     case "collection":
-      return "📦";
+      return "COL";
     case "doc":
-      return "📖";
+      return "DOC";
     case "hook":
-      return "🪝";
+      return "HK";
     case "command":
-      return "⚡";
+      return "CMD";
     case "tool":
-      return "🛠";
+      return "TL";
+  }
+}
+
+export function kindIcon(kind: Kind): string {
+  return kindGlyph(kind);
+}
+
+export function kindLabel(kind: Kind): string {
+  switch (kind) {
+    case "skill":
+      return "Skill";
+    case "server":
+      return "MCP server";
+    case "agent":
+      return "Agent";
+    case "collection":
+      return "Collection";
+    case "doc":
+      return "Doc";
+    case "hook":
+      return "Hook";
+    case "command":
+      return "Command";
+    case "tool":
+      return "Tool";
   }
 }
 
