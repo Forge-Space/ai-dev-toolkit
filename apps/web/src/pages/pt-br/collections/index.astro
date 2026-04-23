@@ -8,6 +8,8 @@ const locale: Locale = "pt-br";
 const collections = localizeEntries(await getCollections(), locale);
 const base = import.meta.env.BASE_URL;
 const url = (p: string) => localizedUrl(base, p, locale);
+const featuredCollections = collections.slice(0, 3);
+const remainingCollections = collections.slice(3);
 ---
 <Base
   title={t("list.collections.title", locale)}
@@ -15,18 +17,39 @@ const url = (p: string) => localizedUrl(base, p, locale);
   locale={locale}
 >
   <h1>{t("list.collections.title", locale)}</h1>
-  <p class="lead-muted">Bundles curados para fluxos de trabalho específicos.</p>
-  <div class="grid" style="margin-top: 1.5rem;">
-    {collections.map((c) => (
-      <Card
-        kind="collection"
-        id={c.id}
-        name={c.name}
-        description={c.description}
-        tags={c.tags ?? []}
-        href={url(`collections/${c.id}/`)}
-        extraTag={`${c.items.length} itens`}
-      />
-    ))}
-  </div>
+  <p class="lead-muted">{t("list.collections.introLede", locale)}</p>
+  <section class="hero-surface" style="margin: 1.25rem 0 1rem; display: grid; gap: 1rem;">
+    <div>
+      <div class="hero-surface-title">{t("list.collections.intro", locale)}</div>
+      <p class="lead-muted">{t("list.collections.introLede", locale)}</p>
+    </div>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      {featuredCollections.map((c) => (
+        <Card
+          kind="collection"
+          id={c.id}
+          name={c.name}
+          description={c.description}
+          tags={c.tags ?? []}
+          href={url(`collections/${c.id}/`)}
+          extraTag={`${c.items.length} itens`}
+        />
+      ))}
+    </div>
+  </section>
+  {remainingCollections.length > 0 && (
+    <div class="grid">
+      {remainingCollections.map((c) => (
+        <Card
+          kind="collection"
+          id={c.id}
+          name={c.name}
+          description={c.description}
+          tags={c.tags ?? []}
+          href={url(`collections/${c.id}/`)}
+          extraTag={`${c.items.length} itens`}
+        />
+      ))}
+    </div>
+  )}
 </Base>

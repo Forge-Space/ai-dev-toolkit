@@ -10,6 +10,12 @@ const REPO_ROOT = path.resolve(HERE, "../../../..");
 const CATALOG = path.join(REPO_ROOT, "packages/catalog/catalog");
 
 export type Kind = "skill" | "server" | "collection" | "doc" | "agent" | "hook" | "command" | "tool";
+export type CollectionItemKind = Exclude<Kind, "collection">;
+
+export interface CollectionItem {
+  kind: CollectionItemKind;
+  id: string;
+}
 
 export interface Skill {
   id: string;
@@ -44,9 +50,33 @@ export interface Collection {
   id: string;
   name: string;
   description: string;
-  items: Array<{ kind: "skill" | "server" | "doc"; id: string }>;
+  items: CollectionItem[];
   tags?: string[];
   translations?: { "pt-BR"?: { name?: string; description?: string } };
+}
+
+export const COLLECTION_ITEM_ROUTES: Record<CollectionItemKind, string> = {
+  skill: "skills",
+  server: "servers",
+  doc: "docs",
+  agent: "agents",
+  hook: "hooks",
+  command: "commands",
+  tool: "tools",
+};
+
+export function collectionItemPath(item: CollectionItem): string {
+  return `${COLLECTION_ITEM_ROUTES[item.kind]}/${item.id}/`;
+}
+
+export interface CatalogData {
+  skills: Skill[];
+  servers: Server[];
+  docs: Doc[];
+  agents: Agent[];
+  hooks: Hook[];
+  commands: Command[];
+  tools: Tool[];
 }
 
 export interface Doc {
@@ -118,6 +148,19 @@ export async function getDocs(): Promise<Doc[]> {
     out.push({ ...(data as Omit<Doc, "body">), body: content });
   }
   return out;
+}
+
+export async function getCatalogData(): Promise<CatalogData> {
+  const [skills, servers, docs, agents, hooks, commands, tools] = await Promise.all([
+    getSkills(),
+    getServers(),
+    getDocs(),
+    getAgents(),
+    getHooks(),
+    getCommands(),
+    getTools(),
+  ]);
+  return { skills, servers, docs, agents, hooks, commands, tools };
 }
 
 export interface Agent {

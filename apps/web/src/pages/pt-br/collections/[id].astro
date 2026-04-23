@@ -1,35 +1,55 @@
 ---
 import Base from "../../../layouts/Base.astro";
-import { getCollections } from "../../../lib/catalog.ts";
+import Card from "../../../components/Card.astro";
+import { collectionItemPath, getCatalogData, getCollections, type CollectionItem } from "../../../lib/catalog.ts";
 import { localizeEntries, localizedUrl, type Locale } from "../../../lib/i18n.ts";
-import { kindIcon, type Kind } from "../../../lib/ui.ts";
 
 const locale: Locale = "pt-br";
 
 export async function getStaticPaths() {
-  const locale: Locale = "pt-br";
-  const collections = localizeEntries(await getCollections(), locale);
+  const staticLocale: Locale = "pt-br";
+  const collections = localizeEntries(await getCollections(), staticLocale);
   return collections.map((collection) => ({ params: { id: collection.id }, props: { collection } }));
 }
 
+const catalog = await getCatalogData();
 const { collection } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const url = (p: string) => localizedUrl(base, p, locale);
 
-const kindRoutes: Record<Kind, string> = {
-  skill: "skills",
-  server: "servers",
-  agent: "agents",
-  tool: "tools",
-  hook: "hooks",
-  command: "commands",
-  doc: "docs",
-  collection: "collections",
-}
-;
+type EntryLike = { name?: string; title?: string; description: string };
 
-function kindHref(item: { kind: Kind; id: string }) {
-  return url(`${kindRoutes[item.kind]}/${item.id}/`);
+const skills = localizeEntries(catalog.skills, locale);
+const servers = localizeEntries(catalog.servers, locale);
+const docs = localizeEntries(catalog.docs, locale);
+const agents = localizeEntries(catalog.agents, locale);
+const hooks = localizeEntries(catalog.hooks, locale);
+const commands = localizeEntries(catalog.commands, locale);
+const tools = localizeEntries(catalog.tools, locale);
+
+const entriesByKind = {
+  skill: new Map(skills.map((entry) => [entry.id, entry as EntryLike])),
+  server: new Map(servers.map((entry) => [entry.id, entry as EntryLike])),
+  doc: new Map(docs.map((entry) => [entry.id, entry as EntryLike])),
+  agent: new Map(agents.map((entry) => [entry.id, entry as EntryLike])),
+  hook: new Map(hooks.map((entry) => [entry.id, entry as EntryLike])),
+  command: new Map(commands.map((entry) => [entry.id, entry as EntryLike])),
+  tool: new Map(tools.map((entry) => [entry.id, entry as EntryLike])),
+} satisfies Record<CollectionItem["kind"], Map<string, EntryLike>>;
+
+function entryName(entry: { name?: string; title?: string }, fallback: string) {
+  return entry.name ?? entry.title ?? fallback;
+}
+
+function resolveItem(item: CollectionItem) {
+  const entry = entriesByKind[item.kind].get(item.id);
+  return {
+    kind: item.kind,
+    id: item.id,
+    name: entry ? entryName(entry, item.id) : item.id,
+    description: entry?.description ?? "",
+    href: url(collectionItemPath(item)),
+  };
 }
 ---
 <Base title={collection.name} description={collection.description} locale={locale}>
@@ -48,14 +68,6 @@ function kindHref(item: { kind: Kind; id: string }) {
 
   <h2>Itens ({collection.items.length})</h2>
   <div class="grid">
-    {collection.items.map((item) => (
-      <a class="card" href={kindHref(item)}>
-        <div class="row-head">
-          <span class="icon">{kindIcon(item.kind as Kind)}</span>
-          <h3>{item.id}</h3>
-          <span class={`kind kind-${item.kind}`}>{item.kind}</span>
-        </div>
-      </a>
-    ))}
+    {collection.items.map((item) => <Card {...resolveItem(item)} />)}
   </div>
 </Base>

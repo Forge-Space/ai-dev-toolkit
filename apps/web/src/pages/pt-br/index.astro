@@ -64,6 +64,9 @@ const popularTags = [...tagCount.entries()]
   .sort((a, b) => b[1] - a[1])
   .slice(0, 12)
   .map(([tag]) => tag);
+
+const featuredCollections = collections.slice(0, 3);
+const remainingCollections = collections.slice(3);
 ---
 <Base title={t("home.title", locale)} locale={locale}>
   <section class="hero">
@@ -105,19 +108,40 @@ const popularTags = [...tagCount.entries()]
     </div>
     <a class="section-link" href={url("collections/")}>{t("home.allOf", locale, { count: collections.length, kind: t("list.collections.title", locale).toLowerCase() })}</a>
   </div>
-  <div class="grid">
-    {collections.map((c) => (
-      <Card
-        kind="collection"
-        id={c.id}
-        name={c.name}
-        description={c.description}
-        tags={c.tags ?? []}
-        href={url(`collections/${c.id}/`)}
-        extraTag={`${c.items.length} items`}
-      />
-    ))}
-  </div>
+  <section class="hero-surface" style="margin-bottom:1rem; display:grid; gap:1rem;">
+    <div>
+      <div class="hero-surface-title">{t("home.collections.title", locale)}</div>
+      <p class="lead-muted">{t("home.collections.lede", locale)}</p>
+    </div>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      {featuredCollections.map((c) => (
+        <Card
+          kind="collection"
+          id={c.id}
+          name={c.name}
+          description={c.description}
+          tags={c.tags ?? []}
+          href={url(`collections/${c.id}/`)}
+          extraTag={`${c.items.length} items`}
+        />
+      ))}
+    </div>
+  </section>
+  {remainingCollections.length > 0 && (
+    <div class="grid">
+      {remainingCollections.map((c) => (
+        <Card
+          kind="collection"
+          id={c.id}
+          name={c.name}
+          description={c.description}
+          tags={c.tags ?? []}
+          href={url(`collections/${c.id}/`)}
+          extraTag={`${c.items.length} items`}
+        />
+      ))}
+    </div>
+  )}
 
   <div class="section-top">
     <div><h2>{t("home.section.skills", locale)}</h2></div>
