@@ -3,7 +3,7 @@ import Base from "../../../layouts/Base.astro";
 import InstallBlock from "../../../components/InstallBlock.astro";
 import { getServers } from "../../../lib/catalog.ts";
 import { localizeEntries, type Locale } from "../../../lib/i18n.ts";
-import { installCommand } from "../../../lib/ui.ts";
+import { installCommand, kindGlyph, kindLabel } from "../../../lib/ui.ts";
 
 const locale: Locale = "pt-br";
 
@@ -24,9 +24,9 @@ const runCmd =
 <Base title={server.name} description={server.description} locale={locale}>
   <p style="margin-bottom: 1.5rem;"><a href="../">← todos os servidores</a></p>
   <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
-    <span style="font-size: 1.6rem;">🔌</span>
+    <span style="font-size: 1.6rem;">{kindGlyph(server.kind)}</span>
     <h1 style="margin: 0;">{server.name}</h1>
-    <span class="kind kind-server">server</span>
+    <span class="kind kind-server">{kindLabel(server.kind)}</span>
   </div>
   <p class="lead-muted" style="margin-bottom: 1rem;">{server.description}</p>
   <div class="tags" style="margin-bottom: 1.25rem;">

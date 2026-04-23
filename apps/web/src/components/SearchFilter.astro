@@ -1,8 +1,12 @@
 ---
+import { resolveLocale, t } from "../lib/i18n";
+
 interface Props {
   placeholder?: string;
   tags?: string[];
 }
+const locale = resolveLocale(Astro.url.pathname);
+const allChipLabel = locale === "pt-br" ? "Todos" : t("search.allTags", locale);
 const { placeholder = "Search by name, description, or tag…", tags = [] } = Astro.props;
 ---
 <div class="search-panel">
@@ -24,7 +28,7 @@ const { placeholder = "Search by name, description, or tag…", tags = [] } = As
   </div>
   {tags.length > 0 && (
     <div class="chips" id="chips">
-      <button class="chip active" data-tag="" type="button">All</button>
+      <button class="chip active" data-tag="" type="button">{allChipLabel}</button>
       {tags.map((t) => (
         <button class="chip" data-tag={t} type="button">{t}</button>
       ))}
@@ -37,14 +41,8 @@ const { placeholder = "Search by name, description, or tag…", tags = [] } = As
     const input = document.getElementById("search");
     const chips = document.getElementById("chips");
     const cards = () => document.querySelectorAll("a.card");
-    const allChipLabel = document.documentElement.lang.startsWith("pt") ? "Todos" : "All";
     let activeTag = "";
     let query = "";
-
-    if (chips) {
-      const first = chips.querySelector("button.chip[data-tag='']");
-      if (first) first.textContent = allChipLabel;
-    }
 
     function apply() {
       let visible = 0;

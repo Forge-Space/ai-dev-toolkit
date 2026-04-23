@@ -16,7 +16,7 @@ const { collection } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const url = (p: string) => localizedUrl(base, p, locale);
 
-const kindRoutes: Record<string, string> = {
+const kindRoutes: Record<Kind, string> = {
   skill: "skills",
   server: "servers",
   agent: "agents",
@@ -25,11 +25,11 @@ const kindRoutes: Record<string, string> = {
   command: "commands",
   doc: "docs",
   collection: "collections",
-};
+}
+;
 
-function kindHref(item: { kind: string; id: string }) {
-  const dir = kindRoutes[item.kind];
-  return dir ? url(`${dir}/${item.id}/`) : url(`${item.kind}s/${item.id}/`);
+function kindHref(item: { kind: Kind; id: string }) {
+  return url(`${kindRoutes[item.kind]}/${item.id}/`);
 }
 ---
 <Base title={collection.name} description={collection.description} locale={locale}>

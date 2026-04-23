@@ -2,7 +2,7 @@
 import Base from "../../../layouts/Base.astro";
 import { getDocs } from "../../../lib/catalog.ts";
 import { localizeEntries, type Locale } from "../../../lib/i18n.ts";
-import { renderMarkdown } from "../../../lib/ui.ts";
+import { kindGlyph, kindLabel, renderMarkdown } from "../../../lib/ui.ts";
 
 const locale: Locale = "pt-br";
 
@@ -18,9 +18,9 @@ const rendered = renderMarkdown(doc.body);
 <Base title={doc.title} description={doc.description} locale={locale}>
   <p style="margin-bottom: 1.5rem;"><a href="../">← toda a documentação</a></p>
   <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
-    <span style="font-size: 1.6rem;">📖</span>
+    <span style="font-size: 1.6rem;">{kindGlyph(doc.kind)}</span>
     <h1 style="margin: 0;">{doc.title}</h1>
-    <span class="kind kind-doc">doc</span>
+    <span class="kind kind-doc">{kindLabel(doc.kind)}</span>
   </div>
   <p class="lead-muted" style="margin-bottom: 1rem;">{doc.description}</p>
   <div class="tags" style="margin-bottom: 1.5rem;">

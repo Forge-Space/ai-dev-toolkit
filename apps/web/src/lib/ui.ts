@@ -2,15 +2,20 @@ import { marked } from "marked";
 
 export type Kind = "skill" | "server" | "agent" | "collection" | "doc" | "hook" | "command" | "tool";
 
+const ACRONYM_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/^adt\s+/i, ""],
+  [/\bai\b/gi, "AI"],
+  [/\bapi\b/gi, "API"],
+  [/\bci cd\b/gi, "CI/CD"],
+  [/\bmcp\b/gi, "MCP"],
+  [/\brag\b/gi, "RAG"],
+  [/\brtk\b/gi, "RTK"],
+];
+
 export function displayEntryName(name: string): string {
-  return name
-    .replace(/^Adt\s+/i, "")
-    .replace(/\bAi\b/g, "AI")
-    .replace(/\bApi\b/g, "API")
-    .replace(/\bCi Cd\b/g, "CI/CD")
-    .replace(/\bMcp\b/g, "MCP")
-    .replace(/\bRag\b/g, "RAG")
-    .replace(/\bRtk\b/g, "RTK");
+  return ACRONYM_REPLACEMENTS.reduce((value, [pattern, replacement]) => {
+    return value.replace(pattern, replacement);
+  }, name);
 }
 
 export function kindGlyph(kind: Kind): string {

@@ -26,7 +26,7 @@
   "translations": {
     "pt-BR": {
       "name": "Install Windows",
-      "description": "Faz bootstrap da stack principal de CLI do Forge Kit no Windows via PowerShell e winget. Útil no setup ou reparo da estação; requer PowerShell administrador e acesso ao gerenciador de pacotes."
+      "description": "Faz bootstrap da stack principal de CLI do Forge Kit no Windows via PowerShell e winget. Útil no setup ou reparo da estação; requer acesso administrativo, acesso ao gerenciador de pacotes e hardware de desenvolvedor padrão."
     }
   }
 }
